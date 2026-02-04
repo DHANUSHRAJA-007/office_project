@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:office_project/screens/adminmain.dart';
 import 'package:office_project/screens/cretepass.dart';
+import 'package:office_project/screens/dashboard.dart';
 import 'package:office_project/screens/forgotpass.dart';
 import 'package:office_project/screens/homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,11 +11,11 @@ import 'package:office_project/screens/verificationpage.dart';
 import 'firebase_options.dart';
 import 'package:get/get.dart';
 
-void main() {
-  //   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+void main()async {
+    WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'office_project',
-      home: Homepage(),
+      home: Loginpage(),
     );
   }
 }
