@@ -52,7 +52,7 @@ class _ForgotpassState extends State<Forgotpass> {
               const SizedBox(height: 40),
               IconButton(
                 onPressed: () {
-                  Get.to(Loginpage());
+                  Get.to(LoginPage());
                 },
                 icon: const Icon(Icons.arrow_back),
               ),
