@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:office_project/auth.dart';
+import 'package:office_project/screens/adminmain.dart';
 import 'admindashboard.dart';
 import 'userhomepage.dart';
 import 'signuppage.dart';
@@ -31,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       print('ROLE = $role');
 
       if (role == 'admin') {
-        Get.offAll(() => const AdminDashboard());
+        Get.offAll(() => const Adminmain());
       } else {
         Get.offAll(() => const HomePage(role: 'user'));
       }
