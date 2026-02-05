@@ -12,6 +12,8 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final emailController = TextEditingController();
+  final nameController = TextEditingController();
+  final phonenumberController = TextEditingController();
   final passwordController = TextEditingController();
   final AuthService authService = AuthService();
 
@@ -24,7 +26,10 @@ class _SignupPageState extends State<SignupPage> {
       await authService.signUp(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
+
         role: 'user', // 👈 default user
+        name:nameController.text.trim(),
+        phonenumber: phonenumberController.text.trim()
       );
 
       Get.snackbar('Success', 'Account created');
@@ -45,6 +50,13 @@ class _SignupPageState extends State<SignupPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+               TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'name'),
+            ),   TextField(
+              controller: phonenumberController,
+              decoration: const InputDecoration(labelText: 'phone number'),
+            ),
             TextField(
               controller: emailController,
               decoration: const InputDecoration(labelText: 'Email'),
