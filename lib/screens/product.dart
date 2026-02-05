@@ -13,11 +13,12 @@ class _ProductState extends State<Product> {
   final CollectionReference products = FirebaseFirestore.instance.collection(
     'products',
   );
-  void addProduct(String name, price, category) {
+  void addProduct(String name, price, category,count) {
     products.add({
       "name": name,
       "price": price,
       "category": category,
+      "count":count,
       "Createdat": FieldValue.serverTimestamp(),
     });
   }
@@ -26,11 +27,12 @@ class _ProductState extends State<Product> {
     products.doc(docId).delete();
   }
 
-  void updateProduct(String docId, String name, String price, String category) {
+  void updateProduct(String docId, String name, String price, String category,String count) {
     products.doc(docId).update({
       "name": name,
       "price": price,
       'category': category,
+         "count":count,
     });
   }
 
@@ -39,6 +41,7 @@ class _ProductState extends State<Product> {
     String? existingName,
     String? existingPrice,
     String? existingcategory,
+    String? existingcount,
   }) {
     TextEditingController namecontroller = TextEditingController(
       text: existingName,
@@ -50,7 +53,7 @@ class _ProductState extends State<Product> {
     TextEditingController categorycontroller = TextEditingController(
       text: existingcategory
     );
-
+    TextEditingController countcontroller =TextEditingController(text: existingcount);
     showDialog(
       context: context,
       builder: (context) {
@@ -71,6 +74,10 @@ class _ProductState extends State<Product> {
                 controller: categorycontroller,
                 decoration: InputDecoration(labelText: "category"),
               ),
+              TextField(
+                controller: countcontroller,
+                decoration: InputDecoration(labelText: "count"),
+              )
             ],
           ),
           actions: [
@@ -82,6 +89,7 @@ class _ProductState extends State<Product> {
                     namecontroller.text,
                     pricecontroller.text,
                     categorycontroller.text,
+                    countcontroller.text
                   );
                 } else {
                   // UPDATE
@@ -90,6 +98,7 @@ class _ProductState extends State<Product> {
                     namecontroller.text,
                     pricecontroller.text,
                     categorycontroller.text,
+                    countcontroller.text
                   );
                 }
 
@@ -131,6 +140,7 @@ class _ProductState extends State<Product> {
                   children: [
                     Text(product["name"]),
                     Text("Category:${product['category']}"),
+                    Text("count : ${product['count']}")
                   ],
                 ),
                 subtitle: Text("Price: ₹${product["price"]}"),
@@ -142,6 +152,7 @@ class _ProductState extends State<Product> {
                           docId: docId,
                           existingName: product["name"],
                           existingPrice: product["price"],
+                          existingcount: product["count"]
                         );
                       },
                       icon: Icon(Icons.edit),
