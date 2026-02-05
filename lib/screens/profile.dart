@@ -86,7 +86,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 const Icon(Icons.phone, size: 18),
                 const SizedBox(width: 8),
-                Text(userData!['phone'] ?? 'N/A'),
+                Text(userData!['phonenumber'] ?? 'N/A'),
               ],
             ),
             const SizedBox(height: 12),

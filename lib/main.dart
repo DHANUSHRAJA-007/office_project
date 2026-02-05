@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
 
       title: 'E-Commerce Starter',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const LoginPage(),
+      home: const SignupPage(),
 
 
     );
