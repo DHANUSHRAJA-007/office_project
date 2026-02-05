@@ -5,45 +5,42 @@ import 'package:office_project/screens/profile.dart';
 
 class HomePage extends StatefulWidget {
   final String role;
+ 
+  
 
-  const HomePage({super.key, required this.role});
+  const HomePage({super.key, required this.role,});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  
+  int _currentIndex = 0;
 
-    int _currentIndex = 0;
-
-  final List<Widget> _pages = <Widget>[
-    Home(),
-    Cart(),
-    Profile()
-  ];
+  final List<Widget> _pages = <Widget>[Home(), Cart(), Profile()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Center(child: Text('e comerse name'))),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
-         
-     onTap: (index) {
-  setState(() {
-    _currentIndex = index;
-  });
-},
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.black,
+        selectedLabelStyle: TextStyle(color: Colors.black),
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
 
         items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home),label: "home"),
-        BottomNavigationBarItem(icon: Icon(Icons.trolley),label:"cart"),
-        BottomNavigationBarItem(icon: Icon(Icons.person),label:"profile")
-      ]),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
+          BottomNavigationBarItem(icon: Icon(Icons.trolley), label: "cart"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "profile"),
+        ],
+      ),
     );
   }
 }
-

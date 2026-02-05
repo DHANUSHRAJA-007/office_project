@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final AuthService authService = AuthService();
 
   bool loading = false;
+  bool textVisible = true;
 
   Future<void> login() async {
     setState(() => loading = true);
@@ -59,16 +60,26 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16),
             TextField(
               controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: textVisible,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      textVisible = !textVisible;
+                    });
+                  },
+                  icon: Icon(
+                    textVisible ? Icons.visibility_off : Icons.visibility,
+                  ),
+                ),
+              ),
             ),
+
             const SizedBox(height: 24),
             loading
                 ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: login,
-                    child: const Text('Login'),
-                  ),
+                : ElevatedButton(onPressed: login, child: const Text('Login')),
             TextButton(
               onPressed: () {
                 Get.offAll(() => const SignupPage());
