@@ -13,7 +13,7 @@ class _ProductState extends State<Product> {
   final CollectionReference products = FirebaseFirestore.instance.collection(
     'products',
   );
-  void addProduct(String name, price, category,count) {
+  void addProduct(String name, price, category,int count) {
     products.add({
       "name": name,
       "price": price,
@@ -27,7 +27,7 @@ class _ProductState extends State<Product> {
     products.doc(docId).delete();
   }
 
-  void updateProduct(String docId, String name, String price, String category,String count) {
+  void updateProduct(String docId, String name, String price, String category,int count) {
     products.doc(docId).update({
       "name": name,
       "price": price,
@@ -83,13 +83,14 @@ class _ProductState extends State<Product> {
           actions: [
             ElevatedButton(
               onPressed: () {
+                 int parsedCount = int.tryParse(countcontroller.text) ?? 0;
                 if (docId == null) {
                   // ADD
                   addProduct(
                     namecontroller.text,
                     pricecontroller.text,
                     categorycontroller.text,
-                    countcontroller.text
+                    parsedCount
                   );
                 } else {
                   // UPDATE
@@ -98,7 +99,7 @@ class _ProductState extends State<Product> {
                     namecontroller.text,
                     pricecontroller.text,
                     categorycontroller.text,
-                    countcontroller.text
+                    parsedCount
                   );
                 }
 
