@@ -35,7 +35,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/route_manager.dart';
 import 'package:office_project/screens/adminmain.dart';
 import 'package:office_project/screens/cart_provider.dart';
-import 'package:office_project/screens/home.dart';
 import 'package:office_project/screens/product.dart';
 import 'package:office_project/screens/signuppage.dart';
 import 'package:office_project/screens/userhomepage.dart';
@@ -65,7 +64,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'E-Commerce Starter',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const Home(),
+      home: const LoginPage(),
     );
   }
 }

@@ -16,11 +16,13 @@ class _HomeState extends State<Home> {
   final CollectionReference products = FirebaseFirestore.instance.collection(
     'products',
   );
+
   bool showPopup = false;
 
   void showAddPopup() {
     setState(() => showPopup = true);
-    Future.delayed(Duration(seconds: 5), () {
+
+    Future.delayed(const Duration(seconds: 3), () {
       if (mounted) setState(() => showPopup = false);
     });
   }
@@ -30,18 +32,18 @@ class _HomeState extends State<Home> {
     return Material(
       child: Stack(
         children: [
-          /// 🔥 PRODUCT LIST
-          StreamBuilder(
+          // PRODUCT LIST
+          StreamBuilder<QuerySnapshot>(
             stream: products.snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
 
               var productList = snapshot.data!.docs;
 
               if (productList.isEmpty) {
-                return Center(child: Text("No products available"));
+                return const Center(child: Text("No products available"));
               }
 
               return ListView.builder(
@@ -49,28 +51,72 @@ class _HomeState extends State<Home> {
                 itemBuilder: (context, index) {
                   var product = productList[index];
 
-                  return ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(product['name']),
-                        Text("Category : ${product['category']}"),
-                      ],
-                    ),
-                    subtitle: Text("Price : ${product['price']}"),
+                  return Card(
+                    child: ListTile(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(product['name']),
+                          Text("Category : ${product['category']}"),
 
-                    trailing: ElevatedButton(
-                      onPressed: () {
-                        Map<String, dynamic> cartItem = {
-                          'name': product["name"],
-                          'price': product["price"],
-                        };
+                          if (product['count'] == 0)
+                            const Text(
+                              "Out of stock",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
 
-                        context.read<CartProvider>().addToCart(cartItem);
+                          if (product['count'] < 10 && product['count'] > 0)
+                            Text(
+                              "Limited stock",
+                              style: TextStyle(
+                                color: Colors.orange,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
 
-                        showAddPopup(); // ⭐ CALL POPUP HERE
-                      },
-                      child: Text("Add to cart"),
+                      subtitle: Text("Price : ₹${product['price']}"),
+
+                      trailing: product['count'] > 0
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // ADD TO CART BUTTON
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Map<String, dynamic> cartItem = {
+                                      'name': product["name"],
+                                      'price': product["price"],
+                                    };
+
+                                    context.read<CartProvider>().addToCart(
+                                      cartItem,
+                                    );
+
+                                    showAddPopup();
+                                  },
+                                  child: Text("Add to cart"),
+                                ),
+
+                                ///BUY BUTTON
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await FirebaseFirestore.instance
+                                        .collection('products')
+                                        .doc(product.id)
+                                        .update({
+                                          'count': FieldValue.increment(-1),
+                                        });
+                                  },
+                                  child: const Text("Buy"),
+                                ),
+                              ],
+                            )
+                          : null,
                     ),
                   );
                 },
@@ -78,7 +124,7 @@ class _HomeState extends State<Home> {
             },
           ),
 
-          /// 🔥 POPUP UI
+          //POPUP UI (Correct Position)
           if (showPopup)
             Positioned(
               bottom: 40,
@@ -90,9 +136,8 @@ class _HomeState extends State<Home> {
                 },
                 child: AnimatedContainer(
                   height: 60,
-                  width: 200,
-                  duration: Duration(milliseconds: 500),
-                  padding: EdgeInsets.all(15),
+                  duration: const Duration(milliseconds: 400),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(15),
@@ -100,10 +145,9 @@ class _HomeState extends State<Home> {
                       BoxShadow(blurRadius: 10, color: Colors.black26),
                     ],
                   ),
-
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.check_circle, color: Colors.white),
                       SizedBox(width: 10),
                       Text(
