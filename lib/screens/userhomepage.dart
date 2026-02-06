@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
 
   int _currentIndex = 0;
 
-  final List<Widget> _pages = <Widget>[Home(), Cartpage(), Profile()];
+  final List<Widget> _pages = <Widget>[Home() ,Cartpage(), Profile()];
 
   @override
   Widget build(BuildContext context) {
