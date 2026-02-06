@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = <Widget>[Home(), Cartpage(), SettingsPage()];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
