@@ -1,0 +1,232 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:office_project/theme_controller.dart';
+
+
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // ================= UPDATE USER =================
+  Future<void> updateUser(
+    String name,
+    String email,
+    String phoneNumber,
+  ) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    await _firestore.collection('users').doc(user.uid).update({
+      'name': name,
+      'email': email,
+      'phonenumber': phoneNumber,
+    });
+  }
+
+  // ================= EDIT DIALOG =================
+  void openEditDialog({
+    required String name,
+    required String email,
+    required String phone,
+  }) {
+    final nameController = TextEditingController(text: name);
+    final emailController = TextEditingController(text: email);
+    final phoneController = TextEditingController(text: phone);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Edit Profile"),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(labelText: "Name"),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(labelText: "Email"),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: phoneController,
+                  decoration: const InputDecoration(labelText: "Phone Number"),
+                  keyboardType: TextInputType.phone,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await updateUser(
+                  nameController.text.trim(),
+                  emailController.text.trim(),
+                  phoneController.text.trim(),
+                );
+                Navigator.pop(context);
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // ================= UI =================
+  @override
+  Widget build(BuildContext context) {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      return const Center(child: Text("User not logged in"));
+    }
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream:
+          _firestore.collection('users').doc(user.uid).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Center(child: Text("User data not found"));
+        }
+
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+
+        return Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ===== HEADER =====
+              Row(
+                children: [
+                  const Text(
+                    "Profile",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      openEditDialog(
+                        name: data['name'] ?? '',
+                        email: data['email'] ?? '',
+                        phone: data['phonenumber'] ?? '',
+                      );
+                    },
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // ===== NAME =====
+              Text(
+                data['name'] ?? 'N/A',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+
+              const SizedBox(height: 6),
+
+              // ===== EMAIL =====
+              Text(
+                data['email'] ?? 'N/A',
+                style: const TextStyle(color: Colors.grey),
+              ),
+
+              const Divider(height: 32),
+
+              // ===== PHONE =====
+              Row(
+                children: [
+                  const Icon(Icons.phone, size: 18),
+                  const SizedBox(width: 8),
+                  Text(data['phonenumber'] ?? 'N/A'),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // ===== ROLE =====
+              Row(
+                children: [
+                  const Icon(Icons.verified_user, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    (data['role'] ?? 'N/A').toString().toUpperCase(),
+                  ),
+                ],
+              ),
+              Spacer(),
+             
+                 Column(
+  children: [
+    const Text(
+      "Theme",
+      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    ),
+
+    const SizedBox(height: 12),
+
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.light_mode),
+        Switch(
+          value: themeNotifier.value == ThemeMode.dark,
+          onChanged: (value) {
+            themeNotifier.value =
+                value ? ThemeMode.dark : ThemeMode.light;
+          },
+        ),
+        const Icon(Icons.dark_mode),
+      ],
+    ),
+  ],
+),
+
+               Spacer(),
+
+              // ===== LOGOUT =====
+              ElevatedButton.icon(
+                onPressed: () async {
+                  await _auth.signOut();
+                },
+                icon: const Icon(Icons.logout),
+                label: const Text("Logout"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 48),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
