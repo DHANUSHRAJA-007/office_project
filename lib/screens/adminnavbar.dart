@@ -1,33 +1,59 @@
 import 'package:flutter/material.dart';
 
-class Adminnavbar extends StatelessWidget {
+// ignore: must_be_immutable
+class Adminnavbar extends StatefulWidget {
   final int currentIndex;
-  final Function(int)ontap;
-  const Adminnavbar({super.key, required this.currentIndex, required this.ontap});
+  final Function(int) ontap;
 
+  const Adminnavbar({
+    super.key,
+    required this.currentIndex,
+    required this.ontap,
+  });
+  @override
+  State<Adminnavbar> createState() => _AdminnavbarState();
+}
+
+class _AdminnavbarState extends State<Adminnavbar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-    
-      selectedItemColor: Colors.black,
-      selectedLabelStyle: TextStyle(color: Colors.black),
+      backgroundColor: Color(0xff4CAF50),
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white,
       type: BottomNavigationBarType.fixed,
-      currentIndex: currentIndex,
-      onTap: ontap,
+      currentIndex: widget.currentIndex,
+      onTap: widget.ontap,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.dashboard),
-          label: "Dashboard",
+          icon: Icon(
+            widget.currentIndex == 0 ? Icons.home_filled : Icons.home_outlined,
+          ),
+          label: "Home",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_bag),
+          icon: Icon(
+            widget.currentIndex == 1
+                ? Icons.description
+                : Icons.description_outlined,
+          ),
           label: "Products",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.receipt_long),
-          label: "Orders",
+          icon: Icon(
+            widget.currentIndex == 2
+                ? Icons.shopping_cart
+                : Icons.shopping_cart_outlined,
+          ),
+          label: "Category",
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
+
+        BottomNavigationBarItem(
+          icon: Icon(
+            widget.currentIndex == 3 ? Icons.person_2 : Icons.person_2_outlined,
+          ),
+          label: "Profile",
+        ),
       ],
     );
   }
