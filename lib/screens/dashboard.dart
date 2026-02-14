@@ -11,97 +11,251 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _dashCards(
-                const Color.fromARGB(255, 255, 206, 59),
-                Color(0xFFF5B700),
-                "Total Users",
-                Icons.currency_rupee,
-              ),
-              _dashCards(
-                Colors.cyan,
-                Color(0xFF00B4D8),
-                "Total orders",
-                Icons.receipt_long,
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _dashCards(
-                Colors.blue,
-                Color(0xFF3A86FF),
-                "Total Users",
-                Icons.people,
-              ),
-              _dashCards(
-                const Color.fromARGB(255, 122, 32, 138),
-                Color.fromARGB(255, 155, 56, 236),
-                "Total Products",
-                Icons.store,
-              ),
-            ],
-          ),
-          SizedBox(height: 50),
-          Container(
-            // height: 80,
-            color: Colors.green,
-            child: Text("Recent Orders"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _dashCards(Color color1, color2, String title, IconData icon) {
-    return SizedBox(
-      height: 150,
-      width: 200,
-      child: Card(
-        color: color1,
-        //  const Color.fromARGB(255, 255, 206, 59),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 20,
           children: [
             Container(
-              height: 60,
-              width: 60,
+              height: 80,
               decoration: BoxDecoration(
-                color: color2,
-                // Color(0xFFF5B700),
-                shape: BoxShape.circle,
+                color: Color(0xff4CAF50),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
               ),
-              child: Center(child: Icon(icon)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    "Quickmart",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 50),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.notifications_outlined,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _dashCards(
+                  Color(0xFFFBD099),
+                  "New Orders",
+                  "70",
+                  Icons.description_outlined,
+                ),
+                _dashCards(
+                  Color(0xFFA0D29E),
+
+                  "Total Sales",
+                  "150",
+                  Icons.currency_rupee,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _dashCards(
+                  Color(0xFFFCD1D2),
+                  "Product Stock",
+                  "300",
+                  Icons.inventory_2_outlined,
+                ),
+                _dashCards(
+                  Color(0xFFBCBFFB),
+                  "Low Stock Alerts",
+                  "10",
+                  Icons.move_to_inbox_outlined,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Recent Orders",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+                SizedBox(width: 130),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "View All",
+                    style: TextStyle(color: Colors.green, fontSize: 15),
+                  ),
+                ),
+              ],
             ),
             Column(
-              spacing: 5,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(title),
+                _recents("sara", "#12345", "delivered"),
+                Divider(),
+                _recents("sara", "#12345", "delivered"),
+                Divider(),
+                _recents("sara", "#12345", "delivered"),
+                Divider(),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
                 Text(
-                  "5,000",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  "Product Categories",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
                 ),
-                // Container(
-                //   alignment: Alignment.center,
-                //   height: 20,
-                //   width: 60,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.all(Radius.circular(20)),
-                //     color: Color(0xFFF5B700),
-                //   ),
-                //   child: Text("+62%"),
-                // ),
+                SizedBox(width: 130),
+                TextButton(
+                  onPressed: () {
+                   
+                  },
+                  child: Text(
+                    "View All",
+                    style: TextStyle(color: Colors.green, fontSize: 15),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _categoryBox("vegetables", "assets/v1.jpg"),
+                _categoryBox("vegetables", "assets/v1.jpg"),
+                _categoryBox("vegetables", "assets/v1.jpg"),
+                _categoryBox("vegetables", "assets/v1.jpg"),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _categoryBox("vegetables", "assets/v1.jpg"),
+                _categoryBox("vegetables", "assets/v1.jpg"),
+                _categoryBox("vegetables", "assets/v1.jpg"),
+                _categoryBox("vegetables", "assets/v1.jpg"),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _dashCards(Color color1, String title, title2, IconData icon) {
+    return Container(
+      height: 110,
+      width: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        color: color1,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: TextStyle(color: Colors.white, fontSize: 20)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title2,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+                SizedBox(height: 50),
+                Icon(icon, color: Colors.white),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _recents(String name, id, status) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SizedBox(
+        width: 470,
+        // color: Colors.yellow,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+          children: [
+            CircleAvatar(radius: 25),
+            SizedBox(
+              width: 300,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    "Order id : $id",
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              height: 20,
+              width: 70,
+              color: Color(0xff4CAF50),
+              child: Text(status, style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _categoryBox(String name, image) {
+    return Column(
+      children: [
+        Container(
+          height: 80,
+          width: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            border: Border.all(),
+            image: DecorationImage(image: AssetImage(image), scale: 5),
+          ),
+        ),
+        Text(name),
+      ],
     );
   }
 }
