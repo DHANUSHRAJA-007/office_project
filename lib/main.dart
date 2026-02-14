@@ -3,16 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
 import 'package:office_project/firebase_options.dart';
+import 'package:office_project/screens/acceptorderpage.dart';
+import 'package:office_project/screens/cart_provider.dart';
+import 'package:office_project/screens/onboardingscreen.dart';
 import 'package:office_project/theme_controller.dart';
 import 'package:office_project/screens/loginpage.dart';
+import 'package:provider/provider.dart';
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MyApp());
+  runApp(
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => CartProvider()),
+    ],
+    child: const MyApp(),
+  ),
+);
+
+
 }
 
 class MyApp extends StatelessWidget {
@@ -33,7 +46,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
 
-          home: const LoginPage(),
+          home: Acceptorderpage(),
         );
       },
     );
