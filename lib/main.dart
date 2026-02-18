@@ -12,6 +12,7 @@ import 'package:office_project/screens/deleveriespage.dart';
 import 'package:office_project/screens/deliveryman_details.dart';
 import 'package:office_project/screens/listpage.dart';
 import 'package:office_project/screens/orders.dart';
+import 'package:office_project/screens/paymentdetailspage.dart';
 import 'package:office_project/screens/reports.dart';
 import 'package:office_project/screens/sellerdetails.dart';
 import 'package:office_project/screens/settings2.dart';
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
           darkTheme: ThemeData.dark(),
 
 
-          home: Acceptorderpage(),
+          home:Paymentdetailspage(),
 
         );
       },
