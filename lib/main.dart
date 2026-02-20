@@ -1,22 +1,25 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-
 import 'package:office_project/firebase_options.dart';
 import 'package:office_project/screens/addproduct.dart';
 import 'package:office_project/screens/adminmain.dart';
 import 'package:office_project/screens/cart_provider.dart';
+import 'package:office_project/screens/dashboard.dart';
 import 'package:office_project/screens/deleveriespage.dart';
 import 'package:office_project/screens/deliveryman_details.dart';
 import 'package:office_project/screens/invoice.dart';
 import 'package:office_project/screens/listpage.dart';
 import 'package:office_project/screens/orders.dart';
 import 'package:office_project/screens/reports.dart';
+import 'package:office_project/screens/salesreport.dart';
 import 'package:office_project/screens/sellerdetails.dart';
 import 'package:office_project/screens/settings2.dart';
+import 'package:office_project/screens/settingspage.dart';
 import 'package:office_project/screens/signuppage.dart';
 import 'package:office_project/screens/splash_screen.dart';
 import 'package:office_project/screens/uploadproduct.dart';
+import 'package:office_project/screens/view_productpage.dart';
 import 'package:office_project/theme_controller.dart';
 import 'package:office_project/screens/loginpage.dart';
 import 'package:provider/provider.dart';
@@ -49,9 +52,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
 
-          home: Invoice(),
+          home: Salesreport(),
         );
       },
     );
   }
 }
+ 
