@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:office_project/widgets/drawerbox.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -11,6 +12,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer:Drawerbox(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,6 +30,14 @@ class _DashboardState extends State<Dashboard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  Builder(
+                    builder: (context) => IconButton(
+                      icon: Icon(Icons.sort, color: Colors.white, size: 30),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    ),
+                  ),
                   Text(
                     "Quickmart",
                     style: TextStyle(
@@ -128,9 +138,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 SizedBox(width: 130),
                 TextButton(
-                  onPressed: () {
-                   
-                  },
+                  onPressed: () {},
                   child: Text(
                     "View All",
                     style: TextStyle(color: Colors.green, fontSize: 15),
