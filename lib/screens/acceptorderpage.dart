@@ -190,6 +190,11 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:office_project/widgets/buyercard.dart';
+import 'package:office_project/widgets/buyerinstructioncard.dart';
+import 'package:office_project/widgets/ordercard.dart';
+import 'package:office_project/widgets/productcard.dart';
+import 'package:office_project/widgets/productitemcard.dart';
 
 class Acceptorderpage extends StatelessWidget {
   const Acceptorderpage({super.key});
@@ -222,22 +227,21 @@ class Acceptorderpage extends StatelessWidget {
                   children: [
 
                     /// ORDER CARD
-                    _buildOrderCard(),
+                    ordercard(),
 
                     const SizedBox(height: 16),
 
-                    /// PRODUCT CARD
-                    _buildProductCard(),
+                    Productcard(),
 
                     const SizedBox(height: 16),
 
                     /// BUYER DETAILS
-                    _buildBuyerCard(),
+                    Buyercard(),
 
                     const SizedBox(height: 16),
 
                     /// SPECIAL INSTRUCTIONS
-                    _buildInstructionCard(),
+                  Buyerinstructioncard()
                   ],
                 ),
               ),
@@ -283,157 +287,11 @@ class Acceptorderpage extends StatelessWidget {
     );
   }
 
-  /// ---------------- ORDER CARD ----------------
-  Widget _buildOrderCard() {
-    return Card(
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "Order ID: 123456",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Divider(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(radius: 25),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Emily Davis"),
-                      Text("+1 234 567 890"),
-                      Text("452 Maple Street, Springfield"),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  
+  
+ 
 
-  /// ---------------- PRODUCT CARD ----------------
-  Widget _buildProductCard() {
-    return Card(
-      elevation: 3,
-      child:  Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              color: Colors.grey[300],
-              child: const Text(
-                "Product for delivery",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-            _productItem(),
-            const Divider(),
-            _productItem(),
-          ],
-        ),
-      
-    );
-  }
 
-  Widget _productItem() {
-    return const Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CircleAvatar(radius: 22),
-        SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Product Name"),
-              Text("Grocery Hub"),
-              Text("Price: \$50.00/2kg"),
-            ],
-          ),
-        )
-      ],
-    );
-  }
 
-  /// ---------------- BUYER CARD ----------------
-  Widget _buildBuyerCard() {
-    return Card(
-      elevation: 3,
-      child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              color: Colors.grey[300],
-              child: const Text(
-                "Buyer Details",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(radius: 25),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    "Emily Davis\n452 Maple Street, Springfield\nBangalore",
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      
-    );
-  }
-
-  /// ---------------- INSTRUCTION CARD ----------------
-  Widget _buildInstructionCard() {
-    return Card(
-      elevation: 3,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              color: Colors.grey[300],
-              child: const Text(
-                "Special Instructions",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text("Please deliver between 5-6 PM."),
-            const Text(
-                "Leave the package at the front door if no one is home."),
-            const Divider(),
-            const SizedBox(height: 6),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Total Amount",
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text("\$100.00",
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              ],
-            )
-          ],
-        ),
-      
-    );
-  }
+ 
 }
