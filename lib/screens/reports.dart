@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 class Reports extends StatelessWidget {
   const Reports({super.key});
@@ -10,7 +11,9 @@ class Reports extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: const Text(

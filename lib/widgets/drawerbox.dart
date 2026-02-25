@@ -1,4 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/screens/aboutuspage.dart';
+import 'package:office_project/screens/dashboard.dart';
+import 'package:office_project/screens/orders.dart';
+import 'package:office_project/screens/reports.dart';
+import 'package:office_project/screens/settings2.dart';
+import 'package:office_project/screens/settingspage.dart';
 
 class Drawerbox extends StatelessWidget {
   const Drawerbox({super.key});
@@ -11,7 +19,7 @@ class Drawerbox extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: ListView(
           children: [
-              SizedBox(height: 20),
+            SizedBox(height: 20),
             Row(
               spacing: 8,
               children: [
@@ -27,41 +35,51 @@ class Drawerbox extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            _tile("My Account ", Icons.person),
-            _tile("Coupon", Icons.confirmation_number),
-            _tile("Chats", Icons.message),
-            _tile("Promo", Icons.local_offer),
-            _tile("Report", Icons.insert_chart_outlined),
-            _tile("Settings", Icons.settings),
-            _tile("FAQ", Icons.quiz),
+            _tile(context, "Dashboard", Icons.dashboard, '/dashboard'),
+            _tile(context, "My Account", Icons.people, '/my account'),
+            _tile(context, "Orders", Icons.shopping_bag, '/orders'),
+            _tile(context, "Coupon", Icons.add_box_outlined, '/coupon'),
+            _tile(context, "Reports", Icons.bar_chart, '/reports'),
+
+            _tile(context, "About Us", Icons.info, '/about'),
+
+            _tile(context, "chat", Icons.chat, '/chat'),
+            _tile(context, "Promo", Icons.rocket, '/promo'),
+
+            _tile(context, "Settings", Icons.settings, '/settings'),
+            _tile(context, "FAQ", Icons.textsms_outlined, '/faq'),
           ],
         ),
       ),
     );
   }
 
-  Widget _tile(String name, IconData icon) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {},
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(icon, color: Colors.white, size: 25),
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(color: Colors.white),
-      ],
+  Widget _tile(
+    BuildContext context,
+    String title,
+    IconData icon,
+    String route,
+  ) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.white),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      onTap: () {
+        Get.back(); // close drawer
+
+        if (route == '/dashboard') {
+          Get.to(const Dashboard());
+        } else if (route == '/settings') {
+          Get.to(const Settings2());
+        } else if (route == '/orders') {
+          Get.to(Orders());
+        } else if (route == '/my account') {
+          Get.to(SettingsPage());
+        } else if (route == '/reports') {
+          Get.to(Reports());
+        } else if (route == '/about') {
+          Get.to(AboutUsPage());
+        }
+      },
     );
   }
 }

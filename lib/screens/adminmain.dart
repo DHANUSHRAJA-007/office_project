@@ -3,6 +3,7 @@ import 'package:office_project/screens/adminnavbar.dart';
 import 'package:office_project/screens/dashboard.dart';
 import 'package:office_project/screens/order.dart';
 import 'package:office_project/screens/product.dart';
+import 'package:office_project/screens/profilepage.dart';
 
 class Adminmain extends StatefulWidget {
   const Adminmain({super.key});
@@ -13,7 +14,7 @@ class Adminmain extends StatefulWidget {
 
 class _AdminmainState extends State<Adminmain> {
   int currentIndex = 0;
-  final List<Widget> pages = [Dashboard(), Product(), Order(), ];
+  final List<Widget> pages = [Dashboard(), Product(), Order(), Profilepage()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
