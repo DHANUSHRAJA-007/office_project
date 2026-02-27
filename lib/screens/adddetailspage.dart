@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Adddetailspage extends StatefulWidget {
   const Adddetailspage({super.key});
@@ -14,6 +15,54 @@ class _AdddetailspageState extends State<Adddetailspage> {
   late String selectedValue;
 
   DateTime? selectedDate;
+
+  final TextEditingController productIdController = TextEditingController();
+  final TextEditingController productNameController = TextEditingController();
+  final TextEditingController categoryController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController tagController = TextEditingController();
+
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController taxController = TextEditingController();
+  final TextEditingController percentageController = TextEditingController();
+  final TextEditingController offerController = TextEditingController();
+
+  Future<void> saveProduct() async {
+    // if (productIdController.text.isEmpty ||
+    //     productNameController.text.isEmpty ||
+    //     priceController.text.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text("Please fill required fields")),
+    //   );
+    //   return; // stop saving
+    // }
+
+    try {
+      await FirebaseFirestore.instance.collection('addedproducts').add({
+        'productId': productIdController.text.trim(),
+        'productName': productNameController.text.trim(),
+        'category': categoryController.text.trim(),
+        'description': descriptionController.text.trim(),
+        'tag': tagController.text.trim(),
+        'price': double.tryParse(priceController.text) ?? 0,
+        'tax': taxController.text.trim(),
+        'percentage': percentageController.text.trim(),
+        'offer': offerController.text.trim(),
+        'stock': count,
+        'unit': selectedValue,
+        'packingDate': selectedDate ?? DateTime.now(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Product Saved Successfully")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
 
   @override
   void initState() {
@@ -71,11 +120,24 @@ class _AdddetailspageState extends State<Adddetailspage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        buildTextField("Product ID"),
-                        buildTextField("Product Name"),
-                        buildTextField("Product Category"),
-                        buildTextField("Description", maxLines: 4),
-                        buildTextField("Add Tag"),
+                        buildTextField(
+                          "Product ID",
+                          controller: productIdController,
+                        ),
+                        buildTextField(
+                          "Product Name",
+                          controller: productNameController,
+                        ),
+                        buildTextField(
+                          "Product Category",
+                          controller: categoryController,
+                        ),
+                        buildTextField(
+                          "Description",
+                          maxLines: 4,
+                          controller: descriptionController,
+                        ),
+                        buildTextField("Add Tag", controller: tagController),
                         const SizedBox(height: 30),
                         SizedBox(
                           width: double.infinity,
@@ -104,18 +166,33 @@ class _AdddetailspageState extends State<Adddetailspage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // buildTextField(
+                        //   "Price",
+                        //   keyboardType: TextInputType.number, controller: priceController,
+                        // ),
                         buildTextField(
                           "Price",
+                          controller: priceController,
                           keyboardType: TextInputType.number,
                         ),
                         Row(
                           children: [
-                            Expanded(child: buildTextField("Tax (GST)")),
+                            Expanded(
+                              child: buildTextField(
+                                "Tax (GST)",
+                                controller: taxController,
+                              ),
+                            ),
                             const SizedBox(width: 12),
-                            Expanded(child: buildTextField("Percentage (%)")),
+                            Expanded(
+                              child: buildTextField(
+                                "Percentage (%)",
+                                controller: percentageController,
+                              ),
+                            ),
                           ],
                         ),
-                        buildTextField("Offer"),
+                        buildTextField("Offer", controller: offerController),
                         const SizedBox(height: 16),
                         Row(
                           children: [
@@ -239,7 +316,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: saveProduct,
                 child: const Text(
                   "Save",
                   style: TextStyle(color: Colors.white),
@@ -252,8 +329,31 @@ class _AdddetailspageState extends State<Adddetailspage> {
     );
   }
 
+  //   Widget buildTextField(
+  //     String label, {
+  //     int maxLines = 1,
+  //     TextInputType keyboardType = TextInputType.text,
+  //   }) {
+  //     return Padding(
+  //       padding: const EdgeInsets.only(bottom: 16),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Text(label),
+  //           const SizedBox(height: 6),
+  //           TextField(
+  //             maxLines: maxLines,
+  //             keyboardType: keyboardType,
+  //             decoration: const InputDecoration(border: OutlineInputBorder()),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+
   Widget buildTextField(
     String label, {
+    required TextEditingController controller,
     int maxLines = 1,
     TextInputType keyboardType = TextInputType.text,
   }) {
@@ -265,6 +365,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
           Text(label),
           const SizedBox(height: 6),
           TextField(
+            controller: controller,
             maxLines: maxLines,
             keyboardType: keyboardType,
             decoration: const InputDecoration(border: OutlineInputBorder()),

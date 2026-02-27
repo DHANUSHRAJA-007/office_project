@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:office_project/screens/adddetailspage.dart';
 
 class UploadProductPage extends StatefulWidget {
   const UploadProductPage({super.key});
@@ -15,7 +16,6 @@ class UploadProductPage extends StatefulWidget {
 class _UploadProductPageState extends State<UploadProductPage> {
   final ImagePicker picker = ImagePicker();
 
-  
   List<XFile> images = [];
 
   /// -------- PICK IMAGES ----------
@@ -194,16 +194,20 @@ class _UploadProductPageState extends State<UploadProductPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: () {
-                  if (images.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Upload atleast one image")),
-                    );
-                    return;
-                  }
 
-                  print("Images Selected: ${images.length}");
-                },
+                // onPressed: () {
+                //   if (images.isEmpty) {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(content: Text("Upload atleast one image")),
+                //     );
+                //     return;
+                //   } else {
+                //     Get.to(Adddetailspage());
+                //   }
+
+                //   print("Images Selected: ${images.length}");
+                // },
+                onPressed: () => Get.to(Adddetailspage()),
                 child: const Text(
                   "Save",
                   style: TextStyle(fontSize: 18, color: Colors.white),
