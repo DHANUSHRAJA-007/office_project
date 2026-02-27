@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/aboutuspage.dart';
@@ -69,11 +68,11 @@ class Drawerbox extends StatelessWidget {
         if (route == '/dashboard') {
           Get.to(const Dashboard());
         } else if (route == '/settings') {
-          Get.to(const Settings2());
+          Get.to( Settings2());
         } else if (route == '/orders') {
           Get.to(Orders());
         } else if (route == '/my account') {
-          Get.to(SettingsPage());
+          Get.to(ProfilePage());
         } else if (route == '/reports') {
           Get.to(Reports());
         } else if (route == '/about') {

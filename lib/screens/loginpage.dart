@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 30),
 
                       Text(
-                        "Welcome back",
+                        "Welcome",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,

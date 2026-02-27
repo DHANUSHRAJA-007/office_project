@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:office_project/screens/loginpage.dart';
 import 'package:office_project/screens/verificationpage.dart';
 
-class Cretepass extends StatefulWidget {
-  const Cretepass({super.key});
+class Createpass extends StatefulWidget {
+  const Createpass({super.key});
   @override
-  State<Cretepass> createState() => _CreatepassState();
+  State<Createpass> createState() => _CreatepassState();
 
   static Widget _inputField(String hint, {bool obscure = true}) {
     return TextField(
@@ -37,7 +36,7 @@ class Cretepass extends StatefulWidget {
   }
 }
 
-class _CreatepassState extends State<Cretepass> {
+class _CreatepassState extends State<Createpass> {
   bool textVisible = true;
 
   @override

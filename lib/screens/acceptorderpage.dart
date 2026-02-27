@@ -194,7 +194,6 @@ import 'package:office_project/widgets/buyercard.dart';
 import 'package:office_project/widgets/buyerinstructioncard.dart';
 import 'package:office_project/widgets/ordercard.dart';
 import 'package:office_project/widgets/productcard.dart';
-import 'package:office_project/widgets/productitemcard.dart';
 
 class Acceptorderpage extends StatelessWidget {
   const Acceptorderpage({super.key});
