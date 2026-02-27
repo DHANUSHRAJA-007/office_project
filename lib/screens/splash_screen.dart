@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/adminmain.dart';
 import 'package:office_project/screens/loginpage.dart';
-
+import 'package:office_project/screens/onboardingscreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,14 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
       if (user != null) {
         Get.offAll(() => Adminmain());
       } else {
-        Get.offAll(() =>  LoginPage());
+        Get.offAll(() => OnboardingScreen());
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: Center(child: Image(image: AssetImage("assets/logo.png"))),
     );

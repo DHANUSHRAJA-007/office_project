@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
 
 
-  final List<Widget> _pages = <Widget>[Home(), Cartpage(), SettingsPage()];
+  final List<Widget> _pages = <Widget>[Home(), Cartpage(), ProfilePage()];
 
 
   @override

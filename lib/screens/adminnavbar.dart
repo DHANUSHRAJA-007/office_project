@@ -45,14 +45,14 @@ class _AdminnavbarState extends State<Adminnavbar> {
                 ? Icons.shopping_cart
                 : Icons.shopping_cart_outlined,
           ),
-          label: "Category",
+          label: "Orders",
         ),
 
         BottomNavigationBarItem(
           icon: Icon(
-            widget.currentIndex == 3 ? Icons.person_2 : Icons.person_2_outlined,
+            widget.currentIndex == 3 ? Icons.settings : Icons.settings_outlined,
           ),
-          label: "Profile",
+          label: "Settings",
         ),
       ],
     );

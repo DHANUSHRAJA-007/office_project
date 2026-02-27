@@ -2,42 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:office_project/firebase_options.dart';
-import 'package:office_project/screens/aboutuspage.dart';
-
-import 'package:office_project/screens/acceptorderpage.dart';
-import 'package:office_project/screens/adddetailspage.dart';
-
-import 'package:office_project/screens/addproduct.dart';
-import 'package:office_project/screens/adminmain.dart';
-
 import 'package:office_project/screens/cart_provider.dart';
-import 'package:office_project/screens/cartpage.dart';
-import 'package:office_project/screens/dashboard.dart';
-import 'package:office_project/screens/deleveriespage.dart';
-import 'package:office_project/screens/deliveryman_details.dart';
-import 'package:office_project/screens/invoice.dart';
-import 'package:office_project/screens/listpage.dart';
-import 'package:office_project/screens/order.dart';
-import 'package:office_project/screens/orders.dart';
-import 'package:office_project/screens/paymentdetailspage.dart';
-import 'package:office_project/screens/privacypolicy.dart';
-import 'package:office_project/screens/product.dart';
-import 'package:office_project/screens/reports.dart';
-import 'package:office_project/screens/salesreport.dart';
-import 'package:office_project/screens/sellerdetails.dart';
-import 'package:office_project/screens/settings2.dart';
-import 'package:office_project/screens/settingspage.dart';
-import 'package:office_project/screens/signuppage.dart';
-import 'package:office_project/screens/skip3page.dart';
-import 'package:office_project/screens/skipone.dart';
-import 'package:office_project/screens/skiptwo.dart';
 import 'package:office_project/screens/splash_screen.dart';
-import 'package:office_project/screens/storespage.dart';
-import 'package:office_project/screens/termsandcond.dart';
-import 'package:office_project/screens/uploadproduct.dart';
-
-import 'package:office_project/screens/verificationpage.dart';
-import 'package:office_project/screens/view_productpage.dart';
 import 'package:office_project/theme_controller.dart';
 import 'package:provider/provider.dart';
 

@@ -99,7 +99,6 @@ class _DashboardState extends State<Dashboard> {
                 Text(
                   "Recent Orders",
                   style: TextStyle(
-                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 25,
                   ),
@@ -131,7 +130,7 @@ class _DashboardState extends State<Dashboard> {
                 Text(
                   "Product Categories",
                   style: TextStyle(
-                    color: Colors.black,
+                    
                     fontWeight: FontWeight.bold,
                     fontSize: 25,
                   ),
@@ -225,14 +224,14 @@ class _DashboardState extends State<Dashboard> {
                   Text(
                     name,
                     style: TextStyle(
-                      color: Colors.black,
+                      
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
                   Text(
                     "Order id : $id",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle( fontSize: 18),
                   ),
                 ],
               ),
