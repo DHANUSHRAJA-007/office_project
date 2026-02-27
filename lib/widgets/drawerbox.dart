@@ -34,7 +34,7 @@ class Drawerbox extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            _tile(context, "Dashboard", Icons.dashboard, '/dashboard'),
+            // _tile(context, "Dashboard", Icons.dashboard, '/dashboard'),
             _tile(context, "My Account", Icons.people, '/my account'),
             _tile(context, "Orders", Icons.shopping_bag, '/orders'),
             _tile(context, "Coupon", Icons.add_box_outlined, '/coupon'),

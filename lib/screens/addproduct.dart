@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/screens/uploadproduct.dart';
 
 class Addproduct extends StatelessWidget {
   const Addproduct({super.key});
@@ -28,7 +30,9 @@ class Addproduct extends StatelessWidget {
           children: [
             SizedBox(height: 50),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.to(UploadProductPage());
+              },
               child: Container(
                 height: 50,
                 width: 150,
@@ -60,25 +64,6 @@ class Addproduct extends StatelessWidget {
             ),
 
             SizedBox(height: 50),
-            InkWell(
-              onTap: () {
-                
-              },
-              child: Container(
-                alignment: Alignment.center,
-                height: 60,
-                width: 450,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Color(0xff4CAF50),
-                ),
-                child: Text(
-                  "Save",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
-            ),
-            SizedBox(height: 30),
           ],
         ),
       ),

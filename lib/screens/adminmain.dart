@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:office_project/screens/addproduct.dart';
 import 'package:office_project/screens/adminnavbar.dart';
 import 'package:office_project/screens/dashboard.dart';
 import 'package:office_project/screens/orders.dart';
@@ -14,7 +15,16 @@ class Adminmain extends StatefulWidget {
 
 class _AdminmainState extends State<Adminmain> {
   int currentIndex = 0;
+// <<<<<<< HEAD
   final List<Widget> pages = [Dashboard(), Product(), Orders(), Settings2()];
+// =======
+//   final List<Widget> pages = [
+//     Dashboard(),
+//     Addproduct(),
+//     Order(),
+//     Profilepage(),
+//   ];
+// >>>>>>> origin/girish
   @override
   Widget build(BuildContext context) {
     return Scaffold(
