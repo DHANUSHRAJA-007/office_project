@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
 class Adddetailspage extends StatefulWidget {
   const Adddetailspage({super.key});
@@ -38,7 +39,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
     // }
 
     try {
-      await FirebaseFirestore.instance.collection('addedproducts').add({
+      await FirebaseFirestore.instance.collection('products').add({
         'productId': productIdController.text.trim(),
         'productName': productNameController.text.trim(),
         'category': categoryController.text.trim(),
@@ -92,12 +93,19 @@ class _AdddetailspageState extends State<Adddetailspage> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.green,
           title: const Text(
             "Add Details",
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
+           leading: IconButton(
+          onPressed: () {
+            Get.back(); // optional back
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
         ),
         body: Column(
           children: [

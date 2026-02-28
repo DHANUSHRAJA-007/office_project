@@ -65,7 +65,9 @@ class _UploadProductPageState extends State<UploadProductPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
           icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         backgroundColor: const Color(0xff4CAF50),
