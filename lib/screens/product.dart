@@ -92,7 +92,7 @@
 //             ElevatedButton(
 //               onPressed: () {
 //                 int parsedCount = int.tryParse(countcontroller.text) ?? 0;
-                
+
 //                 if (docId == null) {
 //                   // ADD
 //                   addProduct(
@@ -201,7 +201,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -213,8 +212,9 @@ class Product extends StatefulWidget {
 }
 
 class _ProductState extends State<Product> {
-  final CollectionReference products =
-      FirebaseFirestore.instance.collection('products');
+  final CollectionReference products = FirebaseFirestore.instance.collection(
+    'products',
+  );
 
   // ---------------- ADD PRODUCT ----------------
   void addProduct(String name, String price, String category, int count) {
@@ -256,17 +256,21 @@ class _ProductState extends State<Product> {
     String? existingcategory,
     String? existingcount,
   }) {
-    TextEditingController namecontroller =
-        TextEditingController(text: existingName);
+    TextEditingController namecontroller = TextEditingController(
+      text: existingName,
+    );
 
-    TextEditingController pricecontroller =
-        TextEditingController(text: existingPrice);
+    TextEditingController pricecontroller = TextEditingController(
+      text: existingPrice,
+    );
 
-    TextEditingController categorycontroller =
-        TextEditingController(text: existingcategory);
+    TextEditingController categorycontroller = TextEditingController(
+      text: existingcategory,
+    );
 
-    TextEditingController countcontroller =
-        TextEditingController(text: existingcount);
+    TextEditingController countcontroller = TextEditingController(
+      text: existingcount,
+    );
 
     showDialog(
       context: context,
@@ -334,7 +338,12 @@ class _ProductState extends State<Product> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Products")),
+      appBar: AppBar(
+        title: const Text(
+          "Products",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: StreamBuilder(
         stream: products.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:office_project/screens/cartpage.dart';
 import 'package:office_project/screens/home.dart';
-import 'package:office_project/screens/settingspage.dart';
+import 'package:office_project/screens/admin_settings.dart';
 
 class HomePage extends StatefulWidget {
   final String role;
@@ -20,13 +20,12 @@ class _HomePageState extends State<HomePage> {
 
 
 
-  final List<Widget> _pages = <Widget>[Home(), Cartpage(), ProfilePage()];
+  final List<Widget> _pages = <Widget>[Home(), Cartpage(), Settings2()];
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text('e-commerce name'))),
       body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

@@ -13,16 +13,22 @@ class _AdddetailspageState extends State<Adddetailspage> {
   int count = 0;
 
   final List<String> items = ["1 unit", "2 unit", "3 unit"];
+  final List<String> categories = [
+    "Fruits",
+    "Juice",
+    "Vegetable",
+    "ProteinPowder",
+  ];
   late String selectedValue;
 
   DateTime? selectedDate;
-
+  String? selectedItem;
   final TextEditingController productIdController = TextEditingController();
   final TextEditingController productNameController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController tagController = TextEditingController();
-
+  final ExpansionTileController _controller = ExpansionTileController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController taxController = TextEditingController();
   final TextEditingController percentageController = TextEditingController();
@@ -42,7 +48,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
       await FirebaseFirestore.instance.collection('products').add({
         'productId': productIdController.text.trim(),
         'productName': productNameController.text.trim(),
-        'category': categoryController.text.trim(),
+        'category': selectedItem??"",
         'description': descriptionController.text.trim(),
         'tag': tagController.text.trim(),
         'price': double.tryParse(priceController.text) ?? 0,
@@ -100,12 +106,12 @@ class _AdddetailspageState extends State<Adddetailspage> {
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
-           leading: IconButton(
-          onPressed: () {
-            Get.back(); // optional back
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
+          leading: IconButton(
+            onPressed: () {
+              Get.back(); // optional back
+            },
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+          ),
         ),
         body: Column(
           children: [
@@ -136,9 +142,37 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           "Product Name",
                           controller: productNameController,
                         ),
-                        buildTextField(
-                          "Product Category",
-                          controller: categoryController,
+                       
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: ExpansionTile(
+                            controller: _controller,
+                            tilePadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                            ),
+                            title: Text(
+                              selectedItem ?? "Select Category",
+                              style: TextStyle(
+                                color: selectedItem == null
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
+                            children: categories.map((item) {
+                              return ListTile(
+                                title: Text(item),
+                                onTap: () {
+                                  setState(() {
+                                    selectedItem = item;
+                                  });
+                                  _controller.collapse();
+                                },
+                              );
+                            }).toList(),
+                          ),
                         ),
                         buildTextField(
                           "Description",
@@ -147,23 +181,23 @@ class _AdddetailspageState extends State<Adddetailspage> {
                         ),
                         buildTextField("Add Tag", controller: tagController),
                         const SizedBox(height: 30),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: const Text(
-                              "Save",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   height: 50,
+                        //   child: ElevatedButton(
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: Colors.green,
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(25),
+                        //       ),
+                        //     ),
+                        //     onPressed: () {},
+                        //     child: const Text(
+                        //       "Save",
+                        //       style: TextStyle(color: Colors.white),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

@@ -97,11 +97,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:office_project/screens/skip3page.dart';
 
 class Skiptwopage extends StatelessWidget {
-  const Skiptwopage({super.key});
+  final VoidCallback onSkip;
+
+  const Skiptwopage({super.key, required this.onSkip});
 
   @override
   Widget build(BuildContext context) {
@@ -128,17 +129,10 @@ class Skiptwopage extends StatelessWidget {
                   onTap: () {
                     Get.to(Skip3page());
                   },
-                  child: Positioned(
-                    right: 10,
-                    child: TextButton(
-                      onPressed: () {
-                        Get.to(Skip3page());
-                      },
-                      child: Text(
-                        "Skip",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
+
+                  child: TextButton(
+                    onPressed: onSkip,
+                    child: Text("Skip", style: TextStyle(color: Colors.black)),
                   ),
                 ),
               ),

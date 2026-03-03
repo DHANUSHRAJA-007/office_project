@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 
-class Orders extends StatelessWidget {
+class Orders extends StatefulWidget {
   const Orders({super.key});
 
+  @override
+  State<Orders> createState() => _OrdersState();
+}
+
+class _OrdersState extends State<Orders> {
+  final List<String> days = ["Today", "yesterday", "Tomorrow"];
+  final ExpansionTileController _controller = ExpansionTileController();
+  String? selectedDay;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Get.back();
+        //   },
+        //   icon: const Icon(Icons.arrow_back, color: Colors.white),
+        // ),
         title: const Text(
           "Orders",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -32,7 +39,7 @@ class Orders extends StatelessWidget {
                 "320",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
               ),
-              Text("Today", style: TextStyle(fontSize: 16)),
+              Text(selectedDay??"", style: TextStyle(fontSize: 16)),
             ],
           ),
           SizedBox(height: 30),
@@ -48,11 +55,19 @@ class Orders extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: ExpansionTile(
-                title: Text("Today"),
-                children: [
-                  ListTile(title: Text("Item 1")),
-                  ListTile(title: Text("Item 2")),
-                ],
+                controller: _controller,
+                title: Text(selectedDay ?? "Select day"),
+                children: days.map((item) {
+                  return ListTile(
+                    title: Text(item),
+                    onTap: () {
+                      setState(() {
+                        selectedDay = item;
+                      });
+                      _controller.collapse();
+                    },
+                  );
+                }).toList(),
               ),
             ),
           ),

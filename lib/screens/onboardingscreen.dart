@@ -111,6 +111,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
+  void skipToLast() {
+    _controller.animateToPage(
+      2,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +126,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-
             /// PAGE CONTENT
             Expanded(
               child: PageView(
@@ -126,10 +133,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPageChanged: (index) {
                   setState(() => currentIndex = index);
                 },
-                children: const [
-                  Skiponepage(),
-                  Skiptwopage(),
-                  Skip3page(),
+                children: [
+                  Skiponepage(
+                    onSkip:skipToLast
+                  ),
+                   Skiptwopage(onSkip: skipToLast,),
+                  const Skip3page(),
                 ],
               ),
             ),
@@ -140,7 +149,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-
                   /// DOTS CENTER
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -166,9 +174,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     Positioned(
                       right: 20,
                       child: FloatingActionButton(
+                        shape: CircleBorder(),
                         backgroundColor: Colors.green,
                         onPressed: nextPage,
-                        child: const Icon(Icons.arrow_forward),
+                        child: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                 ],

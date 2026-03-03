@@ -56,10 +56,10 @@ class _HomeState extends State<Home> {
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(product['name']),
+                          Text(product['productName']),
                           Text("Category : ${product['category']}"),
 
-                          if (product['count'] == 0)
+                          if (product['stock'] == 0)
                             const Text(
                               "Out of stock",
                               style: TextStyle(
@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
 
-                          if (product['count'] < 10 && product['count'] > 0)
+                          if (product['stock'] < 10 && product['stock'] > 0)
                             Text(
                               "Limited stock",
                               style: TextStyle(
@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
 
                       subtitle: Text("Price : ₹${product['price']}"),
 
-                      trailing: product['count'] > 0
+                      trailing: product['stock'] > 0
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -89,8 +89,9 @@ class _HomeState extends State<Home> {
                                 ElevatedButton(
                                   onPressed: () {
                                     Map<String, dynamic> cartItem = {
-                                      'name': product["name"],
+                                      'name': product["productName"],
                                       'price': product["price"],
+                                      'quantity':1
                                     };
 
                                     context.read<CartProvider>().addToCart(
@@ -109,14 +110,14 @@ class _HomeState extends State<Home> {
                                         .collection('products')
                                         .doc(product.id)
                                         .update({
-                                          'count': FieldValue.increment(-1),
+                                          'stock': FieldValue.increment(-1),
                                         });
                                   },
                                   child: const Text("Buy"),
                                 ),
                               ],
                             )
-                          : null,
+                          : const SizedBox.shrink(),
                     ),
                   );
                 },
@@ -164,3 +165,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+

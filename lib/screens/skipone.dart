@@ -1,88 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:office_project/screens/skip3page.dart';
 
 class Skiponepage extends StatelessWidget {
-  const Skiponepage({super.key});
+  final VoidCallback onSkip;
+  const Skiponepage({super.key, required this.onSkip});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final statusBar = MediaQuery.of(context).padding.top;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        // TOP GREEN BAR (STATUS AREA)
-        Container(
-          height: size.height * 0.08,
-          width: double.infinity,
-          color: Colors.green,
-        ),
-
-        // IMAGE WITH CURVE + SKIP
-        SizedBox(
-          height: size.height * 0.56,
-          width: double.infinity,
-          child: Stack(
-            children: [
-              ClipPath(
-                clipper: BottomInwardCurveClipper(),
-                child: Image.asset(
-                  "assets/one.png",
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              // ✅ SKIP — NOW CLEARLY VISIBLE
-              Positioned(
-                right: 10,
-                child: TextButton(
-                  onPressed: () {
-                    Get.to(
-                      Skip3page());
-                  },
-                  child: Text("Skip", style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            ],
+    return Material(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // TOP GREEN BAR (STATUS AREA)
+          Container(
+            height: size.height * 0.08,
+            width: double.infinity,
+            color: Colors.green,
           ),
-        ),
 
-        // TEXT SECTION
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  "Fresh Groceries,\nDelivered Every Day",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none, // ✅ remove underline
+          // IMAGE WITH CURVE + SKIP
+          SizedBox(
+            height: size.height * 0.56,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                ClipPath(
+                  clipper: BottomInwardCurveClipper(),
+                  child: Image.asset(
+                    "assets/one.png",
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 12),
-                Text(
-                  "Handpicked local produce delivered fresh\nfrom nearby farms to you.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 14,
-                    decoration: TextDecoration.none, // ✅ remove underline
+
+                // ✅ SKIP — NOW CLEARLY VISIBLE
+                Positioned(
+                  right: 10,
+                  child: TextButton(
+                    onPressed: onSkip,
+                    child: Text("Skip", style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ],
+
+          // TEXT SECTION
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    "Fresh Groceries,\nDelivered Every Day",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.none, // ✅ remove underline
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    "Handpicked local produce delivered fresh\nfrom nearby farms to you.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14,
+                      decoration: TextDecoration.none, // ✅ remove underline
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:office_project/screens/loginpage.dart';
 import 'package:office_project/screens/privacypolicy.dart';
+import 'package:office_project/screens/profilepage.dart';
 import 'package:office_project/screens/reports.dart';
-import 'package:office_project/screens/settingspage.dart';
 import 'package:office_project/screens/termsandcond.dart';
 import 'package:office_project/theme_controller.dart';
 
 class Settings2 extends StatelessWidget {
-   Settings2({super.key});
+  Settings2({super.key});
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -128,24 +129,27 @@ class Settings2 extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Card(
-                  elevation: 2,
-                  shape: BeveledRectangleBorder(),
-                  child: ListTile(
-                    leading: Icon(Icons.logout, color: Colors.red),
-                    title: Text(
-                      "Log out",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(),
+                    child: ListTile(
+                      
+                      leading: Icon(Icons.logout, color: Colors.red),
+                      title: Text(
+                        "Log out",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
                       ),
-                    ),
-                    onTap: () async {
+                      onTap: () async {
                         await _auth.signOut();
+                        Get.offAll(() => LoginPage());
                       },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              
+          ],
           ),
         ),
       ),
@@ -164,10 +168,8 @@ class Settings2 extends StatelessWidget {
           Get.to(Reports());
         } else if (route == '/privacy') {
           Get.to(PrivacyPolicyPage());
-        }
-        else if(route=='/terms'){
-          Get.to(
-            TermsAndConditionsPage());
+        } else if (route == '/terms') {
+          Get.to(TermsAndConditionsPage());
         }
       },
     );

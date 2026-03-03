@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:office_project/screens/aboutuspage.dart';
 import 'package:office_project/screens/dashboard.dart';
 import 'package:office_project/screens/orders.dart';
+import 'package:office_project/screens/profilepage.dart';
 import 'package:office_project/screens/reports.dart';
-import 'package:office_project/screens/settings2.dart';
-import 'package:office_project/screens/settingspage.dart';
+import 'package:office_project/screens/admin_settings.dart';
 
 class Drawerbox extends StatelessWidget {
   const Drawerbox({super.key});
@@ -36,7 +36,7 @@ class Drawerbox extends StatelessWidget {
             SizedBox(height: 20),
             // _tile(context, "Dashboard", Icons.dashboard, '/dashboard'),
             _tile(context, "My Account", Icons.people, '/my account'),
-            _tile(context, "Orders", Icons.shopping_bag, '/orders'),
+            // _tile(context, "Orders", Icons.shopping_bag, '/orders'),
             _tile(context, "Coupon", Icons.add_box_outlined, '/coupon'),
             _tile(context, "Reports", Icons.bar_chart, '/reports'),
 
@@ -45,7 +45,7 @@ class Drawerbox extends StatelessWidget {
             _tile(context, "chat", Icons.chat, '/chat'),
             _tile(context, "Promo", Icons.rocket, '/promo'),
 
-            _tile(context, "Settings", Icons.settings, '/settings'),
+            // _tile(context, "Settings", Icons.settings, '/settings'),
             _tile(context, "FAQ", Icons.textsms_outlined, '/faq'),
           ],
         ),

@@ -3,8 +3,7 @@ import 'package:office_project/screens/addproduct.dart';
 import 'package:office_project/screens/adminnavbar.dart';
 import 'package:office_project/screens/dashboard.dart';
 import 'package:office_project/screens/orders.dart';
-import 'package:office_project/screens/product.dart';
-import 'package:office_project/screens/settings2.dart';
+import 'package:office_project/screens/admin_settings.dart';
 
 class Adminmain extends StatefulWidget {
   const Adminmain({super.key});

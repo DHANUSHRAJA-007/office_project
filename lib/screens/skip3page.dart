@@ -91,13 +91,8 @@ class Skip3page extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         /// TOP GREEN BAR
-        Container(
-          height: 60,
-          width: double.infinity,
-          color: Colors.green,
-        ),
+        Container(height: 60, width: double.infinity, color: Colors.green),
 
         /// IMAGE
         Expanded(
@@ -117,7 +112,6 @@ class Skip3page extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 /// LOGIN BUTTON
                 SizedBox(
                   width: double.infinity,
@@ -132,7 +126,10 @@ class Skip3page extends StatelessWidget {
                     onPressed: () {
                       Get.off(() => const LoginPage());
                     },
-                    child: const Text("Login"),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
 

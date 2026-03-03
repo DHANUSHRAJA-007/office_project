@@ -120,7 +120,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/fruitspage.dart';
 import 'package:office_project/screens/juicepage.dart';
+import 'package:office_project/screens/proteinpage.dart';
 import 'package:office_project/screens/uploadproduct.dart';
+import 'package:office_project/screens/vegetablepage.dart';
 
 class Addproduct extends StatelessWidget {
   const Addproduct({super.key});
@@ -133,15 +135,19 @@ class Addproduct extends StatelessWidget {
         backgroundColor: const Color(0xff4CAF50),
         automaticallyImplyLeading: false,
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Get.back(); // optional back
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Get.back(); // optional back
+        //   },
+        //   icon: const Icon(Icons.arrow_back, color: Colors.white),
+        // ),
         title: const Text(
           "Product",
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -175,28 +181,17 @@ class Addproduct extends StatelessWidget {
 
             Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    Get.to(() => const FruitsPage());
-                  },
-                  child: _productCards("assets/v1.jpg", "Fruits"),
-                ),
+                _productCards("assets/v1.jpg", "Fruits", "/Fruits"),
 
-                InkWell(
-                  onTap: () {
-                    Get.to(() => const JuicePage());
-                  },
-                  child: _productCards("assets/v1.jpg", "Juice"),
-                ),
+                _productCards("assets/v1.jpg", "Juice", '/juice'),
 
-                InkWell(
-                  onTap: () {
-                    // Add VegetablePage here
-                  },
-                  child: _productCards("assets/v1.jpg", "Vegetables"),
-                ),
+                _productCards("assets/v1.jpg", "Vegetables", '/vegetable'),
 
-                _productCards("assets/v1.jpg", "Protein Powder"),
+                _productCards(
+                  "assets/v1.jpg",
+                  "Protein Powder",
+                  '/protein powder',
+                ),
               ],
             ),
 
@@ -207,23 +202,40 @@ class Addproduct extends StatelessWidget {
     );
   }
 
-  Widget _productCards(String image, String name) {
+  Widget _productCards(String image, String name, String route) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SizedBox(
-        height: 60,
-        child: Card(
-          elevation: 3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Image.asset(image, height: 40, width: 40),
-              SizedBox(
-                width: 200,
-                child: Text(name, style: const TextStyle(fontSize: 18)),
-              ),
-              const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
-            ],
+      child: InkWell(
+        onTap: () {
+          if (route == '/juice') {
+            Get.to(Juicepage());
+          } else if (route == '/Fruits') {
+            Get.to(FruitsPage());
+          } else if (route == "/vegetable") {
+            Get.to(Vegetablepage());
+          } else if (route == '/protein powder') {
+            Get.to(Proteinpage());
+          }
+        },
+        child: SizedBox(
+          height: 60,
+          child: Card(
+            elevation: 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Image.asset(image, height: 40, width: 40),
+                SizedBox(
+                  width: 200,
+                  child: Text(name, style: const TextStyle(fontSize: 18)),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 18,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
           ),
         ),
       ),
