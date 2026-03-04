@@ -140,6 +140,8 @@ import 'package:get/get.dart';
 import 'package:office_project/auth.dart';
 import 'package:office_project/screens/termsandcond.dart';
 import 'loginpage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -159,6 +161,27 @@ class _SignupPageState extends State<SignupPage> {
 
   bool loading = false;
   bool isAccepted = false;
+
+
+// Future<UserCredential?> signInWithGoogle() async {
+
+//   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+//   if (googleUser == null) {
+//     return null;
+//   }
+
+//   final GoogleSignInAuthentication googleAuth =
+//       await googleUser.authentication;
+
+//   final credential = GoogleAuthProvider.credential(
+//     accessToken: googleAuth.accessToken,
+//     idToken: googleAuth.idToken,
+//   );
+
+//   return await FirebaseAuth.instance.signInWithCredential(credential);
+// }
+
 
   Future<void> signUp() async {
     setState(() => loading = true);
