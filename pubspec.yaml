@@ -43,6 +43,8 @@ dependencies:
   dotted_border: ^2.1.0
   bootstrap_icons: ^1.13.1
   google_sign_in: ^7.2.0
+  intl: ^0.18.1
+  carousel_slider: ^5.1.2
 
 
 dev_dependencies:

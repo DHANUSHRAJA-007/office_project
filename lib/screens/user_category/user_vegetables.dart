@@ -2,23 +2,22 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:office_project/screens/view_productpage.dart';
 
-class Vegetablepage extends StatefulWidget {
-  const Vegetablepage({super.key});
+class UserVegetables extends StatefulWidget {
+  const UserVegetables({super.key});
 
   @override
-  State<Vegetablepage> createState() => _VegetablepageState();
+  State<UserVegetables> createState() => _UserVegetablesState();
 }
-
-class _VegetablepageState extends State<Vegetablepage> {
+Map<String, bool> likedProducts = {};
+class _UserVegetablesState extends State<UserVegetables> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: const Text(
-          "Vegetablepage",
+          "Vegetables",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -111,23 +110,23 @@ class _VegetablepageState extends State<Vegetablepage> {
                     ),
                   ),
       
-                  // IconButton(
-                  //   padding: EdgeInsets.zero,
-                  //   constraints: const BoxConstraints(),
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       likedProducts[product.id] =
-                  //           !(likedProducts[product.id] ?? false);
-                  //     });
-                  //   },
-                  //   icon: Icon(
-                  //     Icons.favorite,
-                  //     size: 20,
-                  //     color: likedProducts[product.id] == true
-                  //         ? Colors.red
-                  //         : Colors.grey,
-                  //   ),
-                  // ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      setState(() {
+                        likedProducts[product.id] =
+                            !(likedProducts[product.id] ?? false);
+                      });
+                    },
+                    icon: Icon(
+                      Icons.favorite,
+                      size: 20,
+                      color: likedProducts[product.id] == true
+                          ? Colors.red
+                          : Colors.grey,
+                    ),
+                  ),
                 ],
               ),
       
@@ -180,20 +179,20 @@ class _VegetablepageState extends State<Vegetablepage> {
                     ],
                   ),
       
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(
-                  //     horizontal: 10,
-                  //     vertical: 4,
-                  //   ),
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.green,
-                  //     borderRadius: BorderRadius.circular(6),
-                  //   ),
-                  //   child: const Text(
-                  //     "Add",
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  // ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text(
+                      "Add",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
             ],
