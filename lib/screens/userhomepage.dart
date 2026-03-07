@@ -3,11 +3,14 @@ import 'package:office_project/screens/cartpage.dart';
 import 'package:office_project/screens/admin_settings.dart';
 import 'package:office_project/screens/searchpage.dart';
 import 'package:office_project/screens/user_homescreen.dart';
+import 'package:office_project/screens/userprofile.dart';
 
 class HomePage extends StatefulWidget {
   final String role;
 
   const HomePage({super.key, required this.role});
+
+    static final GlobalKey<_HomePageState> homeKey = GlobalKey<_HomePageState>();
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -15,13 +18,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  int _currentIndex = 0;
+ int _currentIndex = 0;
+
+  void changeTab(int index){
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+ 
 
   final List<Widget> _pages = [
     UserHomescreen(),
     Searchpage(),
     Cartpage(),
-    Settings2(),
+    Userprofile(),
   ];
 
   @override

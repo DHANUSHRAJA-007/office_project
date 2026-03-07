@@ -12,7 +12,20 @@
           "package_name": "com.example.office_project"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "953330828039-j0vsrmc7vf4sqck9ef3ka25dcq6ctf9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.office_project",
+            "certificate_hash": "eed0c55c9e24741d50cab4f9f5a90c971e87a094"
+          }
+        },
+        {
+          "client_id": "953330828039-taf0cai4gdtcdsdbcfuchn5qh58msedc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyANlA90n_FWeyeF20LN624ZfMnDjxWjHkU"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953330828039-taf0cai4gdtcdsdbcfuchn5qh58msedc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "953330828039-1kd775515m2mrota4eo3f3jfhaen70m4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.officeProject"
+              }
+            }
+          ]
         }
       }
     }
