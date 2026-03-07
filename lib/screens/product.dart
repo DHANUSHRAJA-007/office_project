@@ -205,7 +205,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product extends StatefulWidget {
-  const Product({super.key});
+  const Product({super.key, required QueryDocumentSnapshot<Object?> product});
 
   @override
   State<Product> createState() => _ProductState();
