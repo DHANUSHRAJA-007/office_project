@@ -10,80 +10,285 @@ class Cartpage extends StatefulWidget {
 }
 
 class _CartpageState extends State<Cartpage> {
-  int quantity = 1;
+
+  int getTotal(List cart) {
+    int total = 0;
+
+    for (var item in cart) {
+      int price = int.tryParse(item['price'].toString()) ?? 0;
+      int quantity = item['quantity'] ?? 1;
+
+      total += price * quantity;
+    }
+
+    return total;
+  }
 
   @override
   Widget build(BuildContext context) {
+
     final cart = context.watch<CartProvider>().cartItems;
 
+    int subtotal = getTotal(cart);
+    int delivery = 20;
+    int discount = 35;
+    int total = subtotal + delivery - discount;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Cart")),
+      backgroundColor: const Color(0xffECECEC),
+
+      appBar: AppBar(
+        backgroundColor: const Color(0xffECECEC),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "My Cart",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+
       body: cart.isEmpty
           ? const Center(child: Text("No items in the cart"))
-          : ListView.builder(
-              itemCount: cart.length,
-              itemBuilder: (_, index) {
-                final item = cart[index];
+          : Column(
+              children: [
 
-                int price = int.tryParse(item['price'].toString()) ?? 0;
-                int quantity = item['quantity'] ?? 1;
+                /// CART ITEMS
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(12),
+                    itemCount: cart.length,
+                    itemBuilder: (_, index) {
 
-                int newprice = price * quantity;
+                      final item = cart[index];
 
-                return Card(
-                  margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    title: Text(item["name"]),
-                    subtitle: Text("₹ $newprice"),
-                    // leading: item["image"] != null
-                    //     ? Image.memory(
-                    //         Base64Decoder()
-                    //             .convert(item["image"].split(',').last),
-                    //         width: 60,
-                    //         height: 60,
-                    //         fit: BoxFit.cover,
-                    //       )
-                    //     : const Icon(Icons.image_not_supported),
-                    trailing: Wrap(
-                      spacing: 10,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              item['quantity'] = quantity + 1; // ✅ update item
-                            });
-                          },
-                          icon: const Icon(Icons.add),
+                      int price =
+                          int.tryParse(item['price'].toString()) ?? 0;
+
+                      int quantity = item['quantity'] ?? 1;
+
+                      int newprice = price * quantity;
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(12),
+
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(14),
                         ),
 
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            "$quantity",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                        child: Row(
+                          children: [
+
+                            /// IMAGE
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                "assets/v1.jpg",
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+                            const SizedBox(width: 12),
+
+                            /// DETAILS
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+
+                                  Text(
+                                    item["name"],
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+
+                                  const SizedBox(height: 4),
+
+                                  const Text(
+                                    "Offer 2%",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 13),
+                                  ),
+
+                                  const SizedBox(height: 6),
+
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "₹ $newprice/",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16),
+                                      ),
+                                       Text(
+                                        "Kg",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            /// QUANTITY
+                            Row(
+                              children: [
+
+                                /// MINUS
+                                Container(
+                                  width: 28,
+                                  height: 28,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon: const Icon(Icons.remove,
+                                        size: 16),
+                                    onPressed: () {
+
+                                      if (quantity > 1) {
+                                        setState(() {
+                                          item['quantity'] =
+                                              quantity - 1;
+                                        });
+                                      } else {
+                                        context
+                                            .read<CartProvider>()
+                                            .removeItem(index);
+                                      }
+                                    },
+                                  ),
+                                ),
+
+                                const SizedBox(width: 8),
+
+                                Text(
+                                  "$quantity",
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+
+                                const SizedBox(width: 8),
+
+                                /// PLUS
+                                Container(
+                                  width: 28,
+                                  height: 28,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon:
+                                        const Icon(Icons.add, size: 16),
+                                    onPressed: () {
+                                      setState(() {
+                                        item['quantity'] =
+                                            quantity + 1;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                /// BILL SECTION
+                Container(
+                  padding: const EdgeInsets.all(16),
+
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(25)),
+                  ),
+
+                  child: Column(
+                    children: [
+
+                      /// PROMO CODE
+                     
+                      const SizedBox(height: 20),
+
+                      /// BILL DETAILS
+                      billRow("Sub Total", subtotal),
+                      billRow("Delivery Fee", delivery),
+                      billRow("Discount", discount),
+
+                      const Divider(),
+
+                      billRow("TOTAL COST", total, isBold: true),
+
+                      const SizedBox(height: 20),
+
+                      /// CHECKOUT BUTTON
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(12),
                             ),
                           ),
+                          onPressed: () {},
+                          child: const Text(
+                            "Proceed to Checkout",
+                            style: TextStyle(fontSize: 18,color: Colors.white),
+                          ),
                         ),
-
-                        IconButton(
-                          onPressed: () {
-                            if (quantity > 1) {
-                              setState(() {
-                                item['quantity'] =
-                                    quantity - 1; // ✅ update item
-                              });
-                            }
-                          },
-                          icon: const Icon(Icons.remove),
-                        ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                );
-              },
+                )
+              ],
             ),
+    );
+  }
+
+  /// BILL ROW WIDGET
+  Widget billRow(String title, int price, {bool isBold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight:
+                  isBold ? FontWeight.bold : FontWeight.normal,
+              fontSize: isBold ? 18 : 15,
+            ),
+          ),
+          Text(
+            "₹ $price",
+            style: TextStyle(
+              fontWeight:
+                  isBold ? FontWeight.bold : FontWeight.normal,
+              fontSize: isBold ? 18 : 15,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

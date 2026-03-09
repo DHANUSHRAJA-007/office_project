@@ -625,10 +625,17 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/route_manager.dart';
 import 'package:office_project/screens/productdetailspage.dart';
+import 'package:get/get.dart';
+import 'package:office_project/screens/cart_provider.dart';
+import 'package:office_project/screens/productdetailspage.dart';
+import 'package:office_project/screens/userhomepage.dart';
+
 import 'package:office_project/widgets/bannerslider.dart';
 import 'package:office_project/widgets/category_scroll.dart';
+import 'package:provider/provider.dart';
 
 class UserHomescreen extends StatefulWidget {
   const UserHomescreen({super.key});
@@ -677,23 +684,20 @@ class _UserHomescreenState extends State<UserHomescreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const SearchBar(
-                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
                           elevation: WidgetStatePropertyAll(0),
                           leading: Icon(Icons.search),
                           hintText: "Search Products",
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.tune),
-                    ),
+                    
                   ],
                 ),
 
@@ -734,27 +738,32 @@ class _UserHomescreenState extends State<UserHomescreen> {
                     children: const [
                       CategoryScroll(
                         image: 'assets/veggie.png',
-                        name: 'Vegetables', route: '/vegetable',
+                        name: 'Vegetables',
+                        route: '/vegetable',
                       ),
 
                       CategoryScroll(
                         image: 'assets/fruits.png',
-                        name: 'Fruits', route: '/fruits',
+                        name: 'Fruits',
+                        route: '/fruits',
                       ),
 
                       CategoryScroll(
                         image: 'assets/veggie.png',
-                        name: 'Grocery', route: '',
+                        name: 'Grocery',
+                        route: '',
                       ),
 
-                      CategoryScroll(
-                        image: 'assets/fruits.png',
-                        name: 'Dry Fruits', route: '',
-                      ),
+                      // CategoryScroll(
+                      //   image: 'assets/fruits.png',
+                      //   name: 'Dry Fruits',
+                      //   route: '',
+                      // ),
 
                       CategoryScroll(
                         image: 'assets/veggie.png',
-                        name: 'Protein Powder', route: '/protein',
+                        name: 'Protein Powder',
+                        route: '/protein',
                       ),
                     ],
                   ),
@@ -843,7 +852,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
       borderRadius: BorderRadius.all(Radius.circular(20)),
       onTap: () {
         Get.to( Productdetailspage());
-       
+
       },
       child: Card(
         elevation: 3,
@@ -868,10 +877,13 @@ class _UserHomescreenState extends State<UserHomescreen> {
                     ),
                     child: const Text(
                       "Offer 3%",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
-      
+
                   IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -891,18 +903,18 @@ class _UserHomescreenState extends State<UserHomescreen> {
                   ),
                 ],
               ),
-      
+
               const SizedBox(height: 5),
-      
+
               /// IMAGE
               Expanded(
                 child: Center(
                   child: Image.asset('assets/fruits.png', fit: BoxFit.contain),
                 ),
               ),
-      
+
               const Divider(thickness: 1),
-      
+
               /// NAME + RATING
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -914,19 +926,22 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-      
+
                   const Row(
                     children: [
                       Icon(Icons.star, size: 14, color: Colors.amber),
                       SizedBox(width: 2),
-                      Text("4.9", style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        "4.9",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ],
               ),
-      
+
               const SizedBox(height: 4),
-      
+
               /// PRICE + ADD BUTTON
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -940,19 +955,48 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       const Text(" kg", style: TextStyle(color: Colors.grey)),
                     ],
                   ),
-      
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text(
-                      "Add",
-                      style: TextStyle(color: Colors.white),
+
+                  InkWell(
+                    onTap: () {
+                      Map<String, dynamic> cartItem = {
+                        'name': product["productName"],
+                        'price': product["price"],
+                        'quantity': 1,
+                      };
+
+                      context.read<CartProvider>().addToCart(cartItem);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: Duration(seconds: 3),
+                          backgroundColor: Colors.black,
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Product Added to the Cart",),
+                               TextButton(onPressed: (){
+                                 HomePage.homeKey.currentState?.changeTab(2);
+                               }, child: Text("GO TO CART",style: TextStyle(
+                                color: Colors.yellow
+                               ),))
+                            ],
+                          ),
+                                                ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        "Add",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
