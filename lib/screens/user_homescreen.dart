@@ -625,10 +625,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:office_project/screens/cart_provider.dart';
 import 'package:office_project/screens/productdetailspage.dart';
 import 'package:office_project/screens/userhomepage.dart';
+
 import 'package:office_project/widgets/bannerslider.dart';
 import 'package:office_project/widgets/category_scroll.dart';
 import 'package:provider/provider.dart';
@@ -693,16 +695,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.tune),
-                    ),
+                    
                   ],
                 ),
 
@@ -856,6 +849,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
     return InkWell(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       onTap: () {
+
         Get.to(Productdetailspage());
       },
       child: Card(

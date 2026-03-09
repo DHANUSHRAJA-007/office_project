@@ -151,11 +151,15 @@ class _ViewProductpageState extends State<ViewProductpage> {
                           _details("Product Id", data["productId"] ?? "no id"),
                           _details("Product Name", data['productName']),
                           _details("Product Categories", data['category']),
-                          _details("Offers", data['offer'] ?? "no offer"),
-                          _details("Exist Only", data["unit"]),
-                          _details("Stock", data['stock']),
-                          _details("Price", "₹${data['price']}"),
+                            _details("Stock", data['stock']),
+                         
 
+                          _details("Exist Only", data["unit"]),
+                        
+                          _details("Price", "₹${data['price']}"),
+                           _details("Offers", data['offer'] ?? "no offer"),
+
+                           _details("Final Price", data['finalPrice'] ?? "0"),
                           const SizedBox(height: 30),
 
                           Row(

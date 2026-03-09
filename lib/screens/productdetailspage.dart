@@ -114,16 +114,7 @@
 //               var data =
 //                   product.data() as Map<String, dynamic>;
 
-//               return InkWell(
-//                 onTap: () {
-//                   Get.to(
-//                     ViewProductpage(
-//                       productId: product.id,
-//                       productData: product,
-//                     ),
-//                   );
-//                 },
-//                 child: Container(
+//               return  Container(
 //                   decoration: BoxDecoration(
 //                     borderRadius: BorderRadius.circular(15),
 //                     color: Colors.white,
@@ -174,7 +165,7 @@
 //                       ],
 //                     ),
 //                   ),
-//                 ),
+              
 //               );
 //             },
 //           );
@@ -186,9 +177,12 @@
 //     );
 //   }
 // }
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:office_project/screens/view_productpage.dart';
 
 class Productdetailspage extends StatefulWidget {
@@ -206,253 +200,239 @@ class _ProductdetailspageState extends State<Productdetailspage> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// TOP BAR
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(onPressed: () {
+                Get.back();
+              }, icon: const Icon(Icons.arrow_back)),
+              const Text(
+                "Product Details",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    isliked = !isliked;
+                  });
+                },
+                icon: Icon(
+                  Icons.favorite,
+                  color: isliked ? Colors.white : Colors.red,
+                ),
+              ),
+            ],
+          ),
 
-            /// Top bar
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          /// PRODUCT IMAGE
+          SizedBox(
+            width: double.infinity,
+            height: size.height * 0.4,
+            child: const Icon(Icons.image),
+          ),
+
+          /// PRODUCT INFO
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Productname",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text("category"),
+                    Text("ratings"),
+                  ],
+                ),
+              ),
+              SizedBox(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        "Price",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          const SizedBox(height: 100, child: Text("Product description")),
+
+          const Divider(),
+
+          const Text(
+            "More ",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+
+          const SizedBox(height: 10),
+
+          /// PRODUCT LIST
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('products')
+                  .snapshots(),
+              builder: (context, snapshot) {
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Text("no products available");
+                }
+
+               return SizedBox(
+  height: 300, // important for horizontal list
+  child: ListView.builder(
+    scrollDirection: Axis.horizontal,
+    padding: const EdgeInsets.all(12),
+    itemCount: snapshot.data!.docs.length,
+    itemBuilder: (context, index) {
+
+      var product = snapshot.data!.docs[index];
+      var data = product.data() as Map<String, dynamic>;
+
+      return Container(
+        width: 170,
+        margin: const EdgeInsets.only(right: 12),
+
+        child: Card(
+          elevation: 7,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.arrow_back)),
 
-                const Text(
-                  "Product Details",
-                  style: TextStyle(
+                /// OFFER + LIKE
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Text(
+                        "Offer 3%",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      onPressed: () {
+                        setState(() {
+                          isliked = !isliked;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.favorite,
+                        size: 20,
+                        color: isliked ? Colors.red : Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 5),
+
+                /// IMAGE
+               Expanded(
+  child: Center(
+    child: Image.asset(
+      'assets/fruits.png',
+      fit: BoxFit.contain,
+    ),
+  ),
+),
+                const Divider(),
+
+                /// PRODUCT NAME
+                Text(
+                  data['productName'] ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
                   ),
                 ),
 
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isliked = !isliked;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.favorite,
-                    color: isliked ? Colors.red : Colors.grey,
-                  ),
+                const SizedBox(height: 5),
+
+                /// PRICE + ADD BUTTON
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    Text(
+                      "₹${data['price']}/kg",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        "Add",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-
-            /// Product Image
-            SizedBox(
-              width: double.infinity,
-              height: size.height * 0.35,
-              child: const Icon(
-                Icons.image,
-                size: 120,
-              ),
-            ),
-
-            /// Product info
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Productname",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text("category"),
-                      Text("ratings"),
-                    ],
-                  ),
-
-                  Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Price",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            /// Description
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: SizedBox(
-                height: 80,
-                child: Text("Product description"),
-              ),
-            ),
-
-            const Divider(),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                "More",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            /// Product list
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('products')
-                    .snapshots(),
-
-                builder: (context, snapshot) {
-
-                  /// DEBUG PRINTS
-                  print("Connection: ${snapshot.connectionState}");
-                  print("Has Data: ${snapshot.hasData}");
-
-                  if (snapshot.hasData) {
-                    print("Docs length: ${snapshot.data!.docs.length}");
-                  }
-
-                  /// Loading
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  /// No data
-                  if (!snapshot.hasData ||
-                      snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "No products available",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    );
-                  }
-
-                  /// Product Grid
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(12),
-
-                    itemCount: snapshot.data!.docs.length,
-
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.75,
-                    ),
-
-                    itemBuilder: (context, index) {
-
-                      var product = snapshot.data!.docs[index];
-
-                      var data =
-                          product.data() as Map<String, dynamic>;
-
-                      print(data); // DEBUG DATA
-
-                      return InkWell(
-                        onTap: () {
-                          Get.to(
-                            ViewProductpage(
-                              productId: product.id,
-                              productData: product,
-                            ),
-                          );
-                        },
-
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                blurRadius: 5,
-                                spreadRadius: 2,
-                              ),
-                            ],
-                          ),
-
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-
-                            child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-
-                              children: [
-
-                                Text(
-                                  data['productName'] ?? '',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-
-                                const SizedBox(height: 6),
-
-                                Text(
-                                  data['description'] ?? '',
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      color: Colors.grey),
-                                ),
-
-                                const Spacer(),
-
-                                Text(
-                                  "₹ ${data['price']}",
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green,
-                                  ),
-                                ),
-
-                                const SizedBox(height: 5),
-
-                                Text(
-                                  "Stock: ${data['stock']} ${data['unit']}",
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+          ),
         ),
+      );
+    },
+  ),
+);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
