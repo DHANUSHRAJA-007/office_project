@@ -183,7 +183,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:office_project/screens/view_productpage.dart';
 
 class Productdetailspage extends StatefulWidget {
   const Productdetailspage({super.key});
@@ -200,37 +199,26 @@ class _ProductdetailspageState extends State<Productdetailspage> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        leading:  IconButton(onPressed: () {
+                Get.back();
+              }, icon: const Icon(Icons.arrow_back)),
+              
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title:  Text(
+                  "Product Details",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                               ),),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// TOP BAR
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(onPressed: () {
-                Get.back();
-              }, icon: const Icon(Icons.arrow_back)),
-              const Text(
-                "Product Details",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    isliked = !isliked;
-                  });
-                },
-                icon: Icon(
-                  Icons.favorite,
-                  color: isliked ? Colors.white : Colors.red,
-                ),
-              ),
-            ],
-          ),
+          
 
           /// PRODUCT IMAGE
           SizedBox(
@@ -352,20 +340,20 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                       ),
                     ),
 
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () {
-                        setState(() {
-                          isliked = !isliked;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.favorite,
-                        size: 20,
-                        color: isliked ? Colors.red : Colors.grey,
-                      ),
-                    ),
+                    // IconButton(
+                    //   padding: EdgeInsets.zero,
+                    //   constraints: const BoxConstraints(),
+                    //   onPressed: () {
+                    //     setState(() {
+                    //       isliked = !isliked;
+                    //     });
+                    //   },
+                    //   icon: Icon(
+                    //     Icons.favorite,
+                    //     size: 20,
+                    //     color: isliked ? Colors.red : Colors.grey,
+                    //   ),
+                    // ),
                   ],
                 ),
 

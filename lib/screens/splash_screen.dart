@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 2), () async {
+    Timer(const Duration(seconds:4 ), () async {
       final user = FirebaseAuth.instance.currentUser;
 
       if (user == null) {
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (role == 'admin') {
           Get.offAll(() => const Adminmain());
         } else if (role == 'user') {
-          Get.offAll(() => HomePage(role: role,  key: HomePage.homeKey,        ) );
+          Get.offAll(() => HomePage(role: role,        ) );
         } else {
           Get.offAll(() => const LoginPage()); // or User Home
         }
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(child: Image(image: AssetImage("assets/logo.png"))),
+      body: Center(child: Image(image: AssetImage("assets/aasai.png"))),
     );
   }
 }

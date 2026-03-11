@@ -625,12 +625,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:office_project/screens/cart_provider.dart';
 import 'package:office_project/screens/productdetailspage.dart';
 import 'package:office_project/screens/userhomepage.dart';
-
 import 'package:office_project/widgets/bannerslider.dart';
 import 'package:office_project/widgets/category_scroll.dart';
 import 'package:provider/provider.dart';
@@ -647,7 +645,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
     'products',
   );
 
-  Map<String, bool> likedProducts = {};
+  // Map<String, bool> likedProducts = {};
 
   @override
   Widget build(BuildContext context) {
@@ -732,7 +730,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
                   height: 90,
 
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: const [
                       CategoryScroll(
                         image: 'assets/veggie.png',
@@ -746,21 +744,21 @@ class _UserHomescreenState extends State<UserHomescreen> {
                         route: '/fruits',
                       ),
 
-                      CategoryScroll(
-                        image: 'assets/veggie.png',
-                        name: 'Grocery',
-                        route: '',
-                      ),
+                      // CategoryScroll(
+                      //   image: 'assets/veggie.png',
+                      //   name: 'Grocery',
+                      //   route: '',
+                      // ),
+
+                      // CategoryScroll(
+                      //   image: 'assets/fruits.png',
+                      //   name: 'Dry Fruits',
+                      //   route: '',
+                      // ),
 
                       CategoryScroll(
-                        image: 'assets/fruits.png',
-                        name: 'Dry Fruits',
-                        route: '',
-                      ),
-
-                      CategoryScroll(
                         image: 'assets/veggie.png',
-                        name: 'Protein Powder',
+                        name: 'Malt',
                         route: '/protein',
                       ),
                     ],
@@ -882,23 +880,23 @@ class _UserHomescreenState extends State<UserHomescreen> {
                     ),
                   ),
 
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      setState(() {
-                        likedProducts[product.id] =
-                            !(likedProducts[product.id] ?? false);
-                      });
-                    },
-                    icon: Icon(
-                      Icons.favorite,
-                      size: 20,
-                      color: likedProducts[product.id] == true
-                          ? Colors.red
-                          : Colors.grey,
-                    ),
-                  ),
+                  // IconButton(
+                  //   padding: EdgeInsets.zero,
+                  //   constraints: const BoxConstraints(),
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       likedProducts[product.id] =
+                  //           !(likedProducts[product.id] ?? false);
+                  //     });
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.favorite,
+                  //     size: 20,
+                  //     color: likedProducts[product.id] == true
+                  //         ? Colors.red
+                  //         : Colors.grey,
+                  //   ),
+                  // ),
                 ],
               ),
 

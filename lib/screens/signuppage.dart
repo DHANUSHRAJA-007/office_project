@@ -683,6 +683,7 @@
 //   }
 // }
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -691,6 +692,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:office_project/auth.dart';
 import 'package:office_project/screens/termsandcond.dart';
+import 'package:office_project/screens/userhomepage.dart';
 import 'loginpage.dart';
 
 class SignupPage extends StatefulWidget {
@@ -708,8 +710,11 @@ class _SignupPageState extends State<SignupPage> {
 
   final AuthService authService = AuthService();
 
+
   bool loading = false;
   bool isAccepted = false;
+
+  
 
   // ================= GOOGLE EMAIL PICKER =================
   Future<void> pickGoogleEmail() async {
@@ -750,7 +755,7 @@ class _SignupPageState extends State<SignupPage> {
       );
 
       Get.snackbar('Success', 'Account created');
-      Get.offAll(() => const LoginPage());
+      Get.offAll(() => const HomePage(role: 'user',));
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -950,7 +955,7 @@ class _SignupPageState extends State<SignupPage> {
                       const Text("Already have an account ? "),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const LoginPage());
+                          Get.to(() => const HomePage(role:'user',));
                         },
                         child: const Text(
                           "Sign In",
