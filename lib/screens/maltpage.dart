@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/view_productpage.dart';
 
-class Proteinpage extends StatelessWidget {
-  const Proteinpage({super.key});
+class Maltpage extends StatelessWidget {
+  const Maltpage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class Proteinpage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: const Text(
-          "ProteinPowder",
+          "Malt",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -25,7 +25,7 @@ class Proteinpage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('products')
-            .where('category', isEqualTo: 'ProteinPowder')
+            .where('category', isEqualTo: 'Malt')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -35,7 +35,7 @@ class Proteinpage extends StatelessWidget {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
               child: Text(
-                "No Protein Available",
+                "No Malt Available",
                 style: TextStyle(fontSize: 18),
               ),
             );

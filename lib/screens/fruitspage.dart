@@ -134,6 +134,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:office_project/screens/product.dart';
 import 'package:office_project/screens/view_productpage.dart';
 
 class FruitsPage extends StatelessWidget {
@@ -255,5 +256,6 @@ class FruitsPage extends StatelessWidget {
         },
       ),
     );
+
   }
 }
