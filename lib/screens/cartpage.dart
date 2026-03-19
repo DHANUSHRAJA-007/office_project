@@ -31,7 +31,7 @@ class _CartpageState extends State<Cartpage> {
 
     int subtotal = getTotal(cart);
     int delivery = 20;
-    int discount = 35;
+    int discount = 0;
     int total = subtotal + delivery - discount;
 
     return Scaffold(

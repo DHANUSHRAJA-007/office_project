@@ -179,18 +179,23 @@ class _UserFruitsState extends State<UserFruits> {
                     ],
                   ),
       
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text(
-                      "Add",
-                      style: TextStyle(color: Colors.white),
+                  InkWell(
+                    onTap: () {
+                      
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        "Add",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],

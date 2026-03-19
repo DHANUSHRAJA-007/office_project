@@ -91,7 +91,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // ✅ IMPORTANT
 import 'package:office_project/screens/cartpage.dart';
-import 'package:office_project/screens/searchpage.dart';
 import 'package:office_project/screens/user_homescreen.dart';
 import 'package:office_project/screens/userprofile.dart';
 
@@ -128,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   /// PAGES
   final List<Widget> _pages = [
     const UserHomescreen(),
-    const Searchpage(),
+    
     const Cartpage(),
     const Userprofile(),
   ];
@@ -179,7 +178,7 @@ class _HomePageState extends State<HomePage> {
 
           BottomNavigationBarItem(
             icon: Icon(
-              _currentIndex == 2
+              _currentIndex == 1
                   ? Icons.shopping_cart
                   : Icons.shopping_cart_outlined,
             ),
@@ -188,7 +187,7 @@ class _HomePageState extends State<HomePage> {
 
           BottomNavigationBarItem(
             icon: Icon(
-              _currentIndex == 3
+              _currentIndex == 2
                   ? Icons.person
                   : Icons.person_outline,
             ),
