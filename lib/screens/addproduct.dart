@@ -120,7 +120,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/fruitspage.dart';
 import 'package:office_project/screens/juicepage.dart';
-import 'package:office_project/screens/proteinpage.dart';
+import 'package:office_project/screens/maltpage.dart';
 import 'package:office_project/screens/uploadproduct.dart';
 import 'package:office_project/screens/vegetablepage.dart';
 
@@ -183,14 +183,14 @@ class Addproduct extends StatelessWidget {
               children: [
                 _productCards("assets/v1.jpg", "Fruits", "/Fruits"),
 
-                _productCards("assets/v1.jpg", "Juice", '/juice'),
+              
 
                 _productCards("assets/v1.jpg", "Vegetables", '/vegetable'),
 
                 _productCards(
                   "assets/v1.jpg",
-                  "Protein Powder",
-                  '/protein powder',
+                  "Malt",
+                  '/malt',
                 ),
               ],
             ),
@@ -213,8 +213,8 @@ class Addproduct extends StatelessWidget {
             Get.to(FruitsPage());
           } else if (route == "/vegetable") {
             Get.to(Vegetablepage());
-          } else if (route == '/protein powder') {
-            Get.to(Proteinpage());
+          } else if (route == '/malt') {
+            Get.to(Maltpage());
           }
         },
         child: SizedBox(

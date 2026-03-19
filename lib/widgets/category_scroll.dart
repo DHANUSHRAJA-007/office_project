@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/fruitspage.dart';
-import 'package:office_project/screens/proteinpage.dart';
+import 'package:office_project/screens/maltpage.dart';
 import 'package:office_project/screens/user_category/user_fruits.dart';
 import 'package:office_project/screens/user_category/user_protein.dart';
 import 'package:office_project/screens/user_category/user_vegetables.dart';

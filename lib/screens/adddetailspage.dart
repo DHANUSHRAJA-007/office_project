@@ -1,861 +1,3 @@
-// // import 'package:flutter/material.dart';
-// // import 'package:cloud_firestore/cloud_firestore.dart';
-// // import 'package:get/get.dart';
-
-// // class Adddetailspage extends StatefulWidget {
-// //   const Adddetailspage({super.key});
-
-// //   @override
-// //   State<Adddetailspage> createState() => _AdddetailspageState();
-// // }
-
-// // class _AdddetailspageState extends State<Adddetailspage> {
-// //   int count = 0;
-
-// //   final List<String> items = ["1 unit", "2 unit", "3 unit"];
-// //   final List<String> categories = [
-// //     "Fruits",
-// //     "Juice",
-// //     "Vegetable",
-// //     "ProteinPowder",
-// //   ];
-// //   late String selectedValue;
-
-// //   DateTime? selectedDate;
-// //   String? selectedItem;
-// //   final TextEditingController productIdController = TextEditingController();
-// //   final TextEditingController productNameController = TextEditingController();
-// //   final TextEditingController categoryController = TextEditingController();
-// //   final TextEditingController descriptionController = TextEditingController();
-// //   final TextEditingController tagController = TextEditingController();
-// //   final ExpansionTileController _controller = ExpansionTileController();
-// //   final TextEditingController priceController = TextEditingController();
-// //   final TextEditingController taxController = TextEditingController();
-// //   final TextEditingController percentageController = TextEditingController();
-// //   final TextEditingController offerController = TextEditingController();
-
-// //   Future<void> saveProduct() async {
-// //     // if (productIdController.text.isEmpty ||
-// //     //     productNameController.text.isEmpty ||
-// //     //     priceController.text.isEmpty) {
-// //     //   ScaffoldMessenger.of(context).showSnackBar(
-// //     //     const SnackBar(content: Text("Please fill required fields")),
-// //     //   );
-// //     //   return; // stop saving
-// //     // }
-
-// //     try {
-// //       await FirebaseFirestore.instance.collection('products').add({
-// //         'productId': productIdController.text.trim(),
-// //         'productName': productNameController.text.trim(),
-// //         'category': selectedItem??"",
-// //         'description': descriptionController.text.trim(),
-// //         'tag': tagController.text.trim(),
-// //         'price': double.tryParse(priceController.text) ?? 0,
-// //         'tax': taxController.text.trim(),
-// //         'percentage': percentageController.text.trim(),
-// //         'offer': offerController.text.trim(),
-// //         'stock': count,
-// //         'unit': selectedValue,
-// //         'packingDate': selectedDate ?? DateTime.now(),
-// //         'createdAt': FieldValue.serverTimestamp(),
-// //       });
-
-// //       ScaffoldMessenger.of(context).showSnackBar(
-// //         const SnackBar(content: Text("Product Saved Successfully")),
-// //       );
-// //     } catch (e) {
-// //       ScaffoldMessenger.of(
-// //         context,
-// //       ).showSnackBar(SnackBar(content: Text("Error: $e")));
-// //     }
-// //   }
-
-// //   @override
-// //   void initState() {
-// //     super.initState();
-// //     selectedValue = items.first;
-// //   }
-
-// //   Future<void> pickDate(BuildContext context) async {
-// //     final DateTime? picked = await showDatePicker(
-// //       context: context,
-// //       initialDate: DateTime.now(),
-// //       firstDate: DateTime(2000),
-// //       lastDate: DateTime(2030),
-// //     );
-
-// //     if (picked != null) {
-// //       setState(() {
-// //         selectedDate = picked;
-// //       });
-// //     }
-// //   }
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return DefaultTabController(
-// //       length: 2,
-// //       child: Scaffold(
-// //         resizeToAvoidBottomInset: true,
-// //         appBar: AppBar(
-// //           automaticallyImplyLeading: false,
-// //           backgroundColor: Colors.green,
-// //           title: const Text(
-// //             "Add Details",
-// //             style: TextStyle(color: Colors.white),
-// //           ),
-// //           centerTitle: true,
-// //           leading: IconButton(
-// //             onPressed: () {
-// //               Get.back(); // optional back
-// //             },
-// //             icon: const Icon(Icons.arrow_back, color: Colors.white),
-// //           ),
-// //         ),
-// //         body: Column(
-// //           children: [
-// //             const TabBar(
-// //               labelColor: Colors.green,
-// //               unselectedLabelColor: Colors.grey,
-// //               indicatorColor: Colors.green,
-// //               tabs: [
-// //                 Tab(text: "Product Details"),
-// //                 Tab(text: "Price Details"),
-// //               ],
-// //             ),
-
-// //             Expanded(
-// //               child: TabBarView(
-// //                 children: [
-// //                   /// ================= PRODUCT TAB =================
-// //                   SingleChildScrollView(
-// //                     padding: const EdgeInsets.all(16),
-// //                     child: Column(
-// //                       crossAxisAlignment: CrossAxisAlignment.start,
-// //                       children: [
-// //                         buildTextField(
-// //                           "Product ID",
-// //                           controller: productIdController,
-// //                         ),
-// //                         buildTextField(
-// //                           "Product Name",
-// //                           controller: productNameController,
-// //                         ),
-                       
-// //                         Container(
-// //                           decoration: BoxDecoration(
-// //                             border: Border.all(color: Colors.black),
-// //                             borderRadius: BorderRadius.circular(5),
-// //                           ),
-// //                           child: ExpansionTile(
-// //                             controller: _controller,
-// //                             tilePadding: const EdgeInsets.symmetric(
-// //                               horizontal: 12,
-// //                             ),
-// //                             title: Text(
-// //                               selectedItem ?? "Select Category",
-// //                               style: TextStyle(
-// //                                 color: selectedItem == null
-// //                                     ? Colors.grey
-// //                                     : Colors.black,
-// //                               ),
-// //                             ),
-// //                             children: categories.map((item) {
-// //                               return ListTile(
-// //                                 title: Text(item),
-// //                                 onTap: () {
-// //                                   setState(() {
-// //                                     selectedItem = item;
-// //                                   });
-// //                                   _controller.collapse();
-// //                                 },
-// //                               );
-// //                             }).toList(),
-// //                           ),
-// //                         ),
-// //                         buildTextField(
-// //                           "Description",
-// //                           maxLines: 4,
-// //                           controller: descriptionController,
-// //                         ),
-// //                         buildTextField("Add Tag", controller: tagController),
-// //                         const SizedBox(height: 30),
-// //                         // SizedBox(
-// //                         //   width: double.infinity,
-// //                         //   height: 50,
-// //                         //   child: ElevatedButton(
-// //                         //     style: ElevatedButton.styleFrom(
-// //                         //       backgroundColor: Colors.green,
-// //                         //       shape: RoundedRectangleBorder(
-// //                         //         borderRadius: BorderRadius.circular(25),
-// //                         //       ),
-// //                         //     ),
-// //                         //     onPressed: () {},
-// //                         //     child: const Text(
-// //                         //       "Save",
-// //                         //       style: TextStyle(color: Colors.white),
-// //                         //     ),
-// //                         //   ),
-// //                         // ),
-// //                       ],
-// //                     ),
-// //                   ),
-
-// //                   /// ================= PRICE TAB =================
-// //                   SingleChildScrollView(
-// //                     padding: const EdgeInsets.all(16),
-// //                     child: Column(
-// //                       crossAxisAlignment: CrossAxisAlignment.start,
-// //                       children: [
-// //                         // buildTextField(
-// //                         //   "Price",
-// //                         //   keyboardType: TextInputType.number, controller: priceController,
-// //                         // ),
-// //                         buildTextField(
-// //                           "Price",
-// //                           controller: priceController,
-// //                           keyboardType: TextInputType.number,
-// //                         ),
-// //                         Row(
-// //                           children: [
-// //                             Expanded(
-// //                               child: buildTextField(
-// //                                 "Tax (GST)",
-// //                                 controller: taxController,
-// //                               ),
-// //                             ),
-// //                             const SizedBox(width: 12),
-// //                             Expanded(
-// //                               child: buildTextField(
-// //                                 "Percentage (%)",
-// //                                 controller: percentageController,
-// //                               ),
-// //                             ),
-// //                           ],
-// //                         ),
-// //                         buildTextField("Offer", controller: offerController),
-// //                         Text("final price"),
-// //                         Container(
-// //                           decoration: BoxDecoration(
-// //                             border: Border.all()
-// //                           ),
-// //                         ),
-// //                         const SizedBox(height: 16),
-// //                         Row(
-// //                           children: [
-// //                             Expanded(
-// //                               child: Column(
-// //                                 crossAxisAlignment: CrossAxisAlignment.start,
-// //                                 children: [
-// //                                   const Text("Stock"),
-// //                                   const SizedBox(height: 6),
-// //                                   Container(
-// //                                     height: 50,
-// //                                     decoration: BoxDecoration(
-// //                                       border: Border.all(),
-// //                                       borderRadius: BorderRadius.circular(5),
-// //                                     ),
-// //                                     child: Row(
-// //                                       mainAxisAlignment:
-// //                                           MainAxisAlignment.spaceBetween,
-// //                                       children: [
-// //                                         IconButton(
-// //                                           onPressed: () {
-// //                                             setState(() {
-// //                                               if (count > 0) count--;
-// //                                             });
-// //                                           },
-// //                                           icon: const Icon(Icons.remove),
-// //                                         ),
-// //                                         Text(
-// //                                           "$count",
-// //                                           style: const TextStyle(fontSize: 16),
-// //                                         ),
-// //                                         IconButton(
-// //                                           onPressed: () {
-// //                                             setState(() {
-// //                                               count++;
-// //                                             });
-// //                                           },
-// //                                           icon: const Icon(Icons.add),
-// //                                         ),
-// //                                       ],
-// //                                     ),
-// //                                   ),
-// //                                 ],
-// //                               ),
-// //                             ),
-// //                             const SizedBox(width: 12),
-// //                             Expanded(
-// //                               child: Column(
-// //                                 crossAxisAlignment: CrossAxisAlignment.start,
-// //                                 children: [
-// //                                   const Text("Unit"),
-// //                                   const SizedBox(height: 6),
-// //                                   DropdownButtonFormField<String>(
-// //                                     value: selectedValue,
-// //                                     isExpanded: true,
-// //                                     decoration: const InputDecoration(
-// //                                       border: OutlineInputBorder(),
-// //                                       contentPadding: EdgeInsets.symmetric(
-// //                                         horizontal: 10,
-// //                                       ),
-// //                                     ),
-// //                                     items: items
-// //                                         .map(
-// //                                           (item) => DropdownMenuItem<String>(
-// //                                             value: item,
-// //                                             child: Text(item),
-// //                                           ),
-// //                                         )
-// //                                         .toList(),
-// //                                     onChanged: (value) {
-// //                                       setState(() {
-// //                                         selectedValue = value!;
-// //                                       });
-// //                                     },
-// //                                   ),
-// //                                 ],
-// //                               ),
-// //                             ),
-// //                           ],
-// //                         ),
-// //                         const SizedBox(height: 20),
-// //                         const Text("Date of Packing"),
-// //                         const SizedBox(height: 6),
-// //                         Container(
-// //                           padding: const EdgeInsets.symmetric(horizontal: 12),
-// //                           decoration: BoxDecoration(
-// //                             border: Border.all(),
-// //                             borderRadius: BorderRadius.circular(5),
-// //                           ),
-// //                           child: Row(
-// //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// //                             children: [
-// //                               Text(
-// //                                 selectedDate == null
-// //                                     ? "Select Date"
-// //                                     : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
-// //                               ),
-// //                               IconButton(
-// //                                 onPressed: () => pickDate(context),
-// //                                 icon: const Icon(Icons.calendar_month),
-// //                               ),
-// //                             ],
-// //                           ),
-// //                         ),
-// //                       ],
-// //                     ),
-// //                   ),
-// //                 ],
-// //               ),
-// //             ),
-
-// //             /// 🔹 Bottom Curved Save Button
-// //             Container(
-// //               width: 300,
-// //               height: 50,
-// //               margin: const EdgeInsets.only(bottom: 10),
-// //               child: ElevatedButton(
-// //                 style: ElevatedButton.styleFrom(
-// //                   backgroundColor: Colors.green,
-// //                   shape: RoundedRectangleBorder(
-// //                     borderRadius: BorderRadius.circular(25),
-// //                   ),
-// //                 ),
-// //                 onPressed: saveProduct,
-// //                 child: const Text(
-// //                   "Save",
-// //                   style: TextStyle(color: Colors.white),
-// //                 ),
-// //               ),
-// //             ),
-// //           ],
-// //         ),
-// //       ),
-// //     );
-// //   }
-
-// //   //   Widget buildTextField(
-// //   //     String label, {
-// //   //     int maxLines = 1,
-// //   //     TextInputType keyboardType = TextInputType.text,
-// //   //   }) {
-// //   //     return Padding(
-// //   //       padding: const EdgeInsets.only(bottom: 16),
-// //   //       child: Column(
-// //   //         crossAxisAlignment: CrossAxisAlignment.start,
-// //   //         children: [
-// //   //           Text(label),
-// //   //           const SizedBox(height: 6),
-// //   //           TextField(
-// //   //             maxLines: maxLines,
-// //   //             keyboardType: keyboardType,
-// //   //             decoration: const InputDecoration(border: OutlineInputBorder()),
-// //   //           ),
-// //   //         ],
-// //   //       ),
-// //   //     );
-// //   //   }
-
-// //   Widget buildTextField(
-// //     String label, {
-// //     required TextEditingController controller,
-// //     int maxLines = 1,
-// //     TextInputType keyboardType = TextInputType.text,
-// //   }) {
-// //     return Padding(
-// //       padding: const EdgeInsets.only(bottom: 16),
-// //       child: Column(
-// //         crossAxisAlignment: CrossAxisAlignment.start,
-// //         children: [
-// //           Text(label),
-// //           const SizedBox(height: 6),
-// //           TextField(
-// //             controller: controller,
-// //             maxLines: maxLines,
-// //             keyboardType: keyboardType,
-// //             decoration: const InputDecoration(border: OutlineInputBorder()),
-// //           ),
-// //         ],
-// //       ),
-// //     );
-// //   }
-// // }
-// import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:get/get.dart';
-
-// class Adddetailspage extends StatefulWidget {
-//   const Adddetailspage({super.key});
-
-//   @override
-//   State<Adddetailspage> createState() => _AdddetailspageState();
-// }
-
-// class _AdddetailspageState extends State<Adddetailspage> {
-//   int count = 0;
-
-//   double finalPrice = 0;
-
-//   final List<String> items = ["1 unit", "2 unit", "3 unit"];
-//   final List<String> categories = [
-//     "Fruits",
-//     "Juice",
-//     "Vegetable",
-//     "ProteinPowder",
-//   ];
-//   late String selectedValue;
-
-//   DateTime? selectedDate;
-//   String? selectedItem;
-
-//   final TextEditingController productIdController = TextEditingController();
-//   final TextEditingController productNameController = TextEditingController();
-//   final TextEditingController categoryController = TextEditingController();
-//   final TextEditingController descriptionController = TextEditingController();
-//   final TextEditingController tagController = TextEditingController();
-//   final ExpansionTileController _controller = ExpansionTileController();
-//   final TextEditingController priceController = TextEditingController();
-//   final TextEditingController taxController = TextEditingController();
-//   final TextEditingController percentageController = TextEditingController();
-//   final TextEditingController offerController = TextEditingController();
-
-//   /// GST + Offer Calculation
-//  void calculateFinalPrice() {
-//   double price = double.tryParse(priceController.text) ?? 0;
-//   double gst = double.tryParse(percentageController.text) ?? 0;
-//   double offerPercent = double.tryParse(offerController.text) ?? 0;
-
-//   double discountAmount = price * offerPercent / 100;
-//   double discountedPrice = price - discountAmount;
-
-//   double gstAmount = discountedPrice * gst / 100;
-
-//   setState(() {
-//     finalPrice = discountedPrice + gstAmount;
-//   });
-// }
-
-//   Future<void> saveProduct() async {
-//     try {
-//       await FirebaseFirestore.instance.collection('products').add({
-//         'productId': productIdController.text.trim(),
-//         'productName': productNameController.text.trim(),
-//         'category': selectedItem ?? "",
-//         'description': descriptionController.text.trim(),
-//         'tag': tagController.text.trim(),
-//         'price': double.tryParse(priceController.text) ?? 0,
-//         'tax': taxController.text.trim(),
-//         'percentage': percentageController.text.trim(),
-//         'offer': offerController.text.trim(),
-//         'finalPrice': finalPrice,
-//         'stock': count,
-//         'unit': selectedValue,
-//         'packingDate': selectedDate ?? DateTime.now(),
-//         'createdAt': FieldValue.serverTimestamp(),
-//       });
-
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text("Product Saved Successfully")),
-//       );
-//     } catch (e) {
-//       ScaffoldMessenger.of(
-//         context,
-//       ).showSnackBar(SnackBar(content: Text("Error: $e")));
-//     }
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     selectedValue = items.first;
-//   }
-
-//   Future<void> pickDate(BuildContext context) async {
-//     final DateTime? picked = await showDatePicker(
-//       context: context,
-//       initialDate: DateTime.now(),
-//       firstDate: DateTime(2000),
-//       lastDate: DateTime(2030),
-//     );
-
-//     if (picked != null) {
-//       setState(() {
-//         selectedDate = picked;
-//       });
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultTabController(
-//       length: 2,
-//       child: Scaffold(
-//         resizeToAvoidBottomInset: true,
-//         appBar: AppBar(
-//           automaticallyImplyLeading: false,
-//           backgroundColor: Colors.green,
-//           title: const Text(
-//             "Add Details",
-//             style: TextStyle(color: Colors.white),
-//           ),
-//           centerTitle: true,
-//           leading: IconButton(
-//             onPressed: () {
-//               Get.back();
-//             },
-//             icon: const Icon(Icons.arrow_back, color: Colors.white),
-//           ),
-//         ),
-//         body: Column(
-//           children: [
-//             const TabBar(
-//               labelColor: Colors.green,
-//               unselectedLabelColor: Colors.grey,
-//               indicatorColor: Colors.green,
-//               tabs: [
-//                 Tab(text: "Product Details"),
-//                 Tab(text: "Price Details"),
-//               ],
-//             ),
-//             Expanded(
-//               child: TabBarView(
-//                 children: [
-//                   /// PRODUCT TAB
-//                   SingleChildScrollView(
-//                     padding: const EdgeInsets.all(16),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         buildTextField(
-//                           "Product ID",
-//                           controller: productIdController,
-//                         ),
-//                         buildTextField(
-//                           "Product Name",
-//                           controller: productNameController,
-//                         ),
-
-//                         Container(
-//                           decoration: BoxDecoration(
-//                             border: Border.all(color: Colors.black),
-//                             borderRadius: BorderRadius.circular(5),
-//                           ),
-//                           child: ExpansionTile(
-//                             controller: _controller,
-//                             tilePadding:
-//                                 const EdgeInsets.symmetric(horizontal: 12),
-//                             title: Text(
-//                               selectedItem ?? "Select Category",
-//                               style: TextStyle(
-//                                 color: selectedItem == null
-//                                     ? Colors.grey
-//                                     : Colors.black,
-//                               ),
-//                             ),
-//                             children: categories.map((item) {
-//                               return ListTile(
-//                                 title: Text(item),
-//                                 onTap: () {
-//                                   setState(() {
-//                                     selectedItem = item;
-//                                   });
-//                                   _controller.collapse();
-//                                 },
-//                               );
-//                             }).toList(),
-//                           ),
-//                         ),
-
-//                         buildTextField(
-//                           "Description",
-//                           maxLines: 4,
-//                           controller: descriptionController,
-//                         ),
-//                         buildTextField(
-//                           "Add Tag",
-//                           controller: tagController,
-//                         ),
-//                         const SizedBox(height: 30),
-//                       ],
-//                     ),
-//                   ),
-
-//                   /// PRICE TAB
-//                   SingleChildScrollView(
-//                     padding: const EdgeInsets.all(16),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         buildTextField(
-//                           "Price",
-//                           controller: priceController,
-//                           keyboardType: TextInputType.number,
-//                           onChanged: (_) => calculateFinalPrice(),
-//                         ),
-
-//                         Row(
-//                           children: [
-//                             Expanded(
-//                               child: buildTextField(
-//                                 "Tax (GST)",
-//                                 controller: taxController,
-//                               ),
-//                             ),
-//                             const SizedBox(width: 12),
-//                             Expanded(
-//                               child: buildTextField(
-//                                 "Percentage (%)",
-//                                 controller: percentageController,
-//                                 keyboardType: TextInputType.number,
-//                                 onChanged: (_) => calculateFinalPrice(),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-
-//                         buildTextField(
-//                           "Offer",
-//                           controller: offerController,
-//                           keyboardType: TextInputType.number,
-//                           onChanged: (_) => calculateFinalPrice(),
-//                         ),
-
-//                         const Text("Final Price"),
-//                        Container(
-//   height: 50,
-//   width: double.infinity,
-//   alignment: Alignment.centerLeft,
-//   padding: const EdgeInsets.symmetric(horizontal: 10),
-//   decoration: BoxDecoration(
-//     border: Border.all(),
-//   ),
-//   child: Text(
-//     finalPrice.toStringAsFixed(2),
-//     style: const TextStyle(fontSize: 18),
-//   ),
-// ),
-//                         const SizedBox(height: 16),
-
-//                         Row(
-//                           children: [
-//                             Expanded(
-//                               child: Column(
-//                                 crossAxisAlignment:
-//                                     CrossAxisAlignment.start,
-//                                 children: [
-//                                   const Text("Stock"),
-//                                   const SizedBox(height: 6),
-//                                   Container(
-//                                     height: 50,
-//                                     decoration: BoxDecoration(
-//                                       border: Border.all(),
-//                                       borderRadius:
-//                                           BorderRadius.circular(5),
-//                                     ),
-//                                     child: Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceBetween,
-//                                       children: [
-//                                         IconButton(
-//                                           onPressed: () {
-//                                             setState(() {
-//                                               if (count > 0) count--;
-//                                             });
-//                                           },
-//                                           icon:
-//                                               const Icon(Icons.remove),
-//                                         ),
-//                                         Text(
-//                                           "$count",
-//                                           style: const TextStyle(
-//                                               fontSize: 16),
-//                                         ),
-//                                         IconButton(
-//                                           onPressed: () {
-//                                             setState(() {
-//                                               count++;
-//                                             });
-//                                           },
-//                                           icon: const Icon(Icons.add),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-
-//                             const SizedBox(width: 12),
-
-//                             Expanded(
-//                               child: Column(
-//                                 crossAxisAlignment:
-//                                     CrossAxisAlignment.start,
-//                                 children: [
-//                                   const Text("Unit"),
-//                                   const SizedBox(height: 6),
-//                                   DropdownButtonFormField<String>(
-//                                     value: selectedValue,
-//                                     isExpanded: true,
-//                                     decoration:
-//                                         const InputDecoration(
-//                                       border: OutlineInputBorder(),
-//                                       contentPadding:
-//                                           EdgeInsets.symmetric(
-//                                               horizontal: 10),
-//                                     ),
-//                                     items: items
-//                                         .map(
-//                                           (item) =>
-//                                               DropdownMenuItem<String>(
-//                                             value: item,
-//                                             child: Text(item),
-//                                           ),
-//                                         )
-//                                         .toList(),
-//                                     onChanged: (value) {
-//                                       setState(() {
-//                                         selectedValue = value!;
-//                                       });
-//                                     },
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-
-//                         const SizedBox(height: 20),
-
-//                         const Text("Date of Packing"),
-//                         const SizedBox(height: 6),
-
-//                         Container(
-//                           padding:
-//                               const EdgeInsets.symmetric(horizontal: 12),
-//                           decoration: BoxDecoration(
-//                             border: Border.all(),
-//                             borderRadius: BorderRadius.circular(5),
-//                           ),
-//                           child: Row(
-//                             mainAxisAlignment:
-//                                 MainAxisAlignment.spaceBetween,
-//                             children: [
-//                               Text(
-//                                 selectedDate == null
-//                                     ? "Select Date"
-//                                     : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
-//                               ),
-//                               IconButton(
-//                                 onPressed: () => pickDate(context),
-//                                 icon: const Icon(
-//                                     Icons.calendar_month),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-
-//             Container(
-//               width: 300,
-//               height: 50,
-//               margin: const EdgeInsets.only(bottom: 10),
-//               child: ElevatedButton(
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: Colors.green,
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(25),
-//                   ),
-//                 ),
-//                 onPressed: saveProduct,
-//                 child: const Text(
-//                   "Save",
-//                   style: TextStyle(color: Colors.white),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget buildTextField(
-//     String label, {
-//     required TextEditingController controller,
-//     int maxLines = 1,
-//     TextInputType keyboardType = TextInputType.text,
-//     Function(String)? onChanged,
-//   }) {
-//     return Padding(
-//       padding: const EdgeInsets.only(bottom: 16),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text(label),
-//           const SizedBox(height: 6),
-//           TextField(
-//             controller: controller,
-//             maxLines: maxLines,
-//             keyboardType: keyboardType,
-//             onChanged: onChanged,
-//             decoration:
-//                 const InputDecoration(border: OutlineInputBorder()),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -869,45 +11,66 @@ class Adddetailspage extends StatefulWidget {
 
 class _AdddetailspageState extends State<Adddetailspage> {
   int count = 0;
-
   double finalPrice = 0;
 
-  final List<String> items = ["1 unit", "2 unit", "3 unit"];
+  bool isFetchedProduct = false;
+
+  final List<String> items = ["250 grams", "500 grams", "1 kg"];
   final List<String> categories = [
     "Fruits",
-    "Juice",
     "Vegetable",
-    "ProteinPowder",
+    "Malt",
   ];
-  late String selectedValue;
 
+  late String selectedValue;
   DateTime? selectedDate;
   String? selectedItem;
 
   final TextEditingController productIdController = TextEditingController();
   final TextEditingController productNameController = TextEditingController();
-  final TextEditingController categoryController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController tagController = TextEditingController();
-  final ExpansionTileController _controller = ExpansionTileController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController taxController = TextEditingController();
   final TextEditingController percentageController = TextEditingController();
   final TextEditingController offerController = TextEditingController();
 
-  /// ================= PRODUCT ID GENERATOR =================
-  Future<void> generateProductId() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('products').get();
+  final ExpansionTileController _controller = ExpansionTileController();
+
+  Future<void> generateProductId(String category) async {
+    if (category.isEmpty) return;
+
+    String prefix;
+
+    switch (category) {
+      case "Fruits":
+        prefix = "ASAIF";
+        break;
+      case "Juice":
+        prefix = "ASAIJ";
+        break;
+      case "Vegetable":
+        prefix = "ASAIV";
+        break;
+      case "Malt":
+        prefix = "ASAIM";
+        break;
+      default:
+        prefix = "ASAI";
+    }
+
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('products')
+        .where("category", isEqualTo: category)
+        .get();
 
     int productCount = snapshot.docs.length + 1;
 
-    String productId = "ASAI${productCount.toString().padLeft(3, '0')}";
+    String productId = "$prefix${productCount.toString().padLeft(3, '0')}";
 
     productIdController.text = productId;
   }
 
-  /// ================= FINAL PRICE CALCULATION =================
   void calculateFinalPrice() {
     double price = double.tryParse(priceController.text) ?? 0;
     double gst = double.tryParse(percentageController.text) ?? 0;
@@ -923,7 +86,49 @@ class _AdddetailspageState extends State<Adddetailspage> {
     });
   }
 
-  /// ================= SAVE PRODUCT =================
+  Future<void> fetchProduct() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection("products").get();
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView(
+          children: snapshot.docs.map((doc) {
+            var data = doc.data() as Map<String, dynamic>;
+
+            return ListTile(
+              title: Text(
+                "${data["productId"] ?? ""}   ${data["productName"] ?? ""}",
+              ),
+              onTap: () {
+                productIdController.text = data["productId"] ?? "";
+                productNameController.text = data["productName"] ?? "";
+                descriptionController.text = data["description"] ?? "";
+                tagController.text = data["tag"] ?? "";
+
+                priceController.text = data["price"].toString();
+                taxController.text = data["tax"] ?? "";
+                percentageController.text = data["percentage"] ?? "";
+                offerController.text = data["offer"] ?? "";
+
+                selectedItem = data["category"];
+
+                isFetchedProduct = true;
+
+                calculateFinalPrice();
+
+                setState(() {});
+
+                Navigator.pop(context);
+              },
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
   Future<void> saveProduct() async {
     try {
       await FirebaseFirestore.instance.collection('products').add({
@@ -947,11 +152,14 @@ class _AdddetailspageState extends State<Adddetailspage> {
         const SnackBar(content: Text("Product Saved Successfully")),
       );
 
-      generateProductId(); // generate next id after save
+      isFetchedProduct = false;
+
+      if (selectedItem != null) {
+        generateProductId(selectedItem!);
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
@@ -959,7 +167,6 @@ class _AdddetailspageState extends State<Adddetailspage> {
   void initState() {
     super.initState();
     selectedValue = items.first;
-    generateProductId(); // generate id when page opens
   }
 
   Future<void> pickDate(BuildContext context) async {
@@ -1009,28 +216,46 @@ class _AdddetailspageState extends State<Adddetailspage> {
                 Tab(text: "Price Details"),
               ],
             ),
-
             Expanded(
               child: TabBarView(
                 children: [
-                  /// PRODUCT TAB
                   SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         buildTextField(
                           "Product ID",
                           controller: productIdController,
                           readOnly: true,
                         ),
-
                         buildTextField(
                           "Product Name",
                           controller: productNameController,
                         ),
-
+                        const Text("Fetch Product"),
+                        const SizedBox(height: 6),
+                        GestureDetector(
+                          onTap: fetchProduct,
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            alignment: Alignment.centerLeft,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: const Text(
+                              "Tap to Fetch Product",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text("Category"),
+                        const SizedBox(height: 6),
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.black),
@@ -1051,47 +276,45 @@ class _AdddetailspageState extends State<Adddetailspage> {
                             children: categories.map((item) {
                               return ListTile(
                                 title: Text(item),
-                                onTap: () {
+                                onTap: () async {
                                   setState(() {
                                     selectedItem = item;
                                   });
+
+                                  if (!isFetchedProduct) {
+                                    await generateProductId(item);
+                                  }
+
                                   _controller.collapse();
                                 },
                               );
                             }).toList(),
                           ),
                         ),
-
                         buildTextField(
                           "Description",
                           maxLines: 4,
                           controller: descriptionController,
                         ),
-
                         buildTextField(
                           "Add Tag",
                           controller: tagController,
                         ),
-
                         const SizedBox(height: 30),
                       ],
                     ),
                   ),
-
-                  /// PRICE TAB
                   SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         buildTextField(
                           "Price",
                           controller: priceController,
                           keyboardType: TextInputType.number,
                           onChanged: (_) => calculateFinalPrice(),
                         ),
-
                         Row(
                           children: [
                             Expanded(
@@ -1111,16 +334,13 @@ class _AdddetailspageState extends State<Adddetailspage> {
                             ),
                           ],
                         ),
-
                         buildTextField(
                           "Offer (%)",
                           controller: offerController,
                           keyboardType: TextInputType.number,
                           onChanged: (_) => calculateFinalPrice(),
                         ),
-
                         const Text("Final Price"),
-
                         Container(
                           height: 50,
                           width: double.infinity,
@@ -1133,9 +353,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                             style: const TextStyle(fontSize: 18),
                           ),
                         ),
-
                         const SizedBox(height: 16),
-
                         Row(
                           children: [
                             Expanded(
@@ -1180,9 +398,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                                 ],
                               ),
                             ),
-
                             const SizedBox(width: 12),
-
                             Expanded(
                               child: Column(
                                 crossAxisAlignment:
@@ -1217,13 +433,9 @@ class _AdddetailspageState extends State<Adddetailspage> {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 20),
-
                         const Text("Date of Packing"),
-
                         const SizedBox(height: 6),
-
                         Container(
                           padding:
                               const EdgeInsets.symmetric(horizontal: 12),
@@ -1254,7 +466,6 @@ class _AdddetailspageState extends State<Adddetailspage> {
                 ],
               ),
             ),
-
             Container(
               width: 300,
               height: 50,

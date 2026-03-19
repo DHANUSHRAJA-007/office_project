@@ -17,7 +17,7 @@ class _UserProteinState extends State<UserProtein> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: const Text(
-          "Proteins",
+          "Malts",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -39,7 +39,7 @@ class _UserProteinState extends State<UserProtein> {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
               child: Text(
-                "No Fruits Available",
+                "No Malts Available",
                 style: TextStyle(fontSize: 18),
               ),
             );

@@ -5,6 +5,12 @@ import 'package:office_project/firebase_options.dart';
 import 'package:office_project/screens/adminmain.dart';
 import 'package:office_project/screens/cart_provider.dart';
 
+
+import 'package:office_project/screens/productdetailspage.dart';
+
+import 'package:office_project/screens/product_card.dart';
+
+
 import 'package:office_project/screens/product_card.dart';
 import 'package:office_project/screens/productdetailspage.dart';
 
