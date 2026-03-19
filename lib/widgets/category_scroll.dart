@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:office_project/screens/fruitspage.dart';
 import 'package:office_project/screens/maltpage.dart';
 import 'package:office_project/screens/user_category/user_fruits.dart';
-import 'package:office_project/screens/user_category/user_protein.dart';
+import 'package:office_project/screens/user_category/user_malt.dart';
 import 'package:office_project/screens/user_category/user_vegetables.dart';
 
 class CategoryScroll extends StatelessWidget {
@@ -27,7 +27,7 @@ class CategoryScroll extends StatelessWidget {
             }
             else if(route=='/protein')
             {
-              Get.to(UserProtein());
+              Get.to(UserMalt());
             }
           },
           child: Container(

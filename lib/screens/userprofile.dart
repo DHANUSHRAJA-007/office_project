@@ -19,11 +19,7 @@ class _UserprofileState extends State<Userprofile> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // ================= UPDATE USER =================
-  Future<void> updateUser(
-    String name,
-    String email,
-    String phoneNumber,
-  ) async {
+  Future<void> updateUser(String name, String email, String phoneNumber) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
@@ -138,22 +134,18 @@ class _UserprofileState extends State<Userprofile> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Colors.green,
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-            ),
+
             title: const Text(
               "Profile",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             centerTitle: true,
           ),
           body: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 30.0, horizontal: 15),
+            padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 15),
             child: ListView(
               children: [
                 // ================= PROFILE HEADER =================
@@ -167,7 +159,9 @@ class _UserprofileState extends State<Userprofile> {
                             ? data['name'][0].toUpperCase()
                             : "U",
                         style: const TextStyle(
-                            color: Colors.white, fontSize: 22),
+                          color: Colors.white,
+                          fontSize: 22,
+                        ),
                       ),
                     ),
 
@@ -181,7 +175,9 @@ class _UserprofileState extends State<Userprofile> {
                           Text(
                             data['name'] ?? "No Name",
                             style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                           Text(
                             data['phonenumber'] ?? "No Phone",
@@ -198,11 +194,16 @@ class _UserprofileState extends State<Userprofile> {
                     // EDIT BUTTON
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 191, 255, 224),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)))),
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          191,
+                          255,
+                          224,
+                        ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ),
                       onPressed: () {
                         openEditDialog(
                           name: data['name'] ?? '',
@@ -214,29 +215,39 @@ class _UserprofileState extends State<Userprofile> {
                         "Edit",
                         style: TextStyle(color: Colors.green),
                       ),
-                    )
+                    ),
                   ],
                 ),
 
                 const Divider(thickness: 1.5),
 
-               // _reportItems(
-                   // "Profile", '/profile', Icons.person, Icons.arrow_forward_ios),
+                // _reportItems(
+                // "Profile", '/profile', Icons.person, Icons.arrow_forward_ios),
+                // const Divider(),
+                _reportItems(
+                  "Change Password",
+                  '/password',
+                  Icons.lock,
+                  Icons.arrow_forward_ios,
+                ),
 
                 const Divider(),
 
-                _reportItems("Change Password", '/password', Icons.lock,
-                    Icons.arrow_forward_ios),
+                _reportItems(
+                  "Privacy",
+                  '/privacy',
+                  Icons.privacy_tip,
+                  Icons.arrow_forward_ios,
+                ),
 
                 const Divider(),
 
-                _reportItems("Privacy", '/privacy', Icons.privacy_tip,
-                    Icons.arrow_forward_ios),
-
-                const Divider(),
-
-                _reportItems("Terms & Conditions", '/terms', Icons.file_copy,
-                    Icons.arrow_forward_ios),
+                _reportItems(
+                  "Terms & Conditions",
+                  '/terms',
+                  Icons.file_copy,
+                  Icons.arrow_forward_ios,
+                ),
 
                 const Divider(),
 
@@ -251,7 +262,9 @@ class _UserprofileState extends State<Userprofile> {
                       title: const Text(
                         "Log out",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.red),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
                       ),
                       onTap: () async {
                         await _auth.signOut();

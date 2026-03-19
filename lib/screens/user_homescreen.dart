@@ -1110,13 +1110,13 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ),
+                    // TextButton(
+                    //   onPressed: () {},
+                    //   child: const Text(
+                    //     "See All",
+                    //     style: TextStyle(color: Colors.green),
+                    //   ),
+                    // ),
                   ],
                 ),
 
@@ -1159,13 +1159,13 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ),
+                    // TextButton(
+                    //   onPressed: () {},
+                    //   child: const Text(
+                    //     "See All",
+                    //     style: TextStyle(color: Colors.green),
+                    //   ),
+                    // ),
                   ],
                 ),
 
@@ -1276,8 +1276,9 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Text(
-                      "Offer 3%",
+                    child:  Text(
+                                           "Offer ${product['offer']}%",
+
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 12),
                     ),

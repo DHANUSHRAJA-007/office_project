@@ -168,14 +168,14 @@ class _HomePageState extends State<HomePage> {
             label: "Home",
           ),
 
-          BottomNavigationBarItem(
-            icon: Icon(
-              _currentIndex == 1
-                  ? Icons.search
-                  : Icons.search_outlined,
-            ),
-            label: "Search",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     _currentIndex == 1
+          //         ? Icons.search
+          //         : Icons.search_outlined,
+          //   ),
+          //   label: "Search",
+          // ),
 
           BottomNavigationBarItem(
             icon: Icon(
