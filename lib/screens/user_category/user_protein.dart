@@ -110,23 +110,23 @@ class _UserProteinState extends State<UserProtein> {
                     ),
                   ),
       
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      setState(() {
-                        likedProducts[product.id] =
-                            !(likedProducts[product.id] ?? false);
-                      });
-                    },
-                    icon: Icon(
-                      Icons.favorite,
-                      size: 20,
-                      color: likedProducts[product.id] == true
-                          ? Colors.red
-                          : Colors.grey,
-                    ),
-                  ),
+                  // IconButton(
+                  //   padding: EdgeInsets.zero,
+                  //   constraints: const BoxConstraints(),
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       likedProducts[product.id] =
+                  //           !(likedProducts[product.id] ?? false);
+                  //     });
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.favorite,
+                  //     size: 20,
+                  //     color: likedProducts[product.id] == true
+                  //         ? Colors.red
+                  //         : Colors.grey,
+                  //   ),
+                  // ),
                 ],
               ),
       

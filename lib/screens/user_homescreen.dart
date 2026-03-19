@@ -1012,6 +1012,7 @@
 // }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/route_manager.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/productdetailspage.dart';
@@ -1033,7 +1034,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
   final CollectionReference products =
       FirebaseFirestore.instance.collection('products');
 
-  Map<String, bool> likedProducts = {};
+  // Map<String, bool> likedProducts = {};
 
   TextEditingController searchController = TextEditingController();
   String searchText = "";
@@ -1124,7 +1125,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
                 SizedBox(
                   height: 90,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: const [
                       CategoryScroll(
                         image: 'assets/veggie.png',
@@ -1136,14 +1137,23 @@ class _UserHomescreenState extends State<UserHomescreen> {
                         name: 'Fruits',
                         route: '/fruits',
                       ),
+
+
+                      // CategoryScroll(
+                      //   image: 'assets/veggie.png',
+                      //   name: 'Grocery',
+                      //   route: '',
+                      // ),
+
+                      // CategoryScroll(
+                      //   image: 'assets/fruits.png',
+                      //   name: 'Dry Fruits',
+                      //   route: '',
+                      // ),
+
                       CategoryScroll(
                         image: 'assets/veggie.png',
-                        name: 'Grocery',
-                        route: '',
-                      ),
-                      CategoryScroll(
-                        image: 'assets/veggie.png',
-                        name: 'Protein Powder',
+                        name: 'Malt',
                         route: '/protein',
                       ),
                     ],
@@ -1285,23 +1295,23 @@ class _UserHomescreenState extends State<UserHomescreen> {
                     ),
                   ),
 
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      setState(() {
-                        likedProducts[product.id] =
-                            !(likedProducts[product.id] ?? false);
-                      });
-                    },
-                    icon: Icon(
-                      Icons.favorite,
-                      size: 20,
-                      color: likedProducts[product.id] == true
-                          ? Colors.red
-                          : Colors.grey,
-                    ),
-                  ),
+                  // IconButton(
+                  //   padding: EdgeInsets.zero,
+                  //   constraints: const BoxConstraints(),
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       likedProducts[product.id] =
+                  //           !(likedProducts[product.id] ?? false);
+                  //     });
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.favorite,
+                  //     size: 20,
+                  //     color: likedProducts[product.id] == true
+                  //         ? Colors.red
+                  //         : Colors.grey,
+                  //   ),
+                  // ),
                 ],
               ),
 
