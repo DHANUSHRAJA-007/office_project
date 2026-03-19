@@ -1111,13 +1111,13 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ),
+                    // TextButton(
+                    //   onPressed: () {},
+                    //   child: const Text(
+                    //     "See All",
+                    //     style: TextStyle(color: Colors.green),
+                    //   ),
+                    // ),
                   ],
                 ),
 
@@ -1138,18 +1138,8 @@ class _UserHomescreenState extends State<UserHomescreen> {
                         route: '/fruits',
                       ),
 
-
-                      // CategoryScroll(
-                      //   image: 'assets/veggie.png',
-                      //   name: 'Grocery',
-                      //   route: '',
-                      // ),
-
-                      // CategoryScroll(
-                      //   image: 'assets/fruits.png',
-                      //   name: 'Dry Fruits',
-                      //   route: '',
-                      // ),
+                    
+                     
 
                       CategoryScroll(
                         image: 'assets/veggie.png',
@@ -1171,13 +1161,13 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ),
+                    // TextButton(
+                    //   onPressed: () {},
+                    //   child: const Text(
+                    //     "See All",
+                    //     style: TextStyle(color: Colors.green),
+                    //   ),
+                    // ),
                   ],
                 ),
 
@@ -1265,7 +1255,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       onTap: () {
-        Get.to(Productdetailspage());
+       Get.to(() => Productdetailspage(product: product));
       },
       child: Card(
         elevation: 3,
@@ -1288,8 +1278,9 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Text(
-                      "Offer 3%",
+                    child:  Text(
+                                           "Offer ${product['offer']}%",
+
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 12),
                     ),
@@ -1396,8 +1387,10 @@ class _UserHomescreenState extends State<UserHomescreen> {
                               const Text("Product Added to the Cart"),
                               TextButton(
                                 onPressed: () {
-                                  HomePage.homeKey.currentState
-                                      ?.changeTab(2);
+                                  // HomePage.homeKey.currentState
+                                  //     ?.changeTab(2);
+
+                                  Get.offAll(() => HomePage(role: "user"), arguments: 2);
                                 },
                                 child: const Text(
                                   "GO TO CART",

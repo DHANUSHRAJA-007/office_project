@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 
 class Productdetailspage extends StatefulWidget {
-  const Productdetailspage({super.key});
+  final DocumentSnapshot product;
+
+  const Productdetailspage({super.key, required this.product});
 
   @override
   State<Productdetailspage> createState() => _ProductdetailspageState();
@@ -13,233 +14,265 @@ class Productdetailspage extends StatefulWidget {
 class _ProductdetailspageState extends State<Productdetailspage> {
   bool isliked = false;
 
+  late Map<String, dynamic> data;
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// ✅ SAFE CAST (NO CRASH)
+    data = widget.product.data() as Map<String, dynamic>;
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        leading:  IconButton(onPressed: () {
-                Get.back();
-              }, icon: const Icon(Icons.arrow_back)),
-              
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title:  Text(
-                  "Product Details",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              /// 🔙 TOP BAR
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: const Icon(Icons.arrow_back),
                   ),
-                               ),),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// TOP BAR
-          
+                  const Text(
+                    "Product Details",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ],
+              ),
 
-          /// PRODUCT IMAGE
-          SizedBox(
-            width: double.infinity,
-            height: size.height * 0.4,
-            child: const Icon(Icons.image),
-          ),
-
-          /// PRODUCT INFO
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+              /// 🖼 IMAGE
               SizedBox(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Productname",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text("category"),
-                    Text("ratings"),
-                  ],
+                height: size.height * 0.35,
+                width: double.infinity,
+                child: Image.asset(
+                  'assets/fruits.png',
+                  fit: BoxFit.contain,
                 ),
               ),
-              SizedBox(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        "Price",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+
+              const SizedBox(height: 10),
+
+              /// 📦 PRODUCT INFO
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data['productName'] ?? '',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                    ),
-                  ],
+                      Text(data['category'] ?? ''),
+                      const Text("4.9 ⭐"),
+                    ],
+                  ),
+
+                  Text(
+                    "₹${data['price'] ?? 0}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 10),
+
+              /// 📝 DESCRIPTION
+              Text(
+                data['description'] ?? "No description available",
+              ),
+
+              const SizedBox(height: 10),
+              const Divider(),
+
+              /// 🔥 MORE PRODUCTS
+              const Text(
+                "More",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+
+              const SizedBox(height: 10),
+
+             SizedBox(
+                height: 300,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('products')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Text("no products available");
+                    }
+
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.all(12),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        var product = snapshot.data!.docs[index];
+                        var data = product.data() as Map<String, dynamic>;
+
+                        return Container(
+                          width: 170,
+                          margin: const EdgeInsets.only(right: 12),
+
+                          child: Card(
+                            elevation: 7,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  /// OFFER + LIKE
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 3,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.orange,
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Offer 3%",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+
+                                      IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        onPressed: () {
+                                          setState(() {
+                                            isliked = !isliked;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          Icons.favorite,
+                                          size: 20,
+                                          color: isliked
+                                              ? Colors.red
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 5),
+
+                                  /// IMAGE
+                                  Expanded(
+                                    child: Center(
+                                      child: Image.asset(
+                                        'assets/fruits.png',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const Divider(),
+
+                                  /// PRODUCT NAME
+                                  Text(
+                                    data['productName'] ?? '',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 5),
+
+                                  /// PRICE + ADD BUTTON
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "₹${data['price']}/kg",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Add",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
-            ],
-          ),
-
-          const SizedBox(height: 10),
-
-          const SizedBox(height: 100, child: Text("Product description")),
-
-          const Divider(),
-
-          const Text(
-            "More ",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 10),
-
-          /// PRODUCT LIST
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('products')
-                  .snapshots(),
-              builder: (context, snapshot) {
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Text("no products available");
-                }
-
-               return SizedBox(
-  height: 300, // important for horizontal list
-  child: ListView.builder(
-    scrollDirection: Axis.horizontal,
-    padding: const EdgeInsets.all(12),
-    itemCount: snapshot.data!.docs.length,
-    itemBuilder: (context, index) {
-
-      var product = snapshot.data!.docs[index];
-      var data = product.data() as Map<String, dynamic>;
-
-      return Container(
-        width: 170,
-        margin: const EdgeInsets.only(right: 12),
-
-        child: Card(
-          elevation: 7,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                /// OFFER + LIKE
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Text(
-                        "Offer 3%",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-
-                    // IconButton(
-                    //   padding: EdgeInsets.zero,
-                    //   constraints: const BoxConstraints(),
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       isliked = !isliked;
-                    //     });
-                    //   },
-                    //   icon: Icon(
-                    //     Icons.favorite,
-                    //     size: 20,
-                    //     color: isliked ? Colors.red : Colors.grey,
-                    //   ),
-                    // ),
-                  ],
-                ),
-
-                const SizedBox(height: 5),
-
-                /// IMAGE
-               Expanded(
-  child: Center(
-    child: Image.asset(
-      'assets/fruits.png',
-      fit: BoxFit.contain,
-    ),
+              Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [Text(
+  "₹${data['price'] ?? 0}",
+  style: const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 18,
   ),
 ),
-                const Divider(),
 
-                /// PRODUCT NAME
-                Text(
-                  data['productName'] ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+ElevatedButton(onPressed: (){}, child: Text("Add Cart"))
+                ],
+              )
 
-                const SizedBox(height: 5),
-
-                /// PRICE + ADD BUTTON
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    Text(
-                      "₹${data['price']}/kg",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        "Add",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            ],
           ),
         ),
-      );
-    },
-  ),
-);
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

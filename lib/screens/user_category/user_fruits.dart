@@ -29,7 +29,7 @@ class _UserFruitsState extends State<UserFruits> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('products')
-            .where('category', isEqualTo: 'fruits')
+            .where('category', isEqualTo: 'Fruits')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -104,8 +104,8 @@ class _UserFruitsState extends State<UserFruits> {
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Text(
-                      "Offer 3%",
+                    child:  Text(
+                      "Offer ${product['offer']}%",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                   ),

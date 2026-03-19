@@ -955,7 +955,7 @@ class _SignupPageState extends State<SignupPage> {
                       const Text("Already have an account ? "),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const HomePage(role:'user',));
+                          Get.to(() => const LoginPage());
                         },
                         child: const Text(
                           "Sign In",

@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-class UserProtein extends StatefulWidget {
-  const UserProtein({super.key});
+class UserMalt extends StatefulWidget {
+  const UserMalt({super.key});
 
   @override
-  State<UserProtein> createState() => _UserProteinState();
+  State<UserMalt> createState() => _UserMaltState();
 }
 Map<String, bool> likedProducts = {};
-class _UserProteinState extends State<UserProtein> {
+class _UserMaltState extends State<UserMalt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: const Text(
-          "Proteins",
+          "Malts",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -29,7 +29,7 @@ class _UserProteinState extends State<UserProtein> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('products')
-            .where('category', isEqualTo: 'ProteinPowder')
+            .where('category', isEqualTo: 'Malt')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,7 +39,7 @@ class _UserProteinState extends State<UserProtein> {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
               child: Text(
-                "No Fruits Available",
+                "No Malts Available",
                 style: TextStyle(fontSize: 18),
               ),
             );

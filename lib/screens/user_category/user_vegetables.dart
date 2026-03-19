@@ -104,8 +104,8 @@ class _UserVegetablesState extends State<UserVegetables> {
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Text(
-                      "Offer 3%",
+                    child:  Text(
+                      "Offer ${product['offer']}%",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                   ),

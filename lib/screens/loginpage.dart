@@ -123,8 +123,7 @@ class _LoginPageState extends State<LoginPage> {
       if (role == 'admin') {
         Get.offAll(() => const Adminmain());
       } else {
-        Get.offAll(() =>  HomePage(role: role, key: HomePage.homeKey, ));
-      }
+Get.offAll(() => HomePage(role: role), arguments: 2);      }
     } catch (e) {
       Get.snackbar('Login Failed', e.toString());
     } finally {
