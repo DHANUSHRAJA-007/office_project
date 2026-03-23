@@ -8,7 +8,8 @@ import 'package:office_project/screens/reports.dart';
 import 'package:office_project/screens/admin_settings.dart';
 
 class Drawerbox extends StatelessWidget {
-  const Drawerbox({super.key});
+
+  const Drawerbox({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class Drawerbox extends StatelessWidget {
         Get.back(); // close drawer
 
         if (route == '/dashboard') {
-          Get.to(const Dashboard());
+          // Get.to(const Dashboard(onNavigateToOrders: () {  },));
         } else if (route == '/settings') {
           Get.to( Settings2());
         } else if (route == '/orders') {

@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   /// PAGES
   final List<Widget> _pages = [
     const UserHomescreen(),
-    
+
     const Cartpage(),
     const Userprofile(),
   ];

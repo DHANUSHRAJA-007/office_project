@@ -1,9 +1,393 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:office_project/screens/userhomepage.dart';
+// import 'package:provider/provider.dart';
+
+// import 'cart_provider.dart';
+
+// class Productdetailspage extends StatefulWidget {
+//   final DocumentSnapshot product;
+
+//   const Productdetailspage({super.key, required this.product});
+
+//   @override
+//   State<Productdetailspage> createState() => _ProductdetailspageState();
+// }
+
+// class _ProductdetailspageState extends State<Productdetailspage> {
+//   bool isliked = false;
+
+//   late Map<String, dynamic> data;
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     /// ✅ SAFE CAST (NO CRASH)
+//     data = widget.product.data() as Map<String, dynamic>;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     var size = MediaQuery.of(context).size;
+
+//     return Scaffold(
+//       body: SingleChildScrollView(
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               /// 🔙 TOP BAR
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   IconButton(
+//                     onPressed: () => Get.back(),
+//                     icon: const Icon(Icons.arrow_back),
+//                   ),
+//                   const Text(
+//                     "Product Details",
+//                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+//                   ),
+//                 ],
+//               ),
+
+//               /// 🖼 IMAGE
+//               SizedBox(
+//                 height: size.height * 0.35,
+//                 width: double.infinity,
+//                 child: Image.asset('assets/fruits.png', fit: BoxFit.contain),
+//               ),
+
+//               const SizedBox(height: 10),
+
+//               /// 📦 PRODUCT INFO
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         data['productName'] ?? '',
+//                         style: const TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                       Text(data['category'] ?? ''),
+//                       const Text("4.9 ⭐"),
+//                     ],
+//                   ),
+
+//                   Text(
+//                     "₹${data['price'] ?? 0}",
+//                     style: const TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 18,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+
+//               const SizedBox(height: 10),
+
+//               /// 📝 DESCRIPTION
+//               Text(data['description'] ?? "No description available"),
+
+//               const SizedBox(height: 10),
+//               const Divider(),
+
+//               /// 🔥 MORE PRODUCTS
+//               const Text("More", style: TextStyle(fontWeight: FontWeight.bold)),
+
+//               const SizedBox(height: 10),
+
+//               SizedBox(
+//                 height: 300,
+//                 child: StreamBuilder<QuerySnapshot>(
+//                   stream: FirebaseFirestore.instance
+//                       .collection('products')
+//                       .snapshots(),
+//                   builder: (context, snapshot) {
+//                     if (snapshot.connectionState == ConnectionState.waiting) {
+//                       return const Center(child: CircularProgressIndicator());
+//                     }
+
+//                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+//                       return const Text("no products available");
+//                     }
+
+//                     return ListView.builder(
+//                       scrollDirection: Axis.horizontal,
+//                       padding: const EdgeInsets.all(12),
+//                       itemCount: snapshot.data!.docs.length,
+//                       itemBuilder: (context, index) {
+//                         var product = snapshot.data!.docs[index];
+//                         var data = product.data() as Map<String, dynamic>;
+
+//                         return Container(
+//                           width: 170,
+//                           margin: const EdgeInsets.only(right: 12),
+
+//                           child: Card(
+//                             elevation: 7,
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(12),
+//                             ),
+
+//                             child: Padding(
+//                               padding: const EdgeInsets.all(8),
+
+//                               child: Column(
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   /// OFFER + LIKE
+//                                   Row(
+//                                     mainAxisAlignment:
+//                                         MainAxisAlignment.spaceBetween,
+//                                     children: [
+//                                       Container(
+//                                         padding: const EdgeInsets.symmetric(
+//                                           horizontal: 8,
+//                                           vertical: 3,
+//                                         ),
+//                                         decoration: BoxDecoration(
+//                                           color: Colors.orange,
+//                                           borderRadius: BorderRadius.circular(
+//                                             5,
+//                                           ),
+//                                         ),
+//                                         child: Text(
+//                                           "Offer ${product['offer']}%",
+
+//                                           style: TextStyle(
+//                                             fontWeight: FontWeight.bold,
+//                                             fontSize: 12,
+//                                           ),
+//                                         ),
+//                                       ),
+
+//                                       IconButton(
+//                                         padding: EdgeInsets.zero,
+//                                         constraints: const BoxConstraints(),
+//                                         onPressed: () {
+//                                           setState(() {
+//                                             isliked = !isliked;
+//                                           });
+//                                         },
+//                                         icon: Icon(
+//                                           Icons.favorite,
+//                                           size: 20,
+//                                           color: isliked
+//                                               ? Colors.red
+//                                               : Colors.grey,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+
+//                                   const SizedBox(height: 5),
+
+//                                   /// IMAGE
+//                                   Expanded(
+//                                     child: Center(
+//                                       child: Image.asset(
+//                                         'assets/fruits.png',
+//                                         fit: BoxFit.contain,
+//                                       ),
+//                                     ),
+//                                   ),
+
+//                                   const Divider(),
+
+//                                   /// PRODUCT NAME
+//                                   Text(
+//                                     data['productName'] ?? '',
+//                                     overflow: TextOverflow.ellipsis,
+//                                     style: const TextStyle(
+//                                       fontWeight: FontWeight.bold,
+//                                     ),
+//                                   ),
+
+//                                   const SizedBox(height: 5),
+
+//                                   /// PRICE + ADD BUTTON
+//                                   Row(
+//                                     mainAxisAlignment:
+//                                         MainAxisAlignment.spaceBetween,
+//                                     children: [
+//                                       Text(
+//                                         "₹${data['price']}/kg",
+//                                         style: const TextStyle(
+//                                           fontWeight: FontWeight.bold,
+//                                         ),
+//                                       ),
+
+//                                       InkWell(
+//                                         onTap: () {
+//                                           Map<String, dynamic> cartItem = {
+//                                             'name': product["productName"],
+//                                             'price': product["price"],
+//                                             'offer':
+//                                                 data["offer"]?.toString() ??
+//                                                 "No offer",
+
+//                                             'quantity': 1,
+//                                           };
+
+//                                           context
+//                                               .read<CartProvider>()
+//                                               .addToCart(cartItem);
+
+//                                           ScaffoldMessenger.of(
+//                                             context,
+//                                           ).showSnackBar(
+//                                             SnackBar(
+//                                               duration: const Duration(
+//                                                 seconds: 3,
+//                                               ),
+//                                               backgroundColor: Colors.black,
+//                                               content: Row(
+//                                                 mainAxisAlignment:
+//                                                     MainAxisAlignment
+//                                                         .spaceBetween,
+//                                                 children: [
+//                                                   const Text(
+//                                                     "Product Added to the Cart",
+//                                                   ),
+//                                                   TextButton(
+//                                                     onPressed: () {
+//                                                       // HomePage.homeKey.currentState
+//                                                       //     ?.changeTab(2);
+
+//                                                       Get.offAll(
+//                                                         () => HomePage(
+//                                                           role: "user",
+//                                                         ),
+//                                                         arguments: 1,
+//                                                       );
+//                                                     },
+//                                                     child: const Text(
+//                                                       "GO TO CART",
+//                                                       style: TextStyle(
+//                                                         color: Colors.yellow,
+//                                                       ),
+//                                                     ),
+//                                                   ),
+//                                                 ],
+//                                               ),
+//                                             ),
+//                                           );
+//                                         },
+//                                         child: Container(
+//                                           padding: const EdgeInsets.symmetric(
+//                                             horizontal: 10,
+//                                             vertical: 4,
+//                                           ),
+//                                           decoration: BoxDecoration(
+//                                             color: Colors.green,
+//                                             borderRadius: BorderRadius.circular(
+//                                               6,
+//                                             ),
+//                                           ),
+//                                           child: const Text(
+//                                             "Add",
+//                                             style: TextStyle(
+//                                               color: Colors.white,
+//                                             ),
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                     );
+//                   },
+//                 ),
+//               ),
+//               Divider(),
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Text(
+//                     "₹${data['price'] ?? 0}",
+//                     style: const TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 18,
+//                     ),
+//                   ),
+
+//                   ElevatedButton(
+//                     onPressed: () {
+//                       Map<String, dynamic> cartItem = {
+//                         'name': data["productName"],
+//                         'price': data["price"],
+//                         'offer': data["offer"]?.toString()??"No offer",
+//                         'quantity': 1,
+//                       };
+
+//                       context.read<CartProvider>().addToCart(cartItem);
+
+//                       ScaffoldMessenger.of(context).showSnackBar(
+//                         SnackBar(
+//                           duration: const Duration(seconds: 3),
+//                           backgroundColor: Colors.black,
+//                           content: Row(
+//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                             children: [
+//                               const Text("Product Added to the Cart"),
+//                               TextButton(
+//                                 onPressed: () {
+//                                   // HomePage.homeKey.currentState
+//                                   //     ?.changeTab(2);
+
+//                                   Get.offAll(
+//                                     () => HomePage(role: "user"),
+//                                     arguments: 1,
+//                                   );
+//                                 },
+//                                 child: const Text(
+//                                   "GO TO CART",
+//                                   style: TextStyle(color: Colors.yellow),
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       );
+//                     },
+//                     child: Text("Add Cart"),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:office_project/screens/userhomepage.dart';
+import 'package:provider/provider.dart';
+
+import 'cart_provider.dart';
 
 class Productdetailspage extends StatefulWidget {
-  const Productdetailspage({super.key});
+  final DocumentSnapshot product;
+
+  const Productdetailspage({super.key, required this.product});
 
   @override
   State<Productdetailspage> createState() => _ProductdetailspageState();
@@ -12,74 +396,120 @@ class Productdetailspage extends StatefulWidget {
 class _ProductdetailspageState extends State<Productdetailspage> {
   bool isliked = false;
 
+  late Map<String, dynamic> data;
+
+  @override
+  void initState() {
+    super.initState();
+    data = widget.product.data() as Map<String, dynamic>;
+  }
+
+  /// ✅ COMMON ADD TO CART FUNCTION (BEST PRACTICE)
+  void addToCart(Map<String, dynamic> productData) {
+    Map<String, dynamic> cartItem = {
+      'name': productData["productName"] ?? "",
+      'price': productData["price"] ?? 0,
+      'offer': productData["offer"]?.toString() ?? "No Offer",
+      'quantity': 1,
+    };
+    print("CART ITEM: $cartItem"); // 👈 ADD THIS ALSO
+
+    context.read<CartProvider>().addToCart(cartItem);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.black,
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("Product Added to the Cart"),
+            TextButton(
+              onPressed: () {
+                Get.offAll(() => HomePage(role: "user"), arguments: 1);
+              },
+              child: const Text(
+                "GO TO CART",
+                style: TextStyle(color: Colors.yellow),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back),
+        ),
+        title: Text(
+          "Product Details",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ),
       body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// TOP BAR
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  const Text(
-                    "Product Details",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
+              /// 🔙 TOP BAR
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     IconButton(
+              //       onPressed: () => Get.back(),
+              //       icon: const Icon(Icons.arrow_back),
+              //     ),
+              //     const Text(
+              //       "Product Details",
+              //       style:
+              //           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              //     ),
+              //   ],
+              // ),
+
+              /// IMAGE
+              SizedBox(
+                height: size.height * 0.35,
+                width: double.infinity,
+                child: Image.asset('assets/fruits.png', fit: BoxFit.contain),
               ),
 
-              /// PRODUCT IMAGE
-              SizedBox(
-                width: double.infinity,
-                height: size.height * 0.4,
-                child: const Icon(Icons.image),
-              ),
+              const SizedBox(height: 10),
 
               /// PRODUCT INFO
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  SizedBox(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Productname",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data['productName'] ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
-                        Text("category"),
-                        Text("ratings"),
-                      ],
-                    ),
+                      ),
+                      Text(data['category'] ?? ''),
+                      const Text("4.9 ⭐"),
+                    ],
                   ),
-                  SizedBox(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            "Price",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
+                  Text(
+                    "₹${data['price'] ?? 0}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -87,18 +517,16 @@ class _ProductdetailspageState extends State<Productdetailspage> {
 
               const SizedBox(height: 10),
 
-              const SizedBox(height: 100, child: Text("Product description")),
+              /// DESCRIPTION
+              Text(data['description'] ?? "No description available"),
 
               const Divider(),
 
-              const Text(
-                "More ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              /// MORE PRODUCTS
+              const Text("More", style: TextStyle(fontWeight: FontWeight.bold)),
 
               const SizedBox(height: 10),
 
-              /// PRODUCT LIST
               SizedBox(
                 height: 300,
                 child: StreamBuilder<QuerySnapshot>(
@@ -106,39 +534,31 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                       .collection('products')
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                    if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Text("no products available");
                     }
 
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.all(12),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-                        var product = snapshot.data!.docs[index];
-                        var data = product.data() as Map<String, dynamic>;
+                        var doc = snapshot.data!.docs[index];
+                        var data = doc.data() as Map<String, dynamic>;
 
                         return Container(
                           width: 170,
                           margin: const EdgeInsets.only(right: 12),
-
                           child: Card(
                             elevation: 7,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-
                             child: Padding(
                               padding: const EdgeInsets.all(8),
-
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  /// OFFER + LIKE
+                                  /// OFFER
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -154,85 +574,69 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                                             5,
                                           ),
                                         ),
-                                        child: const Text(
-                                          "Offer 3%",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                          ),
+                                        child: Text(
+                                          data['offer'] != null
+                                              ? "Offer ${data['offer']}"
+                                              : "No Offer",
+                                          style: const TextStyle(fontSize: 12),
                                         ),
                                       ),
 
                                       IconButton(
-                                        padding: EdgeInsets.zero,
-                                        constraints: const BoxConstraints(),
+                                        icon: Icon(
+                                          Icons.favorite,
+                                          color: isliked
+                                              ? Colors.red
+                                              : Colors.grey,
+                                        ),
                                         onPressed: () {
                                           setState(() {
                                             isliked = !isliked;
                                           });
                                         },
-                                        icon: Icon(
-                                          Icons.favorite,
-                                          size: 20,
-                                          color: isliked
-                                              ? Colors.red
-                                              : Colors.grey,
-                                        ),
                                       ),
                                     ],
                                   ),
 
-                                  const SizedBox(height: 5),
-
-                                  /// IMAGE
                                   Expanded(
                                     child: Center(
-                                      child: Image.asset(
-                                        'assets/fruits.png',
-                                        fit: BoxFit.contain,
-                                      ),
+                                      child: Image.asset('assets/fruits.png'),
                                     ),
                                   ),
 
-                                  const Divider(),
-
-                                  /// PRODUCT NAME
                                   Text(
                                     data['productName'] ?? '',
-                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
 
-                                  const SizedBox(height: 5),
-
-                                  /// PRICE + ADD BUTTON
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "₹${data['price']}/kg",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      Text("₹${data['price']}"),
 
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius: BorderRadius.circular(
-                                            6,
+                                      /// ADD BUTTON
+                                      InkWell(
+                                        onTap: () => addToCart(data),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 4,
                                           ),
-                                        ),
-                                        child: const Text(
-                                          "Add",
-                                          style: TextStyle(color: Colors.white),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            "Add",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -246,6 +650,26 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                     );
                   },
                 ),
+              ),
+
+              const Divider(),
+
+              /// BOTTOM ADD BUTTON
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "₹${data['price'] ?? 0}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => addToCart(data),
+                    child: const Text("Add Cart"),
+                  ),
+                ],
               ),
             ],
           ),

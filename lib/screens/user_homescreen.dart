@@ -1012,6 +1012,7 @@
 // }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/route_manager.dart';
 import 'package:get/get.dart';
 import 'package:office_project/screens/productdetailspage.dart';
@@ -1136,6 +1137,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
                         name: 'Fruits',
                         route: '/fruits',
                       ),
+
                     
                      
 
@@ -1253,7 +1255,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       onTap: () {
-        Get.to(Productdetailspage());
+       Get.to(() => Productdetailspage(product: product));
       },
       child: Card(
         elevation: 3,
@@ -1388,7 +1390,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
                                   // HomePage.homeKey.currentState
                                   //     ?.changeTab(2);
 
-                                  Get.offAll(() => HomePage(role: "user"), arguments: 2);
+                                  Get.offAll(() => HomePage(role: "user"), arguments: 1);
                                 },
                                 child: const Text(
                                   "GO TO CART",

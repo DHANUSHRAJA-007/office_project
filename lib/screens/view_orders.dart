@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:office_project/screens/allorders.dart';
+import 'package:office_project/screens/accepted_orders.dart';
 import 'package:office_project/screens/cancelled_order.dart';
 import 'package:office_project/screens/delivered_page.dart';
 import 'package:office_project/screens/pending_orders.dart';
-
 
 class ViewOrders extends StatefulWidget {
   const ViewOrders({super.key});
@@ -16,7 +15,12 @@ class ViewOrders extends StatefulWidget {
 class _ViewOrdersState extends State<ViewOrders> {
   int selectdIndex = 0;
 
-  final List<String> filters = ["All", "Pending", "Delivered", "Cancelled"];
+  final List<String> filters = [
+    "Pending",
+    "Accepted",
+    "Delivered",
+    "Cancelled",
+  ];
 
   String currentDate = DateFormat('dd MMMM yyyy EEEE').format(DateTime.now());
 
@@ -32,14 +36,13 @@ class _ViewOrdersState extends State<ViewOrders> {
         backgroundColor: Colors.green,
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(135),
+          preferredSize: const Size.fromHeight(70),
           child: Container(
             color: Colors.white,
 
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Column(
-                
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 15),
@@ -53,7 +56,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                         showCheckmark: false,
                         label: Text(filters[index]),
                         selected: selectdIndex == index,
-                        selectedColor: Colors.orange,
+                        selectedColor: Colors.green,
                         backgroundColor: Colors.grey.shade200,
                         labelStyle: TextStyle(
                           color: selectdIndex == index
@@ -70,29 +73,29 @@ class _ViewOrdersState extends State<ViewOrders> {
                     }),
                   ),
                   SizedBox(height: 15),
-                  Container(
-                    height: 40,
-                    width: 450,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: SearchBar(
-                      elevation: WidgetStatePropertyAll(0),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      leading: Icon(Icons.search),
-                      hintText: "Search Orders",
-                    ),
-                  ),
+                  // Container(
+                  //   height: 40,
+                  //   width: 450,
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.grey),
+                  //     borderRadius: BorderRadius.all(Radius.circular(10)),
+                  //   ),
+                  //   child: SearchBar(
+                  //     elevation: WidgetStatePropertyAll(0),
+                  //     shape: MaterialStateProperty.all(
+                  //       RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       ),
+                  //     ),
+                  //     leading: Icon(Icons.search),
+                  //     hintText: "Search Orders",
+                  //   ),
+                  // ),
                   SizedBox(height: 8),
-                  Text(
-                    DateFormat('dd MMM , yyyy EEEE').format(DateTime.now()),
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  // Text(
+                  //   DateFormat('dd MMM , yyyy EEEE').format(DateTime.now()),
+                  //   style: TextStyle(fontSize: 16),
+                  // ),
                 ],
               ),
             ),
@@ -105,9 +108,9 @@ class _ViewOrdersState extends State<ViewOrders> {
 
   Widget getSelectedPage() {
     if (selectdIndex == 0) {
-      return Allorders();
-    } else if (selectdIndex == 1) {
       return PendingOrders();
+    } else if (selectdIndex == 1) {
+      return AcceptedOrders();
     } else if (selectdIndex == 2) {
       return DeliveredPage();
     } else {
