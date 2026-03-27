@@ -6,7 +6,6 @@ import 'package:office_project/screens/cart_provider.dart';
 import 'package:office_project/screens/splash_screen.dart';
 import 'package:office_project/theme_controller.dart';
 import 'package:provider/provider.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
