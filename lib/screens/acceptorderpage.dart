@@ -190,6 +190,7 @@
 // }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:office_project/widgets/buyercard.dart';
 import 'package:office_project/widgets/buyerinstructioncard.dart';
 import 'package:office_project/widgets/ordercard.dart';
@@ -198,7 +199,6 @@ import 'package:office_project/widgets/productcard.dart';
 class Acceptorderpage extends StatelessWidget {
   final DocumentSnapshot order;
   const Acceptorderpage({super.key, required this.order});
-
 
   @override
   Widget build(BuildContext context) {
@@ -309,6 +309,7 @@ class Acceptorderpage extends StatelessWidget {
             itemCount: orders.length,
             itemBuilder: (context, index) {
               final order = orders[index];
+              final data = order.data() as Map<String, dynamic>;
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 16),
@@ -332,9 +333,7 @@ class Acceptorderpage extends StatelessWidget {
                             children: [
                               const CircleAvatar(
                                 radius: 25,
-                                backgroundImage: NetworkImage(
-                                 'assets/v1.jpg'  
-                                ),
+                                backgroundImage: NetworkImage('assets/v1.jpg'),
                               ),
                               const SizedBox(width: 10),
 
@@ -345,8 +344,8 @@ class Acceptorderpage extends StatelessWidget {
                                   // Text(order['phone'] ?? ""),
                                   // Text(order['address'] ?? ""),
                                   Text("Seller name"),
-                                    Text("Phone"),
-                                      Text("Seller address"),
+                                  Text("Phone"),
+                                  Text("Seller address"),
                                 ],
                               ),
                             ],
@@ -371,7 +370,8 @@ class Acceptorderpage extends StatelessWidget {
                                 children: [
                                   const CircleAvatar(
                                     backgroundImage: NetworkImage(
-'assets/v1.jpg'                                    ),
+                                      'assets/v1.jpg',
+                                    ),
                                   ),
                                   const SizedBox(width: 10),
 
@@ -406,16 +406,14 @@ class Acceptorderpage extends StatelessWidget {
                         children: [
                           const CircleAvatar(
                             radius: 25,
-                            backgroundImage: NetworkImage(
-                              "assets/v1.jpg",
-                            ),
+                            backgroundImage: NetworkImage("assets/v1.jpg"),
                           ),
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(order['buyerName'] ?? "Buyer"),
-                              // Text(order['buyerAddress'] ?? ""),
+                              Text(data['buyerName'] ?? "Buyer"),
+                              Text(data['buyerAddress'] ?? "no address"),
                             ],
                           ),
                         ],
@@ -479,11 +477,14 @@ class Acceptorderpage extends StatelessWidget {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              FirebaseFirestore.instance
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
                                   .collection('orders')
                                   .doc(order.id)
                                   .update({'status': 'accepted'});
+
+                              Get.back();
+                              Get.snackbar("Success", "Order Accepted");
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,

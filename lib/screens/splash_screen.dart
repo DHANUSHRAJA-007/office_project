@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (role == 'admin') {
           Get.offAll(() => const Adminmain());
         } else if (role == 'user') {
-          Get.offAll(() => HomePage(role: role,        ) );
+          Get.offAll(() => HomePage(role: role,) );
         } else {
           Get.offAll(() => const LoginPage()); // or User Home
         }

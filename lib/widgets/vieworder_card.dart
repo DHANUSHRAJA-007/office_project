@@ -80,67 +80,93 @@ class VieworderCard extends StatelessWidget {
     required this.status,
   });
 
- @override
-Widget build(BuildContext context) {
-  return Card(
-    margin: const EdgeInsets.all(10),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.all(10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
 
-          /// LEFT SIDE
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Order #$orderId",
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            /// ✅ LEFT SIDE (NOW FLEXIBLE)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Order #$orderId",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    "Buyer: $buyerName",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    "₹ $total",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text("Buyer: $buyerName"),
-              const SizedBox(height: 4),
-              Text("₹ $total"),
-            ],
-          ),
+            ),
 
-          /// RIGHT SIDE → STATUS BADGE
-          Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: getStatusColor(status),
-              borderRadius: BorderRadius.circular(20),
+            const SizedBox(width: 10),
+
+            /// ✅ RIGHT SIDE (SAFE SIZE)
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: getStatusColor(status),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  status.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
-            child: Text(
-              status.toUpperCase(),
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-Color getStatusColor(String status) {
-  switch (status) {
-    case 'pending':
-      return Colors.orange;
-    case 'accepted':
-      return Colors.green;
-    case 'delivered':
-      return Colors.blue;
-    case 'rejected':
-      return Colors.red;
-    default:
-      return Colors.grey;
+    );
   }
-}
+
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'pending':
+        return Colors.orange;
+      case 'accepted':
+        return Colors.green;
+      case 'delivered':
+        return Colors.blue;
+      case 'rejected':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
 }

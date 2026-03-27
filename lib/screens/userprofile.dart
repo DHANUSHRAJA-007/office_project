@@ -187,6 +187,10 @@ class _UserprofileState extends State<Userprofile> {
                             data['email'] ?? "No Email",
                             style: const TextStyle(fontSize: 15),
                           ),
+                          Text(
+                            data['address'] ?? "No Address",
+                            style: const TextStyle(fontSize: 15),
+                          ),
                         ],
                       ),
                     ),

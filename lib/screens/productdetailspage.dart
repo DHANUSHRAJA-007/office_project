@@ -426,7 +426,7 @@ class _ProductdetailspageState extends State<Productdetailspage> {
             const Text("Product Added to the Cart"),
             TextButton(
               onPressed: () {
-                Get.offAll(() => HomePage(role: "user"), arguments: 1);
+                Get.offAll(() => HomePage(role: "user"), arguments: 2);
               },
               child: const Text(
                 "GO TO CART",

@@ -99,7 +99,9 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
+
 int currentIndex = 0;
+
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -122,7 +124,8 @@ class _LoginPageState extends State<LoginPage> {
       if (role == 'admin') {
         Get.offAll(() => const Adminmain());
       } else {
-Get.offAll(() => HomePage(role: role), arguments: 2);      }
+        Get.offAll(() => HomePage(role: role), arguments: 0);
+      }
     } catch (e) {
       Get.snackbar('Login Failed', e.toString());
     } finally {

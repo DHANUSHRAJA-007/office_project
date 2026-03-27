@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:office_project/screens/addproduct.dart';
 import 'package:office_project/screens/adminnavbar.dart';
 import 'package:office_project/screens/dashboard.dart';
-import 'package:office_project/screens/orders.dart';
 import 'package:office_project/screens/admin_settings.dart';
 import 'package:office_project/screens/view_orders.dart';
 

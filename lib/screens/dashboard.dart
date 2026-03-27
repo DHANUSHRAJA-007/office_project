@@ -272,7 +272,7 @@ import 'package:flutter/material.dart';
 import 'package:office_project/widgets/drawerbox.dart';
 
 class Dashboard extends StatefulWidget {
-    final VoidCallback onNavigateToOrders;
+  final VoidCallback onNavigateToOrders;
 
   const Dashboard({super.key, required this.onNavigateToOrders});
 
@@ -373,15 +373,13 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisSpacing: 12,
                       childAspectRatio: 1.6,
                       children: [
-                        InkWell(
-                          onTap:  widget.onNavigateToOrders,
-                          child: _dashCards(
-                            const Color(0xFFFBD099),
-                            "New Orders",
-                            "$pending",
-                            Icons.description_outlined,
-                          ),
+                        _dashCards(
+                          const Color(0xFFFBD099),
+                          "New Orders",
+                          "$pending",
+                          Icons.description_outlined,
                         ),
+
                         _dashCards(
                           const Color(0xFFA0D29E),
                           "Accepted",
@@ -534,35 +532,38 @@ class _DashboardState extends State<Dashboard> {
 
   /// 🔹 DASHBOARD CARD
   Widget _dashCards(Color color, String title, String value, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: color,
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
+    return InkWell(
+      onTap: widget.onNavigateToOrders,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: color,
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  value,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
                 ),
-              ),
-              Icon(icon, color: Colors.white),
-            ],
-          ),
-        ],
+                Icon(icon, color: Colors.white),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -578,13 +579,13 @@ class _DashboardState extends State<Dashboard> {
             title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
           ),
-         TextButton(
-  onPressed: widget.onNavigateToOrders, // 👈 switch tab
-  child: const Text(
-    "View All",
-    style: TextStyle(color: Colors.green),
-  ),
-),
+          TextButton(
+            onPressed: widget.onNavigateToOrders, // 👈 switch tab
+            child: const Text(
+              "View All",
+              style: TextStyle(color: Colors.green),
+            ),
+          ),
         ],
       ),
     );

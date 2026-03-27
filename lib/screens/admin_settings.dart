@@ -6,7 +6,7 @@ import 'package:office_project/screens/privacypolicy.dart';
 import 'package:office_project/screens/profilepage.dart';
 import 'package:office_project/screens/reports.dart';
 import 'package:office_project/screens/termsandcond.dart';
-import 'package:office_project/theme_controller.dart';
+// import 'package:office_project/theme_controller.dart';
 
 class Settings2 extends StatelessWidget {
   Settings2({super.key});
@@ -104,23 +104,23 @@ class Settings2 extends StatelessWidget {
                           Icons.file_copy,
                           Icons.arrow_forward_ios,
                         ),
-                        Divider(),
-                        ListTile(
-                          leading: Icon(Icons.dark_mode),
-                          title: Text(
-                            "Dark Mode",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          trailing: Switch(
-                            focusColor: Theme.of(context).cardColor,
-                            value: themeNotifier.value == ThemeMode.dark,
-                            onChanged: (value) {
-                              themeNotifier.value = value
-                                  ? ThemeMode.dark
-                                  : ThemeMode.light;
-                            },
-                          ),
-                        ),
+                        // Divider(),
+                        // ListTile(
+                        //   leading: Icon(Icons.dark_mode),
+                        //   title: Text(
+                        //     "Dark Mode",
+                        //     style: TextStyle(fontWeight: FontWeight.bold),
+                        //   ),
+                        //   trailing: Switch(
+                        //     focusColor: Theme.of(context).cardColor,
+                        //     value: themeNotifier.value == ThemeMode.dark,
+                        //     onChanged: (value) {
+                        //       themeNotifier.value = value
+                        //           ? ThemeMode.dark
+                        //           : ThemeMode.light;
+                        //     },
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -129,27 +129,25 @@ class Settings2 extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(),
-                    child: ListTile(
-                      
-                      leading: Icon(Icons.logout, color: Colors.red),
-                      title: Text(
-                        "Log out",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(),
+                  child: ListTile(
+                    leading: Icon(Icons.logout, color: Colors.red),
+                    title: Text(
+                      "Log out",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
                       ),
-                      onTap: () async {
-                        await _auth.signOut();
-                        Get.offAll(() => LoginPage());
-                      },
                     ),
+                    onTap: () async {
+                      await _auth.signOut();
+                      Get.offAll(() => LoginPage());
+                    },
                   ),
                 ),
-              
-          ],
+              ),
+            ],
           ),
         ),
       ),

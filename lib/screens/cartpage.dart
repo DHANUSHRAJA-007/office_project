@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:office_project/screens/acceptorderpage.dart';
+import 'package:office_project/screens/addresspage.dart';
 import 'package:provider/provider.dart';
 import 'cart_provider.dart';
 
@@ -11,6 +11,37 @@ class Cartpage extends StatefulWidget {
 
   @override
   State<Cartpage> createState() => _CartpageState();
+}
+
+Future<void> placeOrder(
+  DocumentSnapshot userDoc,
+  List cart,
+  int total,
+  CartProvider cartProvider,
+) async {
+  final user = FirebaseAuth.instance.currentUser;
+
+  final cartItems = cart.map((item) {
+    return {
+      'name': item['name'],
+      'price': item['price'],
+      'quantity': item['quantity'],
+    };
+  }).toList();
+
+  await FirebaseFirestore.instance.collection('orders').add({
+    'buyerId': user!.uid,
+    'buyerName': userDoc['name'],
+    'buyerAddress': userDoc['address'],
+    'items': cartItems,
+    'total': total,
+    'status': 'pending',
+    'timestamp': FieldValue.serverTimestamp(),
+  });
+
+  cartProvider.clearCart();
+
+  Get.snackbar("Success", "Order placed successfully");
 }
 
 class _CartpageState extends State<Cartpage> {
@@ -29,6 +60,8 @@ class _CartpageState extends State<Cartpage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     final cart = context.watch<CartProvider>().cartItems;
     print(cart);
 
@@ -231,7 +264,52 @@ class _CartpageState extends State<Cartpage> {
                       const Divider(),
 
                       billRow("TOTAL COST", total, isBold: true),
+                      const Divider(),
 
+                      FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user!.uid)
+                            .get(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const SizedBox();
+                          }
+
+                          final data =
+                              snapshot.data!.data() as Map<String, dynamic>?;
+
+                          String address =
+                              data?['address'] ?? "No Address Added";
+
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+
+                                const Text(
+                                  "Delivery Address",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 5),
+
+                                Text(
+                                  address,
+                                  style: TextStyle(color: Colors.grey.shade700),
+                                ),
+
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                       const SizedBox(height: 20),
 
                       /// CHECKOUT BUTTON
@@ -271,6 +349,40 @@ class _CartpageState extends State<Cartpage> {
                                   .doc(user.uid)
                                   .get();
 
+                              /// 🔥 CHECK ADDRESS BEFORE ORDER
+                              if (!userDoc.data()!.containsKey('address') ||
+                                  userDoc['address'] == null ||
+                                  userDoc['address'].toString().isEmpty) {
+                                Get.snackbar(
+                                  "Error",
+                                  "Please add address first",
+                                );
+
+                                /// 👉 Go to address page
+                                bool? result = await Get.to(
+                                  () => AddAddressPage(fromCheckout: true),
+                                );
+
+                                /// 🔥 If address added → continue order
+                                if (result == true) {
+                                  // reload userDoc
+                                  final updatedUserDoc = await FirebaseFirestore
+                                      .instance
+                                      .collection('users')
+                                      .doc(user.uid)
+                                      .get();
+
+                                  /// now continue order
+                                  await placeOrder(
+                                    updatedUserDoc,
+                                    cart,
+                                    total,
+                                    cartProvider,
+                                  );
+                                }
+                                return;
+                              }
+
                               /// ✅ Convert cart items
                               final cartItems = cart.map((item) {
                                 return {
@@ -286,7 +398,7 @@ class _CartpageState extends State<Cartpage> {
                                   .add({
                                     'buyerId': user.uid,
                                     'buyerName': userDoc['name'],
-                                    // 'buyerAddress': userDoc['address'],
+                                    'buyerAddress': userDoc['address'],
                                     'items': cartItems, // 🔥 VERY IMPORTANT
                                     'total':
                                         total, // your already calculated total
