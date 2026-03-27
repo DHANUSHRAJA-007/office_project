@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:office_project/screens/cart_provider.dart';
+import 'package:office_project/screens/userhomepage.dart';
+import 'package:provider/provider.dart';
 
 class UserVegetables extends StatefulWidget {
   const UserVegetables({super.key});
@@ -179,18 +182,56 @@ class _UserVegetablesState extends State<UserVegetables> {
                     ],
                   ),
       
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text(
-                      "Add",
-                      style: TextStyle(color: Colors.white),
+                  InkWell(
+                    onTap: () {
+                      Map<String, dynamic> cartItem = {
+                        'name': product["productName"],
+                        'price': product["price"],
+                        'quantity': 1,
+                      };
+
+                      context.read<CartProvider>().addToCart(cartItem);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(seconds: 3),
+                          backgroundColor: Colors.black,
+                          content: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("Product Added to the Cart"),
+                              TextButton(
+                                onPressed: () {
+                                  // HomePage.homeKey.currentState
+                                  //     ?.changeTab(2);
+
+                                  Get.offAll(() => HomePage(role: "user"), arguments: 2);
+                                },
+                                child: const Text(
+                                  "GO TO CART",
+                                  style:
+                                      TextStyle(color: Colors.yellow),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        "Add",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],

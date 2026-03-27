@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/screens/acceptorderpage.dart';
 import 'package:provider/provider.dart';
 import 'cart_provider.dart';
 
@@ -10,7 +14,6 @@ class Cartpage extends StatefulWidget {
 }
 
 class _CartpageState extends State<Cartpage> {
-
   int getTotal(List cart) {
     int total = 0;
 
@@ -26,12 +29,12 @@ class _CartpageState extends State<Cartpage> {
 
   @override
   Widget build(BuildContext context) {
-
     final cart = context.watch<CartProvider>().cartItems;
+    print(cart);
 
     int subtotal = getTotal(cart);
     int delivery = 20;
-    int discount = 35;
+    int discount = 0;
     int total = subtotal + delivery - discount;
 
     return Scaffold(
@@ -52,18 +55,15 @@ class _CartpageState extends State<Cartpage> {
           ? const Center(child: Text("No items in the cart"))
           : Column(
               children: [
-
                 /// CART ITEMS
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: cart.length,
                     itemBuilder: (_, index) {
-
                       final item = cart[index];
 
-                      int price =
-                          int.tryParse(item['price'].toString()) ?? 0;
+                      int price = int.tryParse(item['price'].toString()) ?? 0;
 
                       int quantity = item['quantity'] ?? 1;
 
@@ -80,7 +80,6 @@ class _CartpageState extends State<Cartpage> {
 
                         child: Row(
                           children: [
-
                             /// IMAGE
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -97,24 +96,26 @@ class _CartpageState extends State<Cartpage> {
                             /// DETAILS
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   Text(
                                     item["name"],
                                     style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
 
                                   const SizedBox(height: 4),
 
-                                  const Text(
-                                    "Offer 2%",
+                                  Text(
+                                    item["offer"] != null
+                                        ? "Offer: ${item["offer"]}"
+                                        : "No Offer",
                                     style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 13),
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                    ),
                                   ),
 
                                   const SizedBox(height: 6),
@@ -124,14 +125,17 @@ class _CartpageState extends State<Cartpage> {
                                       Text(
                                         "₹ $newprice/",
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                       Text(
+                                      Text(
                                         "Kg",
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13,color: Colors.grey),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -142,7 +146,6 @@ class _CartpageState extends State<Cartpage> {
                             /// QUANTITY
                             Row(
                               children: [
-
                                 /// MINUS
                                 Container(
                                   width: 28,
@@ -153,19 +156,16 @@ class _CartpageState extends State<Cartpage> {
                                   ),
                                   child: IconButton(
                                     padding: EdgeInsets.zero,
-                                    icon: const Icon(Icons.remove,
-                                        size: 16),
+                                    icon: const Icon(Icons.remove, size: 16),
                                     onPressed: () {
-
                                       if (quantity > 1) {
                                         setState(() {
-                                          item['quantity'] =
-                                              quantity - 1;
+                                          item['quantity'] = quantity - 1;
                                         });
                                       } else {
-                                        context
-                                            .read<CartProvider>()
-                                            .removeItem(index);
+                                        context.read<CartProvider>().removeItem(
+                                          index,
+                                        );
                                       }
                                     },
                                   ),
@@ -190,18 +190,16 @@ class _CartpageState extends State<Cartpage> {
                                   ),
                                   child: IconButton(
                                     padding: EdgeInsets.zero,
-                                    icon:
-                                        const Icon(Icons.add, size: 16),
+                                    icon: const Icon(Icons.add, size: 16),
                                     onPressed: () {
                                       setState(() {
-                                        item['quantity'] =
-                                            quantity + 1;
+                                        item['quantity'] = quantity + 1;
                                       });
                                     },
                                   ),
                                 ),
                               ],
-                            )
+                            ),
                           ],
                         ),
                       );
@@ -216,14 +214,13 @@ class _CartpageState extends State<Cartpage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(25)),
+                      top: Radius.circular(25),
+                    ),
                   ),
 
                   child: Column(
                     children: [
-
                       /// PROMO CODE
-                     
                       const SizedBox(height: 20),
 
                       /// BILL DETAILS
@@ -245,20 +242,81 @@ class _CartpageState extends State<Cartpage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            try {
+                              final cartProvider = context.read<CartProvider>();
+                              final cart = cartProvider.cartItems;
+
+                              if (cart.isEmpty) {
+                                Get.snackbar("Error", "Cart is empty");
+                                return;
+                              }
+
+                              print("🔥 Button clicked");
+
+                              /// ✅ FIX 1: correct user fetch
+                              final user = FirebaseAuth.instance.currentUser;
+
+                              if (user == null) {
+                                Get.snackbar("Error", "User not logged in");
+                                return;
+                              }
+
+                              /// ✅ Fetch user details
+                              final userDoc = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(user.uid)
+                                  .get();
+
+                              /// ✅ Convert cart items
+                              final cartItems = cart.map((item) {
+                                return {
+                                  'name': item['name'],
+                                  'price': item['price'],
+                                  'quantity': item['quantity'],
+                                };
+                              }).toList();
+
+                              /// ✅ Save order (IMPORTANT: await)
+                              await FirebaseFirestore.instance
+                                  .collection('orders')
+                                  .add({
+                                    'buyerId': user.uid,
+                                    'buyerName': userDoc['name'],
+                                    // 'buyerAddress': userDoc['address'],
+                                    'items': cartItems, // 🔥 VERY IMPORTANT
+                                    'total':
+                                        total, // your already calculated total
+                                    'status': 'pending',
+                                    'timestamp': FieldValue.serverTimestamp(),
+                                  });
+
+                              print("✅ Order added to Firestore");
+
+                              /// ✅ Clear cart
+                              cartProvider.clearCart();
+
+                              Get.snackbar(
+                                "Success",
+                                "Order placed successfully",
+                              );
+                            } catch (e) {
+                              print("❌ Error: $e");
+                              Get.snackbar("Error", e.toString());
+                            }
+                          },
                           child: const Text(
                             "Proceed to Checkout",
-                            style: TextStyle(fontSize: 18,color: Colors.white),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
     );
@@ -269,25 +327,22 @@ class _CartpageState extends State<Cartpage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
             style: TextStyle(
-              fontWeight:
-                  isBold ? FontWeight.bold : FontWeight.normal,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
               fontSize: isBold ? 18 : 15,
             ),
           ),
           Text(
             "₹ $price",
             style: TextStyle(
-              fontWeight:
-                  isBold ? FontWeight.bold : FontWeight.normal,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
               fontSize: isBold ? 18 : 15,
             ),
-          )
+          ),
         ],
       ),
     );

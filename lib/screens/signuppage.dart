@@ -683,13 +683,11 @@
 //   }
 // }
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:office_project/auth.dart';
 import 'package:office_project/screens/termsandcond.dart';
 import 'package:office_project/screens/userhomepage.dart';

@@ -91,7 +91,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // ✅ IMPORTANT
 import 'package:office_project/screens/cartpage.dart';
-import 'package:office_project/screens/searchpage.dart';
 import 'package:office_project/screens/user_homescreen.dart';
 import 'package:office_project/screens/userprofile.dart';
 
@@ -128,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   /// PAGES
   final List<Widget> _pages = [
     const UserHomescreen(),
-  
+
     const Cartpage(),
     const Userprofile(),
   ];

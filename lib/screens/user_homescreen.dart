@@ -1390,7 +1390,7 @@ class _UserHomescreenState extends State<UserHomescreen> {
                                   // HomePage.homeKey.currentState
                                   //     ?.changeTab(2);
 
-                                  Get.offAll(() => HomePage(role: "user"), arguments: 2);
+                                  Get.offAll(() => HomePage(role: "user"), arguments: 1);
                                 },
                                 child: const Text(
                                   "GO TO CART",

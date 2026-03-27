@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/screens/acceptorderpage.dart';
+import 'package:office_project/screens/delivered.dart';
 import 'package:office_project/widgets/vieworder_card.dart';
 
-class DeliveredPage extends StatelessWidget {
-  const DeliveredPage({super.key});
+class AcceptedOrders extends StatelessWidget {
+  const AcceptedOrders({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +14,7 @@ class DeliveredPage extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('orders')
-            .where('status', isEqualTo: 'delivered')
+            .where('status', isEqualTo: 'accepted')
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -31,14 +34,13 @@ class DeliveredPage extends StatelessWidget {
 
               return InkWell(
                 onTap: () {
-                  // Get.to(() => Acceptorderpage(order: order));
+                   Get.to(() => Delivered(order: order));
                 },
 
                 child: VieworderCard(
                   orderId: order.id,
                   buyerName: order['buyerName'] ?? "Unknown",
-                  total: order['total'],
-                  status: order['status'],
+                  total: order['total'], status: order['status'],
                 ),
               );
             },
