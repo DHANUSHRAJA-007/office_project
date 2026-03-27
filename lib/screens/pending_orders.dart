@@ -111,6 +111,10 @@ class PendingOrders extends StatelessWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: () {
+                    final order = orders[index];
+
+                    print("Clicked Order ID: ${order.id}");
+
                     Get.to(() => Acceptorderpage(order: order));
                   },
                   child: SizedBox(

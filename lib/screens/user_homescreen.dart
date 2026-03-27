@@ -1010,6 +1010,7 @@
 //   }
 // }
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/route_manager.dart';
@@ -1352,15 +1353,32 @@ class _UserHomescreenState extends State<UserHomescreen> {
                   ),
 
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      final user = FirebaseAuth.instance.currentUser;
+
+                      if (user == null) {
+                        Get.snackbar("Error", "User not logged in");
+                        return;
+                      }
+
                       Map<String, dynamic> cartItem = {
                         'name': product["productName"],
                         'price': product["price"],
                         'quantity': 1,
+                        'productId': product.id,
+                        'userId': user.uid,
+                        'timestamp': FieldValue.serverTimestamp(),
                       };
 
+                      /// ✅ SAVE TO FIRESTORE
+                      await FirebaseFirestore.instance
+                          .collection('cart')
+                          .add(cartItem);
+
+                      /// ✅ ALSO KEEP LOCAL CART
                       context.read<CartProvider>().addToCart(cartItem);
 
+                      /// ✅ UI FEEDBACK
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           duration: const Duration(seconds: 3),
@@ -1371,9 +1389,6 @@ class _UserHomescreenState extends State<UserHomescreen> {
                               const Text("Product Added to the Cart"),
                               TextButton(
                                 onPressed: () {
-                                  // HomePage.homeKey.currentState
-                                  //     ?.changeTab(2);
-
                                   Get.offAll(
                                     () => HomePage(role: "user"),
                                     arguments: 2,
@@ -1388,6 +1403,34 @@ class _UserHomescreenState extends State<UserHomescreen> {
                           ),
                         ),
                       );
+
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     duration: const Duration(seconds: 3),
+                      //     backgroundColor: Colors.black,
+                      //     content: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         const Text("Product Added to the Cart"),
+                      //         TextButton(
+                      //           onPressed: () {
+                      //             // HomePage.homeKey.currentState
+                      //             //     ?.changeTab(2);
+
+                      //             Get.offAll(
+                      //               () => HomePage(role: "user"),
+                      //               arguments: 2,
+                      //             );
+                      //           },
+                      //           child: const Text(
+                      //             "GO TO CART",
+                      //             style: TextStyle(color: Colors.yellow),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
