@@ -19,7 +19,12 @@ class _UserprofileState extends State<Userprofile> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // ================= UPDATE USER =================
-  Future<void> updateUser(String name, String email, String phoneNumber) async {
+  Future<void> updateUser(
+    String name,
+    String email,
+    String phoneNumber,
+    String address,
+  ) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
@@ -27,6 +32,7 @@ class _UserprofileState extends State<Userprofile> {
       'name': name,
       'email': email,
       'phonenumber': phoneNumber,
+      'address': address,
     });
   }
 
@@ -35,10 +41,12 @@ class _UserprofileState extends State<Userprofile> {
     required String name,
     required String email,
     required String phone,
+    required String address,
   }) {
     final nameController = TextEditingController(text: name);
     final emailController = TextEditingController(text: email);
     final phoneController = TextEditingController(text: phone);
+    final addressController = TextEditingController(text: address);
 
     showDialog(
       context: context,
@@ -79,6 +87,15 @@ class _UserprofileState extends State<Userprofile> {
                     ),
                     keyboardType: TextInputType.phone,
                   ),
+                  const SizedBox(height: 12),
+
+                  TextField(
+                    controller: addressController,
+                    decoration: const InputDecoration(
+                      labelText: "address",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -94,6 +111,7 @@ class _UserprofileState extends State<Userprofile> {
                   nameController.text.trim(),
                   emailController.text.trim(),
                   phoneController.text.trim(),
+                  addressController.text.trim(),
                 );
                 Navigator.pop(context);
               },
@@ -213,6 +231,7 @@ class _UserprofileState extends State<Userprofile> {
                           name: data['name'] ?? '',
                           email: data['email'] ?? '',
                           phone: data['phonenumber'] ?? '',
+                          address: data['address'] ?? '',
                         );
                       },
                       child: const Text(

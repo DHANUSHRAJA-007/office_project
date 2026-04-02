@@ -16,11 +16,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
   bool isFetchedProduct = false;
 
   final List<String> items = ["250 grams", "500 grams", "1 kg"];
-  final List<String> categories = [
-    "Fruits",
-    "Vegetable",
-    "Malt",
-  ];
+  final List<String> categories = ["Fruits", "Vegetable", "Malt"];
 
   late String selectedValue;
   DateTime? selectedDate;
@@ -34,6 +30,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
   final TextEditingController taxController = TextEditingController();
   final TextEditingController percentageController = TextEditingController();
   final TextEditingController offerController = TextEditingController();
+  final TextEditingController stockcontroller = TextEditingController();
 
   final ExpansionTileController _controller = ExpansionTileController();
 
@@ -87,8 +84,9 @@ class _AdddetailspageState extends State<Adddetailspage> {
   }
 
   Future<void> fetchProduct() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection("products").get();
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("products")
+        .get();
 
     showModalBottomSheet(
       context: context,
@@ -158,8 +156,9 @@ class _AdddetailspageState extends State<Adddetailspage> {
         generateProductId(selectedItem!);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
@@ -241,8 +240,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                             height: 50,
                             width: double.infinity,
                             alignment: Alignment.centerLeft,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               border: Border.all(),
                               borderRadius: BorderRadius.circular(5),
@@ -263,8 +261,9 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           ),
                           child: ExpansionTile(
                             controller: _controller,
-                            tilePadding:
-                                const EdgeInsets.symmetric(horizontal: 12),
+                            tilePadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                            ),
                             title: Text(
                               selectedItem ?? "Select Category",
                               style: TextStyle(
@@ -296,10 +295,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           maxLines: 4,
                           controller: descriptionController,
                         ),
-                        buildTextField(
-                          "Add Tag",
-                          controller: tagController,
-                        ),
+                        buildTextField("Add Tag", controller: tagController),
                         const SizedBox(height: 30),
                       ],
                     ),
@@ -345,8 +341,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           height: 50,
                           width: double.infinity,
                           alignment: Alignment.centerLeft,
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(border: Border.all()),
                           child: Text(
                             finalPrice.toStringAsFixed(2),
@@ -354,98 +349,50 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Row(
+
+                        buildTextField("Stock", controller: stockcontroller),
+
+                        const SizedBox(width: 12),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Stock"),
-                                  const SizedBox(height: 6),
-                                  Container(
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(),
-                                      borderRadius:
-                                          BorderRadius.circular(5),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              if (count > 0) count--;
-                                            });
-                                          },
-                                          icon:
-                                              const Icon(Icons.remove),
-                                        ),
-                                        Text("$count"),
-                                        IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              count++;
-                                            });
-                                          },
-                                          icon: const Icon(Icons.add),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                            const Text("Unit"),
+                            const SizedBox(height: 6),
+                            DropdownButtonFormField<String>(
+                              value: selectedValue,
+                              isExpanded: true,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Unit"),
-                                  const SizedBox(height: 6),
-                                  DropdownButtonFormField<String>(
-                                    value: selectedValue,
-                                    isExpanded: true,
-                                    decoration:
-                                        const InputDecoration(
-                                      border: OutlineInputBorder(),
+                              items: items
+                                  .map(
+                                    (item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(item),
                                     ),
-                                    items: items
-                                        .map(
-                                          (item) =>
-                                              DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(item),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedValue = value!;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedValue = value!;
+                                });
+                              },
                             ),
                           ],
                         ),
+
                         const SizedBox(height: 20),
                         const Text("Date of Packing"),
                         const SizedBox(height: 6),
                         Container(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
                             border: Border.all(),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 selectedDate == null
@@ -454,8 +401,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                               ),
                               IconButton(
                                 onPressed: () => pickDate(context),
-                                icon: const Icon(
-                                    Icons.calendar_month),
+                                icon: const Icon(Icons.calendar_month),
                               ),
                             ],
                           ),
@@ -511,8 +457,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
             keyboardType: keyboardType,
             onChanged: onChanged,
             readOnly: readOnly,
-            decoration:
-                const InputDecoration(border: OutlineInputBorder()),
+            decoration: const InputDecoration(border: OutlineInputBorder()),
           ),
         ],
       ),

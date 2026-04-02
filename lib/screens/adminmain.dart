@@ -15,23 +15,21 @@ class Adminmain extends StatefulWidget {
 class _AdminmainState extends State<Adminmain> {
   int currentIndex = 0;
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-  Dashboard(
-    onNavigateToOrders: () {
-      setState(() {
-        currentIndex = 2; // 👈 Orders tab
-      });
-    },
-  ),
-  Addproduct(),
-  ViewOrders(),
-  Settings2(),
-];
+      Dashboard(
+        onNavigateToOrders: (status) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => ViewOrders(selectedStatus: status,)),
+          );
+        },
+      ),
+      Addproduct(),
+      ViewOrders(selectedStatus: 'pending'),
+      Settings2(),
+    ];
     return Scaffold(
       body: IndexedStack(index: currentIndex, children: pages),
       bottomNavigationBar: Adminnavbar(

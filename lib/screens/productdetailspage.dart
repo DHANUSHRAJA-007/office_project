@@ -445,15 +445,21 @@ class _ProductdetailspageState extends State<Productdetailspage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         automaticallyImplyLeading: false,
         centerTitle: true,
         leading: IconButton(
+          color: Colors.white,
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back),
         ),
         title: Text(
           "Product Details",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -502,11 +508,11 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                         ),
                       ),
                       Text(data['category'] ?? ''),
-                      const Text("4.9 ⭐"),
+                      // const Text("4.9 ⭐"),
                     ],
                   ),
                   Text(
-                    "₹${data['price'] ?? 0}",
+                    "Rs.${data['price'] ?? 0}",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -582,19 +588,19 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                                         ),
                                       ),
 
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.favorite,
-                                          color: isliked
-                                              ? Colors.red
-                                              : Colors.grey,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            isliked = !isliked;
-                                          });
-                                        },
-                                      ),
+                                      // IconButton(
+                                      //   icon: Icon(
+                                      //     Icons.favorite,
+                                      //     color: isliked
+                                      //         ? Colors.red
+                                      //         : Colors.grey,
+                                      //   ),
+                                      //   onPressed: () {
+                                      //     setState(() {
+                                      //       isliked = !isliked;
+                                      //     });
+                                      //   },
+                                      // ),
                                     ],
                                   ),
 
@@ -615,7 +621,12 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("₹${data['price']}"),
+                                      Text(
+                                        "₹ ${data['price']}/-",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
 
                                       /// ADD BUTTON
                                       InkWell(
@@ -657,17 +668,31 @@ class _ProductdetailspageState extends State<Productdetailspage> {
               /// BOTTOM ADD BUTTON
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                 children: [
-                  Text(
-                    "₹${data['price'] ?? 0}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Total Price"),
+
+                      Text(
+                        "₹ ${data['price'] ?? 0}/-",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
                     onPressed: () => addToCart(data),
-                    child: const Text("Add Cart"),
+                    child: const Text(
+                      "Add To Cart",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),

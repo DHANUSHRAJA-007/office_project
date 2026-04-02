@@ -1323,16 +1323,16 @@ class _UserHomescreenState extends State<UserHomescreen> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Row(
-                    children: [
-                      Icon(Icons.star, size: 14, color: Colors.amber),
-                      SizedBox(width: 2),
-                      Text(
-                        "4.9",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+                  // const Row(
+                  //   children: [
+                  //     Icon(Icons.star, size: 14, color: Colors.amber),
+                  //     SizedBox(width: 2),
+                  //     Text(
+                  //       "4.9",
+                  //       style: TextStyle(fontWeight: FontWeight.bold),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
 

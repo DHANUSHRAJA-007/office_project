@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -12,10 +11,7 @@ class Juicepage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text(
-          "Juice",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Juice", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -34,18 +30,14 @@ class Juicepage extends StatelessWidget {
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
-              child: Text(
-                "No juice Available",
-                style: TextStyle(fontSize: 18),
-              ),
+              child: Text("No juice Available", style: TextStyle(fontSize: 18)),
             );
           }
 
           return GridView.builder(
             padding: const EdgeInsets.all(12),
             itemCount: snapshot.data!.docs.length,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
@@ -53,8 +45,7 @@ class Juicepage extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               var product = snapshot.data!.docs[index];
-              var data =
-                  product.data() as Map<String, dynamic>;
+              var data = product.data() as Map<String, dynamic>;
 
               return InkWell(
                 onTap: () {
@@ -80,8 +71,7 @@ class Juicepage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           data['productName'] ?? '',
@@ -95,8 +85,7 @@ class Juicepage extends StatelessWidget {
                           data['description'] ?? '',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.grey),
+                          style: const TextStyle(color: Colors.grey),
                         ),
                         const Spacer(),
                         Text(
@@ -110,8 +99,7 @@ class Juicepage extends StatelessWidget {
                         const SizedBox(height: 5),
                         Text(
                           "Stock: ${data['stock']} ${data['unit']}",
-                          style:
-                              const TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 12),
                         ),
                       ],
                     ),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -22,12 +21,7 @@ class _UpdateproductpageState extends State<Updateproductpage> {
 
   final List<String> items = ["250 grams", "500 grams", "1 kg"];
 
-  final List<String> categories = [
-    "Fruits",
-    
-    "Vegetable",
-    "Malt",
-  ];
+  final List<String> categories = ["Fruits", "Vegetable", "Malt"];
 
   final List<String> offers = ["25 %", "50 %", "75 %", "no offers"];
 
@@ -47,7 +41,7 @@ class _UpdateproductpageState extends State<Updateproductpage> {
   final TextEditingController finalPriceController = TextEditingController();
 
   final TextEditingController taxController = TextEditingController();
-
+  final TextEditingController stockcontroller = TextEditingController();
   final ExpansionTileController _controller = ExpansionTileController();
 
   /// FINAL PRICE CALCULATION
@@ -81,7 +75,7 @@ class _UpdateproductpageState extends State<Updateproductpage> {
             'finalPrice': double.tryParse(finalPriceController.text) ?? 0,
 
             'tax': taxController.text.trim(),
-            'stock': count,
+            'stock': stockcontroller.text,
             'unit': selectedUnit,
 
             'packingDate': selectedDate ?? DateTime.now(),
@@ -243,147 +237,132 @@ class _UpdateproductpageState extends State<Updateproductpage> {
             ),
 
             /// OFFER FIELD
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-
+            Column(
               children: [
-                SizedBox(
-                  width: 235,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 10),
-                      buildTextField(
-                        "Offer",
-                        controller: offerController,
-                        keyboardType: TextInputType.number,
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(
-                  width: 235,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Value"),
-
-                      const SizedBox(height: 3),
-
-                      DropdownButtonFormField<String>(
-                        value: selectedOffer,
-                        isExpanded: true,
-
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-
-                        items: offers
-                            .map(
-                              (item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              ),
-                            )
-                            .toList(),
-
-                        onChanged: (value) {
-                          setState(() {
-                            selectedOffer = value!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 10),
+                buildTextField(
+                  "Offer",
+                  controller: offerController,
+                  keyboardType: TextInputType.number,
                 ),
               ],
             ),
 
+            // SizedBox(
+            //   width: 235,
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       const Text("Value"),
+
+            //       const SizedBox(height: 3),
+
+            //       DropdownButtonFormField<String>(
+            //         value: selectedOffer,
+            //         isExpanded: true,
+
+            //         decoration: const InputDecoration(
+            //           border: OutlineInputBorder(),
+            //           contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            //         ),
+
+            //         items: offers
+            //             .map(
+            //               (item) => DropdownMenuItem<String>(
+            //                 value: item,
+            //                 child: Text(item),
+            //               ),
+            //             )
+            //             .toList(),
+
+            //         onChanged: (value) {
+            //           setState(() {
+            //             selectedOffer = value!;
+            //           });
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 16),
 
             /// STOCK + UNIT
-            Row(
+            buildTextField("Stock", controller: stockcontroller),
+
+            // Expanded(
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       const Text("Stock"),
+            //       const SizedBox(height: 6),
+
+            //       Container(
+            //         height: 50,
+            //         decoration: BoxDecoration(
+            //           border: Border.all(),
+            //           borderRadius: BorderRadius.circular(5),
+            //         ),
+
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            //           children: [
+            //             IconButton(
+            //               onPressed: () {
+            //                 setState(() {
+            //                   if (count > 0) count--;
+            //                 });
+            //               },
+            //               icon: const Icon(Icons.remove),
+            //             ),
+
+            //             Text("$count"),
+
+            //             IconButton(
+            //               onPressed: () {
+            //                 setState(() {
+            //                   count++;
+            //                 });
+            //               },
+            //               icon: const Icon(Icons.add),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            const SizedBox(width: 12),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Stock"),
-                      const SizedBox(height: 6),
+                const Text("Unit"),
 
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
+                // const SizedBox(height: 6),
+                DropdownButtonFormField<String>(
+                  value: selectedUnit,
+                  isExpanded: true,
 
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (count > 0) count--;
-                                });
-                              },
-                              icon: const Icon(Icons.remove),
-                            ),
-
-                            Text("$count"),
-
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  count++;
-                                });
-                              },
-                              icon: const Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   ),
-                ),
 
-                const SizedBox(width: 12),
-
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Unit"),
-                      const SizedBox(height: 6),
-
-                      DropdownButtonFormField<String>(
-                        value: selectedUnit,
-                        isExpanded: true,
-
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  items: items
+                      .map(
+                        (item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item),
                         ),
+                      )
+                      .toList(),
 
-                        items: items
-                            .map(
-                              (item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              ),
-                            )
-                            .toList(),
-
-                        onChanged: (value) {
-                          setState(() {
-                            selectedUnit = value!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedUnit = value!;
+                    });
+                  },
                 ),
               ],
             ),

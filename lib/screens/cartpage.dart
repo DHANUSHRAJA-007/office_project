@@ -68,14 +68,12 @@ class _CartpageState extends State<Cartpage> {
       backgroundColor: const Color(0xffECECEC),
 
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xffECECEC),
-        elevation: 0,
         centerTitle: true,
         title: const Text(
           "My Cart",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
+        backgroundColor: Colors.green,
       ),
 
       /// 🔥 FIRESTORE CART

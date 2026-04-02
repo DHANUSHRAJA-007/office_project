@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:office_project/firebase_options.dart';
 import 'package:office_project/screens/cart_provider.dart';
+import 'package:office_project/screens/loginpage.dart';
 import 'package:office_project/screens/splash_screen.dart';
 import 'package:office_project/theme_controller.dart';
 import 'package:provider/provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
           themeMode: themeMode,
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
-          home:SplashScreen()
+          home: SplashScreen(),
         );
       },
     );

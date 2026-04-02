@@ -2,34 +2,63 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
-class ConfirmedOrdersPage extends StatelessWidget {
+class ConfirmedOrdersPage extends StatefulWidget {
   const ConfirmedOrdersPage({super.key});
 
   @override
+  State<ConfirmedOrdersPage> createState() => _ConfirmedOrdersPageState();
+}
+
+class _ConfirmedOrdersPageState extends State<ConfirmedOrdersPage> {
+  @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-Color getStatusColor(String status) {
-  switch (status) {
-    case 'accepted':
-      return Colors.green;
-    case 'delivered':
-      return Colors.blue;
-    default:
-      return Colors.grey;
-  }
-}
+    Color getStatusColor(String status) {
+      switch (status) {
+        case 'accepted':
+          return Colors.green;
+        case 'delivered':
+          return Colors.blue;
+        case 'pending':
+          return Colors.orange;
+        default:
+          return Colors.grey;
+      }
+    }
+
+    String getStatusText(String status) {
+      switch (status) {
+        case 'pending':
+          return 'Ready for Shipment';
+        case 'accepted':
+          return 'Product Shipped';
+        case 'delivered':
+          return 'Delivered';
+        default:
+          return status;
+      }
+    }
+
     return Scaffold(
-      appBar: AppBar(title: const Text("My Orders")),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "My Orders",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
+      ),
 
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('orders')
             .where('buyerId', isEqualTo: user!.uid)
-            .where('status', whereIn: ['accepted', 'delivered']) // 🔥 IMPORTANT
+            .where(
+              'status',
+              whereIn: ['accepted', 'delivered', 'pending'],
+            ) // 🔥 IMPORTANT
             .snapshots(),
         builder: (context, snapshot) {
-
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -53,13 +82,16 @@ Color getStatusColor(String status) {
 
                   trailing: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 5),
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
                     decoration: BoxDecoration(
                       color: getStatusColor(order['status']),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      order['status'],
+                      getStatusText(order['status']),
+                      // order['status'],
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),

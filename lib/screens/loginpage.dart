@@ -139,77 +139,102 @@ class _LoginPageState extends State<LoginPage> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Color(0xFFA7C9AD),
       body: SafeArea(
         child: SingleChildScrollView(
           // 🔥 IMPORTANT (no overflow)
           child: Column(
             children: [
-              /// ---------- TOP SECTION ----------
-              Stack(
-                children: [
-                  Container(
-                    height: height * 0.35, // ✅ responsive height
-                    decoration: const BoxDecoration(
-                      color: Color(0xff4CAF50),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(120),
-                        bottomRight: Radius.circular(120),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: height * 0.35,
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.eco,
-                          color: Colors.white,
-                          size: width * 0.15,
-                        ), // ✅ responsive icon
-
-                        SizedBox(height: height * 0.01),
-
-                        Text(
-                          "Quickmart",
-                          style: TextStyle(
-                            fontSize: width * 0.08, // ✅ responsive text
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-
-                        SizedBox(height: height * 0.03),
-
-                        const Text(
-                          "Welcome",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-
-                        SizedBox(height: height * 0.01),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: width * 0.1,
-                          ),
-                          child: const Text(
-                            "Manage your products, orders,\nand store – all in one place.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              Image(
+                height: height * 0.4,
+                // width: width * 0.5,
+                image: AssetImage("assets/aashai.png"),
               ),
+
+              const Text(
+                "Welcome",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+
+              SizedBox(height: height * 0.01),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+                child: const Text(
+                  "Manage your products, orders,\nand store – all in one place.",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+              /// ---------- TOP SECTION ----------
+              // Stack(
+              //   children: [
+              //     Container(
+              //       height: height * 0.35, // ✅ responsive height
+              //       decoration: const BoxDecoration(
+              //         color: Color(0xff4CAF50),
+              //         borderRadius: BorderRadius.only(
+              //           bottomLeft: Radius.circular(120),
+              //           bottomRight: Radius.circular(120),
+              //         ),
+              //       ),
+              //     ),
+
+              //     SizedBox(
+              //       height: height * 0.35,
+              //       width: double.infinity,
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Image(
+              //             height: height * 0.1,
+              //             width: width * 0.1,
+              //             image: AssetImage("assets/aashai.png"),
+              //           ),
+
+              //           // Icon(
+              //           //   Icons.eco,
+              //           //   color: Colors.white,
+              //           //   size: width * 0.15,
+              //           // ), // ✅ responsive icon
+              //           // SizedBox(height: height * 0.01),
+              //           Text(
+              //             "AASHAI",
+              //             style: TextStyle(
+              //               fontSize: width * 0.08, // ✅ responsive text
+              //               fontWeight: FontWeight.bold,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+
+              //           SizedBox(height: height * 0.03),
+
+              //           const Text(
+              //             "Welcome",
+              //             style: TextStyle(
+              //               fontSize: 20,
+              //               fontWeight: FontWeight.w600,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+
+              //           SizedBox(height: height * 0.01),
+
+              //           Padding(
+              //             padding: EdgeInsets.symmetric(
+              //               horizontal: width * 0.1,
+              //             ),
+              //             child: const Text(
+              //               "Manage your products, orders,\nand store – all in one place.",
+              //               textAlign: TextAlign.center,
+              //               style: TextStyle(color: Colors.white70),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
 
               /// ---------- LOGIN SECTION ----------
               Padding(
@@ -288,7 +313,6 @@ class _LoginPageState extends State<LoginPage> {
                     //     style: TextStyle(color: Colors.grey),
                     //   ),
                     // ),
-
                     SizedBox(height: height * 0.03),
 
                     /// LOGIN BUTTON
@@ -316,7 +340,10 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Don’t have an account ? "),
+                        const Text(
+                          "Don’t have an account ? ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         TextButton(
                           onPressed: () {
                             Get.to(const SignupPage());

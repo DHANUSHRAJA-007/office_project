@@ -541,9 +541,7 @@
 //       ),
 //     );
 //   }
-// }
-
-
+// }import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -556,8 +554,6 @@ class Acceptorderpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = order.data() as Map<String, dynamic>;
-
-    /// 🔥 GET ITEMS SAFELY
     List items = data['items'] ?? [];
 
     return Scaffold(
@@ -569,56 +565,49 @@ class Acceptorderpage extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
       ),
 
-      /// ✅ NO STREAMBUILDER HERE
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
             children: [
-              /// 🔥 SCROLLABLE CONTENT
+              /// 🔥 SCROLL AREA
               Expanded(
                 child: ListView(
                   children: [
-                    /// 🔥 ORDER INFO
+                    _sectionTitle("Order ID : #${order.id}"),
                     _sectionCard(
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Order ID : #${order.id}",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          const CircleAvatar(
+                            radius: 25,
+                            backgroundImage: AssetImage('assets/v1.jpg'),
                           ),
-                          const Divider(),
+                          const SizedBox(width: 10),
 
-                          Row(
-                            children: const [
-                              CircleAvatar(
-                                radius: 25,
-                                backgroundImage:
-                                    AssetImage('assets/v1.jpg'),
-                              ),
-                              SizedBox(width: 10),
-
-                              Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Text("Seller name"),
-                                  Text("Phone"),
-                                  Text("Seller address"),
-                                ],
-                              ),
-                            ],
+                          /// ✅ FIXED OVERFLOW
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Seller name",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: 4),
+                                Text("Phone", overflow: TextOverflow.ellipsis),
+                                SizedBox(height: 4),
+                                Text(
+                                  "Seller address",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -632,32 +621,42 @@ class Acceptorderpage extends StatelessWidget {
                       child: Column(
                         children: List.generate(items.length, (i) {
                           final item = items[i];
-
-                          int price = int.tryParse(
-                                  item['price'].toString()) ??
-                              0;
+                          int price =
+                              int.tryParse(item['price'].toString()) ?? 0;
                           int quantity = item['quantity'] ?? 1;
                           int total = price * quantity;
 
                           return Column(
                             children: [
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const CircleAvatar(
-                                    backgroundImage:
-                                        AssetImage('assets/v1.jpg'),
+                                    backgroundImage: AssetImage(
+                                      'assets/v1.jpg',
+                                    ),
                                   ),
                                   const SizedBox(width: 10),
 
+                                  /// ✅ FIXED TEXT OVERFLOW
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(item['name']),
-                                        const Text("Grocery Hub"),
                                         Text(
-                                            "₹ $price x $quantity = ₹ $total"),
+                                          item['name'] ?? "",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        const Text("Grocery Hub"),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          "₹ $price x $quantity = ₹ $total",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -676,22 +675,32 @@ class Acceptorderpage extends StatelessWidget {
                     _sectionTitle("Buyer Details"),
                     _sectionCard(
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const CircleAvatar(
                             radius: 25,
-                            backgroundImage:
-                                AssetImage("assets/v1.jpg"),
+                            backgroundImage: AssetImage("assets/v1.jpg"),
                           ),
                           const SizedBox(width: 10),
 
-                          Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                            children: [
-                              Text(data['buyerName'] ?? "Buyer"),
-                              Text(data['buyerAddress'] ??
-                                  "No address"),
-                            ],
+                          /// ✅ FIXED OVERFLOW
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data['buyerName'] ?? "Buyer",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  data['buyerAddress'] ?? "No address",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -703,18 +712,20 @@ class Acceptorderpage extends StatelessWidget {
                     _sectionTitle("Order Summary"),
                     _sectionCard(
                       child: Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
                             "Total Amount",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text(
-                            "₹ ${data['total']}",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold),
+                          Flexible(
+                            child: Text(
+                              "₹ ${data['total']}",
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -725,7 +736,7 @@ class Acceptorderpage extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              /// 🔥 ACTION BUTTONS
+              /// 🔥 BUTTONS (SAFE)
               Row(
                 children: [
                   Expanded(
@@ -786,10 +797,13 @@ class Acceptorderpage extends StatelessWidget {
   Widget _sectionCard({required Widget child}) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: const BorderRadius.only(
+          bottomRight: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade300,
@@ -809,12 +823,14 @@ class Acceptorderpage extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.green.shade100,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
       ),
       child: Text(
         title,
-        style:
-            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
       ),
     );
   }

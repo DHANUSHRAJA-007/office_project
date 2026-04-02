@@ -126,7 +126,8 @@ import 'package:office_project/screens/delivered_page.dart';
 import 'package:office_project/screens/pending_orders.dart';
 
 class ViewOrders extends StatefulWidget {
-  const ViewOrders({super.key});
+  final String selectedStatus;
+  const ViewOrders({super.key, required this.selectedStatus});
 
   @override
   State<ViewOrders> createState() => _ViewOrdersState();
@@ -141,7 +142,27 @@ class _ViewOrdersState extends State<ViewOrders> {
     "Delivered",
     "Cancelled",
   ];
+@override
+void initState() {
+  super.initState();
 
+  switch (widget.selectedStatus) {
+    case 'pending':
+      selectdIndex = 0;
+      break;
+    case 'accepted':
+      selectdIndex = 1;
+      break;
+    case 'delivered':
+      selectdIndex = 2;
+      break;
+    case 'rejected':
+      selectdIndex = 3;
+      break;
+    default:
+      selectdIndex = 0;
+  }
+}
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
