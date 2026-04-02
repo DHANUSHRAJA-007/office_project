@@ -99,7 +99,9 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
+
 int currentIndex = 0;
+
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -122,7 +124,8 @@ class _LoginPageState extends State<LoginPage> {
       if (role == 'admin') {
         Get.offAll(() => const Adminmain());
       } else {
-Get.offAll(() => HomePage(role: role), arguments: 2);      }
+        Get.offAll(() => HomePage(role: role), arguments: 0);
+      }
     } catch (e) {
       Get.snackbar('Login Failed', e.toString());
     } finally {
@@ -132,78 +135,113 @@ Get.offAll(() => HomePage(role: role), arguments: 2);      }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Color(0xFFA7C9AD),
       body: SafeArea(
-        child: Column(
-          children: [
-            // ---------- Top Green Section ----------
-            Stack(
-              children: [
-                Container(
-                  height: 320,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff4CAF50),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(120),
-                      bottomRight: Radius.circular(120),
-                    ),
-                  ),
+        child: SingleChildScrollView(
+          // 🔥 IMPORTANT (no overflow)
+          child: Column(
+            children: [
+              Image(
+                height: height * 0.4,
+                // width: width * 0.5,
+                image: AssetImage("assets/aashai.png"),
+              ),
+
+              const Text(
+                "Welcome",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+
+              SizedBox(height: height * 0.01),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+                child: const Text(
+                  "Manage your products, orders,\nand store – all in one place.",
+                  textAlign: TextAlign.center,
                 ),
+              ),
 
-                SizedBox(
-                  height: 320,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.eco, color: Colors.white, size: 60),
+              /// ---------- TOP SECTION ----------
+              // Stack(
+              //   children: [
+              //     Container(
+              //       height: height * 0.35, // ✅ responsive height
+              //       decoration: const BoxDecoration(
+              //         color: Color(0xff4CAF50),
+              //         borderRadius: BorderRadius.only(
+              //           bottomLeft: Radius.circular(120),
+              //           bottomRight: Radius.circular(120),
+              //         ),
+              //       ),
+              //     ),
 
-                      SizedBox(height: 10),
+              //     SizedBox(
+              //       height: height * 0.35,
+              //       width: double.infinity,
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Image(
+              //             height: height * 0.1,
+              //             width: width * 0.1,
+              //             image: AssetImage("assets/aashai.png"),
+              //           ),
 
-                      Text(
-                        "Quickmart",
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+              //           // Icon(
+              //           //   Icons.eco,
+              //           //   color: Colors.white,
+              //           //   size: width * 0.15,
+              //           // ), // ✅ responsive icon
+              //           // SizedBox(height: height * 0.01),
+              //           Text(
+              //             "AASHAI",
+              //             style: TextStyle(
+              //               fontSize: width * 0.08, // ✅ responsive text
+              //               fontWeight: FontWeight.bold,
+              //               color: Colors.white,
+              //             ),
+              //           ),
 
-                      SizedBox(height: 30),
+              //           SizedBox(height: height * 0.03),
 
-                      Text(
-                        "Welcome",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
+              //           const Text(
+              //             "Welcome",
+              //             style: TextStyle(
+              //               fontSize: 20,
+              //               fontWeight: FontWeight.w600,
+              //               color: Colors.white,
+              //             ),
+              //           ),
 
-                      SizedBox(height: 10),
+              //           SizedBox(height: height * 0.01),
 
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: Text(
-                          "Manage your products, orders,\nand store – all in one place.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              //           Padding(
+              //             padding: EdgeInsets.symmetric(
+              //               horizontal: width * 0.1,
+              //             ),
+              //             child: const Text(
+              //               "Manage your products, orders,\nand store – all in one place.",
+              //               textAlign: TextAlign.center,
+              //               style: TextStyle(color: Colors.white70),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
 
-            // ---------- Login Section ----------
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+              /// ---------- LOGIN SECTION ----------
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.06),
                 child: Column(
                   children: [
-                    const SizedBox(height: 25),
+                    SizedBox(height: height * 0.03),
 
                     const Text(
                       "Login",
@@ -213,9 +251,9 @@ Get.offAll(() => HomePage(role: role), arguments: 2);      }
                       ),
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: height * 0.03),
 
-                    // Email Field
+                    /// EMAIL
                     TextField(
                       controller: emailController,
                       decoration: InputDecoration(
@@ -226,15 +264,16 @@ Get.offAll(() => HomePage(role: role), arguments: 2);      }
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05,
+                          vertical: height * 0.02,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: height * 0.02),
 
-                    // Password Field
+                    /// PASSWORD
                     TextField(
                       controller: passwordController,
                       obscureText: textVisible,
@@ -258,29 +297,28 @@ Get.offAll(() => HomePage(role: role), arguments: 2);      }
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05,
+                          vertical: height * 0.02,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 15),
+                    // SizedBox(height: height * 0.015),
 
-                    // Forgot Password
-                    const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Forget password ?",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
+                    // const Align(
+                    //   alignment: Alignment.center,
+                    //   child: Text(
+                    //     "Forget password ?",
+                    //     style: TextStyle(color: Colors.grey),
+                    //   ),
+                    // ),
+                    SizedBox(height: height * 0.03),
 
-                    const SizedBox(height: 25),
-
-                    // Login Button
+                    /// LOGIN BUTTON
                     SizedBox(
                       width: double.infinity,
-                      height: 55,
+                      height: height * 0.07,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff4CAF50),
@@ -288,16 +326,7 @@ Get.offAll(() => HomePage(role: role), arguments: 2);      }
                             borderRadius: BorderRadius.circular(15),
                           ),
                         ),
-                        onPressed: () {
-                          login();
-
-                          // TextButton(
-                          //   onPressed: () {
-                          //     Get.offAll(() => const SignupPage());
-                          //   },
-                          //   child: const Text('Create account'),
-                          // );
-                        },
+                        onPressed: login,
                         child: const Text(
                           "Login",
                           style: TextStyle(fontSize: 18, color: Colors.white),
@@ -305,13 +334,16 @@ Get.offAll(() => HomePage(role: role), arguments: 2);      }
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: height * 0.02),
 
-                    // Sign Up Text
+                    /// SIGNUP
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Don’t have an account ? "),
+                        const Text(
+                          "Don’t have an account ? ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         TextButton(
                           onPressed: () {
                             Get.to(const SignupPage());
@@ -326,11 +358,13 @@ Get.offAll(() => HomePage(role: role), arguments: 2);      }
                         ),
                       ],
                     ),
+
+                    SizedBox(height: height * 0.03),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

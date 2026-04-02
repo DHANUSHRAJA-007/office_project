@@ -537,11 +537,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
   bool isFetchedProduct = false;
 
   final List<String> items = ["250 grams", "500 grams", "1 kg"];
-  final List<String> categories = [
-    "Fruits",
-    "Vegetable",
-    "Malt",
-  ];
+  final List<String> categories = ["Fruits", "Vegetable", "Malt"];
 
   late String selectedValue;
   DateTime? selectedDate;
@@ -555,6 +551,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
   final TextEditingController taxController = TextEditingController();
   final TextEditingController percentageController = TextEditingController();
   final TextEditingController offerController = TextEditingController();
+  final TextEditingController stockcontroller = TextEditingController();
 
   final ExpansionTileController _controller = ExpansionTileController();
 
@@ -614,6 +611,15 @@ class _AdddetailspageState extends State<Adddetailspage> {
   }
 }
 
+void showError(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    ),
+  );
+}
+
   void calculateFinalPrice() {
     double price = double.tryParse(priceController.text) ?? 0;
     double gst = double.tryParse(percentageController.text) ?? 0;
@@ -629,88 +635,253 @@ class _AdddetailspageState extends State<Adddetailspage> {
     });
   }
 
-  Future<void> fetchProduct() async {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection("products").get();
+  // Future<void> fetchProduct() async {
+  //   QuerySnapshot snapshot = await FirebaseFirestore.instance
+  //       .collection("products")
+  //       .get();
 
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return ListView(
-          children: snapshot.docs.map((doc) {
-            var data = doc.data() as Map<String, dynamic>;
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) {
+  //       return ListView(
+  //         children: snapshot.docs.map((doc) {
+  //           var data = doc.data() as Map<String, dynamic>;
 
-            return ListTile(
-              title: Text(
-                "${data["productId"] ?? ""}   ${data["productName"] ?? ""}",
-              ),
-              onTap: () async {
-                // ❌ REMOVED OLD ID SETTING
+  //           return ListTile(
+  //             title: Text(
+  //               "${data["productId"] ?? ""}   ${data["productName"] ?? ""}",
+  //             ),
+  //             onTap: () async {
+  //               // ❌ REMOVED OLD ID SETTING
 
-                productNameController.text = data["productName"] ?? "";
-                descriptionController.text = data["description"] ?? "";
-                //tagController.text = data["tag"] ?? "";
+  //               productNameController.text = data["productName"] ?? "";
+  //               descriptionController.text = data["description"] ?? "";
+  //               //tagController.text = data["tag"] ?? "";
 
-                priceController.text = data["price"].toString();
-                taxController.text = data["tax"] ?? "";
-                percentageController.text = data["percentage"] ?? "";
-                offerController.text = data["offer"] ?? "";
+  //               priceController.text = data["price"].toString();
+  //               taxController.text = data["tax"] ?? "";
+  //               percentageController.text = data["percentage"] ?? "";
+  //               offerController.text = data["offer"] ?? "";
 
-                selectedItem = data["category"];
+  //               selectedItem = data["category"];
 
-                isFetchedProduct = true;
+  //               isFetchedProduct = true;
 
-                // ✅ GENERATE NEW ID
-                if (selectedItem != null) {
-                  await generateProductId(selectedItem!);
-                }
+  //               // ✅ GENERATE NEW ID
+  //               if (selectedItem != null) {
+  //                 await generateProductId(selectedItem!);
+  //               }
 
-                calculateFinalPrice();
+  //               calculateFinalPrice();
 
-                setState(() {});
+  //               setState(() {});
 
-                Navigator.pop(context);
-              },
-            );
-          }).toList(),
-        );
-      },
-    );
-  }
+  //               Navigator.pop(context);
+  //             },
+  //           );
+  //         }).toList(),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Future<void> saveProduct() async {
-    try {
-      await FirebaseFirestore.instance.collection('products').add({
-        'productId': productIdController.text.trim(),
-        'productName': productNameController.text.trim(),
-        'category': selectedItem ?? "",
-        'description': descriptionController.text.trim(),
-       // 'tag': tagController.text.trim(),
-        'price': double.tryParse(priceController.text) ?? 0,
-        'tax': taxController.text.trim(),
-        'percentage': percentageController.text.trim(),
-        'offer': offerController.text.trim(),
-        'finalPrice': finalPrice,
-        'stock': count,
-        'unit': selectedValue,
-        'packingDate': selectedDate ?? DateTime.now(),
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+Future<void> fetchProduct() async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection("products")
+      .get();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Product Saved Successfully")),
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return ListView(
+        children: snapshot.docs.map((doc) {
+          var data = doc.data() as Map<String, dynamic>;
+
+          return ListTile(
+            title: Text(
+              "${data["productId"] ?? ""}   ${data["productName"] ?? ""}",
+            ),
+            onTap: () async {
+
+              productNameController.text = data["productName"] ?? "";
+              descriptionController.text = data["description"] ?? "";
+
+              priceController.text = data["price"].toString();
+              taxController.text = data["tax"] ?? "";
+              percentageController.text = data["percentage"] ?? "";
+              offerController.text = data["offer"] ?? "";
+
+              selectedItem = data["category"];
+
+              // ✅ ADD THIS (STOCK)
+              stockcontroller.text = (data["stock"] ?? 0).toString();
+
+              // ✅ ADD THIS (UNIT)
+              selectedValue = data["unit"] ?? items.first;
+
+              isFetchedProduct = true;
+
+              // ✅ Generate new ID
+              if (selectedItem != null) {
+                await generateProductId(selectedItem!);
+              }
+
+              calculateFinalPrice();
+
+              setState(() {});
+
+              Navigator.pop(context);
+            },
+          );
+        }).toList(),
       );
+    },
+  );
+}
 
-      isFetchedProduct = false;
+  // Future<void> saveProduct() async {
+  //   try {
+  //     await FirebaseFirestore.instance.collection('products').add({
+  //       'productId': productIdController.text.trim(),
+  //       'productName': productNameController.text.trim(),
+  //       'category': selectedItem ?? "",
+  //       'description': descriptionController.text.trim(),
+  //      // 'tag': tagController.text.trim(),
+  //       'price': double.tryParse(priceController.text) ?? 0,
+  //       'tax': taxController.text.trim(),
+  //       'percentage': percentageController.text.trim(),
+  //       'offer': offerController.text.trim(),
+  //       'finalPrice': finalPrice,
+  //       'stock': count,
+  //       'unit': selectedValue,
+  //       'packingDate': selectedDate ?? DateTime.now(),
+  //       'createdAt': FieldValue.serverTimestamp(),
+  //     });
 
-      if (selectedItem != null) {
-        generateProductId(selectedItem!);
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error: $e")));
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text("Product Saved Successfully")),
+  //     );
+
+  //     isFetchedProduct = false;
+
+  //     if (selectedItem != null) {
+  //       generateProductId(selectedItem!);
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text("Error: $e")));
+  //   }
+  // }
+Future<bool> isProductNameExists(String name) async {
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('products').get();
+
+  String input = name.trim().toLowerCase();
+
+  for (var doc in snapshot.docs) {
+    String dbName =
+        (doc["productName"] ?? "").toString().trim().toLowerCase();
+
+    if (dbName == input) {
+      return true;
     }
   }
+
+  return false;
+}
+  Future<void> saveProduct() async {
+  // ✅ VALIDATION START
+  if (productIdController.text.trim().isEmpty) {
+    showError("Product ID missing");
+    return;
+  }
+
+  if (productNameController.text.trim().isEmpty) {
+    showError("Enter product name");
+    return;
+  }
+
+  if (selectedItem == null || selectedItem!.isEmpty) {
+    showError("Select category");
+    return;
+  }
+
+  if (descriptionController.text.trim().isEmpty) {
+    showError("Enter description");
+    return;
+  }
+
+  double price = double.tryParse(priceController.text) ?? 0;
+  if (price <= 0) {
+    showError("Enter valid price");
+    return;
+  }
+
+  double gst = double.tryParse(percentageController.text) ?? 0;
+  if (gst < 0) {
+    showError("Invalid GST percentage");
+    return;
+  }
+
+  double offer = double.tryParse(offerController.text) ?? 0;
+  if (offer < 0) {
+    showError("Invalid offer");
+    return;
+  }
+
+  int stock = int.tryParse(stockcontroller.text) ?? 0;
+  if (stock <= 0) {
+    showError("Enter valid stock");
+    return;
+  }
+
+  if (selectedDate == null) {
+    showError("Select packing date");
+    return;
+  }
+  // ✅ VALIDATION END
+  bool exists =
+    await isProductNameExists(productNameController.text);
+
+if (exists) {
+  showError("Product name already exists, change product name");
+  return;
+}
+
+  try {
+    
+    await FirebaseFirestore.instance.collection('products').add({
+      'productId': productIdController.text.trim(),
+      'productName': productNameController.text.trim(),
+      'category': selectedItem ?? "",
+      'description': descriptionController.text.trim(),
+      'price': price,
+      'tax': taxController.text.trim(),
+      'percentage': percentageController.text.trim(),
+      'offer': offerController.text.trim(),
+      'finalPrice': finalPrice,
+      'stock': stock, // ✅ IMPORTANT FIX
+      'unit': selectedValue,
+      'packingDate': selectedDate,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Product Saved Successfully")),
+    );
+
+    isFetchedProduct = false;
+
+    if (selectedItem != null) {
+      generateProductId(selectedItem!);
+    }
+
+  } catch (e) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Error: $e")));
+  }
+}
 
   @override
   void initState() {
@@ -790,8 +961,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                             height: 50,
                             width: double.infinity,
                             alignment: Alignment.centerLeft,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               border: Border.all(),
                               borderRadius: BorderRadius.circular(5),
@@ -812,8 +982,9 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           ),
                           child: ExpansionTile(
                             controller: _controller,
-                            tilePadding:
-                                const EdgeInsets.symmetric(horizontal: 12),
+                            tilePadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                            ),
                             title: Text(
                               selectedItem ?? "Select Category",
                               style: TextStyle(
@@ -845,10 +1016,12 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           maxLines: 4,
                           controller: descriptionController,
                         ),
+
                         // buildTextField(
                         //   "Add Tag",
                         //   controller: tagController,
                         // ),
+
                         const SizedBox(height: 30),
                       ],
                     ),
@@ -894,8 +1067,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           height: 50,
                           width: double.infinity,
                           alignment: Alignment.centerLeft,
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(border: Border.all()),
                           child: Text(
                             finalPrice.toStringAsFixed(2),
@@ -903,98 +1075,50 @@ class _AdddetailspageState extends State<Adddetailspage> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Row(
+
+                        buildTextField("Stock", controller: stockcontroller),
+
+                        const SizedBox(width: 12),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Stock"),
-                                  const SizedBox(height: 6),
-                                  Container(
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(),
-                                      borderRadius:
-                                          BorderRadius.circular(5),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              if (count > 0) count--;
-                                            });
-                                          },
-                                          icon:
-                                              const Icon(Icons.remove),
-                                        ),
-                                        Text("$count"),
-                                        IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              count++;
-                                            });
-                                          },
-                                          icon: const Icon(Icons.add),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                            const Text("Unit"),
+                            const SizedBox(height: 6),
+                            DropdownButtonFormField<String>(
+                              value: selectedValue,
+                              isExpanded: true,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Unit"),
-                                  const SizedBox(height: 6),
-                                  DropdownButtonFormField<String>(
-                                    value: selectedValue,
-                                    isExpanded: true,
-                                    decoration:
-                                        const InputDecoration(
-                                      border: OutlineInputBorder(),
+                              items: items
+                                  .map(
+                                    (item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(item),
                                     ),
-                                    items: items
-                                        .map(
-                                          (item) =>
-                                              DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(item),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedValue = value!;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedValue = value!;
+                                });
+                              },
                             ),
                           ],
                         ),
+
                         const SizedBox(height: 20),
                         const Text("Date of Packing"),
                         const SizedBox(height: 6),
                         Container(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
                             border: Border.all(),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 selectedDate == null
@@ -1003,8 +1127,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
                               ),
                               IconButton(
                                 onPressed: () => pickDate(context),
-                                icon: const Icon(
-                                    Icons.calendar_month),
+                                icon: const Icon(Icons.calendar_month),
                               ),
                             ],
                           ),
@@ -1060,8 +1183,7 @@ class _AdddetailspageState extends State<Adddetailspage> {
             keyboardType: keyboardType,
             onChanged: onChanged,
             readOnly: readOnly,
-            decoration:
-                const InputDecoration(border: OutlineInputBorder()),
+            decoration: const InputDecoration(border: OutlineInputBorder()),
           ),
         ],
       ),

@@ -708,11 +708,10 @@ class _SignupPageState extends State<SignupPage> {
 
   final AuthService authService = AuthService();
 
-
   bool loading = false;
   bool isAccepted = false;
 
-  
+  bool textVisible = true;
 
   // ================= GOOGLE EMAIL PICKER =================
   Future<void> pickGoogleEmail() async {
@@ -753,7 +752,7 @@ class _SignupPageState extends State<SignupPage> {
       );
 
       Get.snackbar('Success', 'Account created');
-      Get.offAll(() => const HomePage(role: 'user',));
+      Get.offAll(() => const HomePage(role: 'user'));
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
@@ -818,45 +817,69 @@ class _SignupPageState extends State<SignupPage> {
   // ================= UI =================
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFA7C9AD),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // HEADER
-            Container(
-              height: 320,
-              width: double.infinity,
-              padding: const EdgeInsets.only(top: 80, bottom: 60),
-              decoration: const BoxDecoration(
-                color: Color(0xff4CAF50),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(120),
-                  bottomRight: Radius.circular(120),
-                ),
-              ),
-              child: Column(
-                children: const [
-                  Icon(Icons.eco, color: Colors.white, size: 60),
-                  SizedBox(height: 10),
-                  Text(
-                    "Quickmart",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Join us today and start\nmanaging your grocery store smarter.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ],
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: height * 0.001),
+              child: Image(
+                // height: height * 0.4,
+                // width: width * 0.5,
+                image: AssetImage("assets/aashai.png"),
               ),
             ),
 
+            const Text(
+              "Welcome",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+
+            SizedBox(height: height * 0.01),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+              child: const Text(
+                "Manage your products, orders,\nand store – all in one place.",
+                textAlign: TextAlign.center,
+              ),
+            ),
+            // HEADER
+            // Container(
+            //   height: 320,
+            //   width: double.infinity,
+            //   padding: const EdgeInsets.only(top: 80, bottom: 60),
+            //   decoration: const BoxDecoration(
+            //     color: Color(0xff4CAF50),
+            //     borderRadius: BorderRadius.only(
+            //       bottomLeft: Radius.circular(120),
+            //       bottomRight: Radius.circular(120),
+            //     ),
+            //   ),
+            //   child: Column(
+            //     children: const [
+            //       Icon(Icons.eco, color: Colors.white, size: 60),
+            //       SizedBox(height: 10),
+            //       Text(
+            //         "Quickmart",
+            //         style: TextStyle(
+            //           fontSize: 32,
+            //           fontWeight: FontWeight.bold,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //       SizedBox(height: 10),
+            //       Text(
+            //         "Join us today and start\nmanaging your grocery store smarter.",
+            //         textAlign: TextAlign.center,
+            //         style: TextStyle(color: Colors.white70),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 30),
 
             Padding(
@@ -878,10 +901,32 @@ class _SignupPageState extends State<SignupPage> {
                   // Updated Email Field
                   buildEmailField(),
 
-                  buildTextField(
-                    "Enter Password",
-                    passwordController,
-                    obscure: true,
+                  TextField(
+                    controller: passwordController,
+                    obscureText: textVisible,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            textVisible = !textVisible;
+                          });
+                        },
+                        icon: Icon(
+                          textVisible ? Icons.visibility_off : Icons.visibility,
+                        ),
+                      ),
+                      hintText: "Enter Password",
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: width * 0.05,
+                        vertical: height * 0.02,
+                      ),
+                    ),
                   ),
 
                   // TERMS
@@ -898,7 +943,7 @@ class _SignupPageState extends State<SignupPage> {
                           TextSpan(
                             text: "Terms & Conditions",
                             style: const TextStyle(
-                              color: Color(0xff4CAF50),
+                              color: Colors.green,
                               decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
@@ -950,7 +995,10 @@ class _SignupPageState extends State<SignupPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account ? "),
+                      const Text(
+                        "Already have an account ? ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       GestureDetector(
                         onTap: () {
                           Get.to(() => const LoginPage());

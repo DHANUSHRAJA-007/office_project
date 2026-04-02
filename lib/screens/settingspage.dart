@@ -602,13 +602,13 @@ class Settingspage extends StatelessWidget {
                           Icons.arrow_forward_ios,
                         ),
 
-                        Divider(),
-                        _reportItems(
-                          "Change Password",
-                          '/password',
-                          Icons.lock,
-                          Icons.arrow_forward_ios,
-                        ),
+                        // Divider(),
+                        // _reportItems(
+                        //   "Change Password",
+                        //   '/password',
+                        //   Icons.lock,
+                        //   Icons.arrow_forward_ios,
+                        // ),
                       ],
                     ),
                   ),

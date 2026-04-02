@@ -269,10 +269,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/recent_orderpage.dart';
 import 'package:office_project/widgets/drawerbox.dart';
 
 class Dashboard extends StatefulWidget {
-    final VoidCallback onNavigateToOrders;
+  final Function(String status) onNavigateToOrders;
 
   const Dashboard({super.key, required this.onNavigateToOrders});
 
@@ -301,36 +303,36 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Builder(
-                      builder: (context) => IconButton(
-                        icon: const Icon(
-                          Icons.sort,
-                          color: Colors.white,
-                          size: 28,
-                        ),
-                        onPressed: () {
-                          Scaffold.of(context).openDrawer();
-                        },
-                      ),
-                    ),
+                    // Builder(
+                    //   builder: (context) => IconButton(
+                    //     icon: const Icon(
+                    //       Icons.sort,
+                    //       color: Colors.white,
+                    //       size: 28,
+                    //     ),
+                    //     onPressed: () {
+                    //       Scaffold.of(context).openDrawer();
+                    //     },
+                    //   ),
+                    // ),
                     const Text(
-                      "Quickmart",
+                      "AASHAI",
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.notifications_outlined,
-                        size: 28,
-                        color: Colors.white,
-                      ),
-                    ),
+                    // IconButton(
+                    //   onPressed: () {},
+                    //   icon: const Icon(
+                    //     Icons.notifications_outlined,
+                    //     size: 28,
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -373,32 +375,34 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisSpacing: 12,
                       childAspectRatio: 1.6,
                       children: [
-                        InkWell(
-                          onTap:  widget.onNavigateToOrders,
-                          child: _dashCards(
-                            const Color(0xFFFBD099),
-                            "New Orders",
-                            "$pending",
-                            Icons.description_outlined,
-                          ),
+                        _dashCards(
+                          const Color(0xFFFBD099),
+                          "New Orders",
+                          "$pending",
+                          Icons.description_outlined,
+                          "pending",
                         ),
+
                         _dashCards(
                           const Color(0xFFA0D29E),
                           "Accepted",
                           "$accepted",
                           Icons.check_circle_outline,
+                          "accepted",
                         ),
                         _dashCards(
                           const Color(0xFFBCBFFB),
                           "Delivered",
                           "$delivered",
                           Icons.local_shipping_outlined,
+                          "delivered",
                         ),
                         _dashCards(
                           const Color(0xFFFCD1D2),
                           "Cancelled",
                           "$rejected",
                           Icons.cancel_outlined,
+                          "rejected",
                         ),
                       ],
                     );
@@ -533,36 +537,47 @@ class _DashboardState extends State<Dashboard> {
   }
 
   /// 🔹 DASHBOARD CARD
-  Widget _dashCards(Color color, String title, String value, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: color,
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
+  Widget _dashCards(
+    Color color,
+    String title,
+    String value,
+    IconData icon,
+    String route,
+  ) {
+    return InkWell(
+      onTap: () {
+        widget.onNavigateToOrders(route);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: color,
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  value,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
                 ),
-              ),
-              Icon(icon, color: Colors.white),
-            ],
-          ),
-        ],
+                Icon(icon, color: Colors.white),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -578,13 +593,16 @@ class _DashboardState extends State<Dashboard> {
             title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
           ),
-         TextButton(
-  onPressed: widget.onNavigateToOrders, // 👈 switch tab
-  child: const Text(
-    "View All",
-    style: TextStyle(color: Colors.green),
-  ),
-),
+          TextButton(
+            onPressed: () {
+              Get.to(
+                RecentOrderpage());
+            },
+            child: const Text(
+              "View All",
+              style: TextStyle(color: Colors.green),
+            ),
+          ),
         ],
       ),
     );
