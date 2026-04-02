@@ -211,7 +211,7 @@ class _UploadProductPageState extends State<UploadProductPage> {
                 // },
                 onPressed: () => Get.to(Adddetailspage()),
                 child: const Text(
-                  "Save",
+                  "Next",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
