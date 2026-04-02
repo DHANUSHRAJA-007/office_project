@@ -34,6 +34,7 @@ Future<void> placeOrder(
     'buyerId': user!.uid,
     'buyerName': userDoc['name'],
     'buyerAddress': userDoc['address'],
+    'buyermobile': userDoc['phonenumber'],
     'items': cartItems,
     'total': total,
     'status': 'pending',
@@ -257,7 +258,8 @@ class _CartpageState extends State<Cartpage> {
                             snapshot.data!.data() as Map<String, dynamic>?;
 
                         String address = data?['address'] ?? "No Address Added";
-
+                        String phonenumber =
+                            data?['phonenumber'] ?? "No Phone Number";
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -267,6 +269,15 @@ class _CartpageState extends State<Cartpage> {
                             ),
                             const SizedBox(height: 5),
                             Text(address),
+                            Row(
+                              children: [
+                                Text(
+                                  "Mobile Number : ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(phonenumber),
+                              ],
+                            ),
                           ],
                         );
                       },

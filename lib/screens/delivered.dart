@@ -103,7 +103,6 @@
 //   }
 // }
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -141,11 +140,11 @@ class Delivered extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               /// 🟢 ORDER ID CARD
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 elevation: 3,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -157,7 +156,9 @@ class Delivered extends StatelessWidget {
                         child: Text(
                           "Order ID: ${order.id}",
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ],
@@ -170,7 +171,8 @@ class Delivered extends StatelessWidget {
               /// 🟢 BUYER DETAILS CARD
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 elevation: 3,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -180,7 +182,9 @@ class Delivered extends StatelessWidget {
                       const Text(
                         "Buyer Details",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                       const Divider(),
 
@@ -198,9 +202,7 @@ class Delivered extends StatelessWidget {
                         children: [
                           const Icon(Icons.location_on, size: 18),
                           const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(data['buyerAddress'] ?? ""),
-                          ),
+                          Expanded(child: Text(data['buyerAddress'] ?? "")),
                         ],
                       ),
                     ],
@@ -213,66 +215,68 @@ class Delivered extends StatelessWidget {
               /// 🟢 PRODUCTS CARD
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 elevation: 3,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       const Text(
                         "Products",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
 
                       const Divider(),
 
-                      ...List.generate(
-                        (data['items'] as List).length,
-                        (index) {
-                          final item = data['items'][index];
+                      ...List.generate((data['items'] as List).length, (index) {
+                        final item = data['items'][index];
 
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.shopping_bag,
-                                    color: Colors.green),
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.shopping_bag,
+                                color: Colors.green,
+                              ),
 
-                                const SizedBox(width: 10),
+                              const SizedBox(width: 10),
 
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item['name'],
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item['name'],
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      Text("Qty: ${item['quantity']}"),
-                                    ],
-                                  ),
+                                    ),
+                                    Text("Qty: ${item['quantity']}"),
+                                  ],
                                 ),
+                              ),
 
-                                Text(
-                                  "₹ ${item['price']}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                              Text(
+                                "₹ ${item['price']}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -284,7 +288,8 @@ class Delivered extends StatelessWidget {
               Card(
                 color: Colors.green.shade50,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 elevation: 3,
                 child: Padding(
                   padding: const EdgeInsets.all(14),
@@ -294,14 +299,17 @@ class Delivered extends StatelessWidget {
                       const Text(
                         "Total Amount",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                       Text(
                         "₹${data['total']}",
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.green),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.green,
+                        ),
                       ),
                     ],
                   ),
@@ -312,35 +320,123 @@ class Delivered extends StatelessWidget {
 
               /// 🔥 BUTTON
               SizedBox(
+                height: 50,
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
                     await FirebaseFirestore.instance
                         .collection('orders')
                         .doc(order.id)
-                        .update({
-                      'status': 'delivered',
-                    });
+                        .update({'status': 'delivered'});
 
                     Get.back();
-
                     Get.snackbar("Success", "Order Delivered");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text(
-                    "Mark as Delivered",
+                    "Mark as Deliver",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
+              ),
+              const SizedBox(height: 20),
+              GridView.count(
+                crossAxisCount: 2, // 2 buttons per row
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 4.5,
+
+                children: [
+                  /// ✅ DELIVER BUTTON
+
+                  /// ❌ REJECT BUTTON
+                  ElevatedButton(
+                    onPressed: () async {
+                      await FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id)
+                          .update({'status': 'rejected'});
+
+                      Get.back();
+                      Get.snackbar("Success", "Order Rejected");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      "Reject",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  /// 🔄 OPTIONAL: ACCEPT BUTTON
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     await FirebaseFirestore.instance
+                  //         .collection('orders')
+                  //         .doc(order.id)
+                  //         .update({'status': 'accepted'});
+
+                  //     Get.back();
+                  //     Get.snackbar("Success", "Order Accepted");
+                  //   },
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: Colors.orange,
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(12),
+                  //     ),
+                  //   ),
+                  //   child: const Text(
+                  //     "Accept",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
+
+                  /// ⏳ OPTIONAL: PENDING BUTTON
+                  ElevatedButton(
+                    onPressed: () async {
+                      await FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id)
+                          .update({'status': 'pending'});
+
+                      Get.back();
+                      Get.snackbar("Success", "Marked as Pending");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      "Pending",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 10),
