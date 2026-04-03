@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/screens/deliver_status.dart';
 import 'package:office_project/widgets/vieworder_card.dart';
 
 class DeliveredPage extends StatelessWidget {
@@ -31,7 +33,7 @@ class DeliveredPage extends StatelessWidget {
 
               return InkWell(
                 onTap: () {
-                  // Get.to(() => Acceptorderpage(order: order));
+                  Get.to(() => DeliverStatus(order: order));
                 },
 
                 child: VieworderCard(
