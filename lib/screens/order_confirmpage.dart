@@ -57,6 +57,7 @@ class _ConfirmedOrdersPageState extends State<ConfirmedOrdersPage> {
               'status',
               whereIn: ['accepted', 'delivered', 'pending'],
             ) // 🔥 IMPORTANT
+            //  .orderBy('timestamp', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {

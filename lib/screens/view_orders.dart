@@ -120,6 +120,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:office_project/screens/accepted_orders.dart';
 import 'package:office_project/screens/cancelled_order.dart';
 import 'package:office_project/screens/delivered_page.dart';
@@ -127,7 +128,7 @@ import 'package:office_project/screens/pending_orders.dart';
 
 class ViewOrders extends StatefulWidget {
   final String selectedStatus;
-  const ViewOrders({super.key, required this.selectedStatus});
+  const ViewOrders({super.key, this.selectedStatus = 'pending'});
 
   @override
   State<ViewOrders> createState() => _ViewOrdersState();
@@ -143,10 +144,15 @@ class _ViewOrdersState extends State<ViewOrders> {
     "Cancelled",
   ];
 @override
-void initState() {
-  super.initState();
+void didUpdateWidget(covariant ViewOrders oldWidget) {
+  super.didUpdateWidget(oldWidget);
 
-  switch (widget.selectedStatus) {
+  if (oldWidget.selectedStatus != widget.selectedStatus) {
+    updateSelectedIndex(widget.selectedStatus);
+  }
+}
+void updateSelectedIndex(String status) {
+  switch (status) {
     case 'pending':
       selectdIndex = 0;
       break;
@@ -162,6 +168,12 @@ void initState() {
     default:
       selectdIndex = 0;
   }
+  setState(() {});
+}
+@override
+void initState() {
+  super.initState();
+  updateSelectedIndex(widget.selectedStatus);
 }
   @override
   Widget build(BuildContext context) {
@@ -171,6 +183,8 @@ void initState() {
       backgroundColor: Colors.grey[100],
 
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+
         title: const Text(
           "View Orders",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

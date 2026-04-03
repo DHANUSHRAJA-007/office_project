@@ -389,6 +389,7 @@ final cartItems = cart.map((item) {
     'buyerId': user!.uid,
     'buyerName': userDoc['name'],
     'buyerAddress': userDoc['address'],
+    'buyermobile': userDoc['phonenumber'],
     'items': cartItems,
     'total': total,
     'status': 'pending',
@@ -610,8 +611,10 @@ class _CartpageState extends State<Cartpage> {
                         final data =
                             snapshot.data!.data() as Map<String, dynamic>?;
 
-                        String address =
-                            data?['address'] ?? "No Address Added";
+
+                        String address = data?['address'] ?? "No Address Added";
+                        String phonenumber =
+                            data?['phonenumber'] ?? "No Phone Number";
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -622,6 +625,15 @@ class _CartpageState extends State<Cartpage> {
                             ),
                             const SizedBox(height: 5),
                             Text(address),
+                            Row(
+                              children: [
+                                Text(
+                                  "Mobile Number : ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(phonenumber),
+                              ],
+                            ),
                           ],
                         );
                       },

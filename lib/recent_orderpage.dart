@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RecentOrderpage extends StatelessWidget {
   const RecentOrderpage({super.key});
@@ -7,43 +8,58 @@ class RecentOrderpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('orders')
-                    .orderBy('timestamp', descending: true)
-                    .limit(5)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: const Text(
+          "Recent Orders",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('orders')
+              .orderBy('timestamp', descending: true)
+              // .limit(5)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                  final orders = snapshot.data!.docs;
+            final orders = snapshot.data!.docs;
 
-                  if (orders.isEmpty) {
-                    return const Center(child: Text("No Orders"));
-                  }
+            if (orders.isEmpty) {
+              return const Center(child: Text("No Orders"));
+            }
 
-                  return Column(
-                    children: orders.map((order) {
-                      final data = order.data() as Map<String, dynamic>;
+            return Column(
+              children: orders.map((order) {
+                final data = order.data() as Map<String, dynamic>;
 
-                      return Column(
-                        children: [
-                          _recents(
-                            data['buyerName'] ?? "Unknown",
-                            order.id,
-                            data['status'] ?? "pending",
-                          ),
-                          const Divider(),
-                        ],
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
+                return Column(
+                  children: [
+                    _recents(
+                      data['buyerName'] ?? "Unknown",
+                      order.id,
+                      data['status'] ?? "pending",
+                    ),
+                    const Divider(),
+                  ],
+                );
+              }).toList(),
+            );
+          },
+        ),
+      ),
     );
   }
+
   Widget _recents(String name, String id, String status) {
     Color getStatusColor(String status) {
       switch (status) {
