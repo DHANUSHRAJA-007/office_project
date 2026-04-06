@@ -125,6 +125,7 @@ import 'package:office_project/screens/accepted_orders.dart';
 import 'package:office_project/screens/cancelled_order.dart';
 import 'package:office_project/screens/delivered_page.dart';
 import 'package:office_project/screens/pending_orders.dart';
+import 'package:office_project/screens/returned_orderpage.dart';
 
 class ViewOrders extends StatefulWidget {
   final String selectedStatus;
@@ -140,41 +141,47 @@ class _ViewOrdersState extends State<ViewOrders> {
   final List<String> filters = [
     "Pending",
     "Accepted",
-    "Delivered",
+    "Shipped",
     "Cancelled",
+    "Returned",
   ];
-@override
-void didUpdateWidget(covariant ViewOrders oldWidget) {
-  super.didUpdateWidget(oldWidget);
+  @override
+  void didUpdateWidget(covariant ViewOrders oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-  if (oldWidget.selectedStatus != widget.selectedStatus) {
+    if (oldWidget.selectedStatus != widget.selectedStatus) {
+      updateSelectedIndex(widget.selectedStatus);
+    }
+  }
+
+  void updateSelectedIndex(String status) {
+    switch (status) {
+      case 'pending':
+        selectdIndex = 0;
+        break;
+      case 'accepted':
+        selectdIndex = 1;
+        break;
+      case 'delivered':
+        selectdIndex = 2;
+        break;
+      case 'rejected':
+        selectdIndex = 3;
+        break;
+      case 'returned':
+        selectdIndex = 4;
+      default:
+        selectdIndex = 0;
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
     updateSelectedIndex(widget.selectedStatus);
   }
-}
-void updateSelectedIndex(String status) {
-  switch (status) {
-    case 'pending':
-      selectdIndex = 0;
-      break;
-    case 'accepted':
-      selectdIndex = 1;
-      break;
-    case 'delivered':
-      selectdIndex = 2;
-      break;
-    case 'rejected':
-      selectdIndex = 3;
-      break;
-    default:
-      selectdIndex = 0;
-  }
-  setState(() {});
-}
-@override
-void initState() {
-  super.initState();
-  updateSelectedIndex(widget.selectedStatus);
-}
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -266,8 +273,10 @@ void initState() {
         return const AcceptedOrders();
       case 2:
         return const DeliveredPage();
-      default:
+      case 3:
         return const CancelledOrder();
+      default:
+        return const ReturnedOrderpage();
     }
   }
 }
