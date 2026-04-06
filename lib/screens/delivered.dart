@@ -112,6 +112,44 @@ class Delivered extends StatelessWidget {
 
   const Delivered({super.key, required this.order});
 
+Future<void> updateStock(List items, bool decrease) async {
+  for (var item in items) {
+    final productId = item['productId'];
+
+    // ✅ FIX HERE
+    final qty = int.tryParse(item['quantity'].toString()) ?? 1;
+
+    print("👉 ProductId: $productId | Qty: $qty");
+
+    if (productId == null) {
+      print("❌ productId missing");
+      continue;
+    }
+
+    final ref = FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId);
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final snap = await transaction.get(ref);
+
+      if (!snap.exists) {
+        print("❌ Product not found for ID: $productId");
+        return;
+      }
+
+      final currentStock = snap['stock'] ?? 0;
+
+      final newStock = decrease
+          ? currentStock - qty
+          : currentStock + qty;
+
+      print("Old: $currentStock → New: $newStock");
+
+      transaction.update(ref, {'stock': newStock});
+    });
+  }
+}
   @override
   Widget build(BuildContext context) {
     final data = order.data() as Map<String, dynamic>;
@@ -323,15 +361,50 @@ class Delivered extends StatelessWidget {
                 height: 50,
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection('orders')
-                        .doc(order.id)
-                        .update({'status': 'shipped'});
 
-                    Get.back();
-                    Get.snackbar("Success", "Order Shipped");
-                  },
+                  // onPressed: () async {
+                  //   await FirebaseFirestore.instance
+                  //       .collection('orders')
+                  //       .doc(order.id)
+                  //       .update({'status': 'shipped'});
+
+                  //   Get.back();
+                  //   Get.snackbar("Success", "Order Shipped");
+                  // },
+                  // onPressed: () async {
+                  //   await FirebaseFirestore.instance
+                  //       .collection('orders')
+                  //       .doc(order.id)
+                  //       .update({'status': 'delivered'});
+
+                  //   Get.back();
+                  //   Get.snackbar("Success", "Order Delivered");
+                  // },
+    
+onPressed: () async {
+  final docRef = FirebaseFirestore.instance
+      .collection('orders')
+      .doc(order.id);
+
+  final freshDoc = await docRef.get(); // ✅ GET LATEST DATA
+  final freshData = freshDoc.data() as Map<String, dynamic>;
+
+  final items = freshData['items'];
+  final currentStatus = freshData['status'];
+
+  try {
+    if (currentStatus != 'shipped') {
+      await updateStock(items, true); // 🔻 decrease
+    }
+
+    await docRef.update({'status': 'shipped'});
+
+    Get.back();
+    Get.snackbar("Success", "Order Shipped");
+  } catch (e) {
+    print(e);
+  }
+},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(
@@ -361,15 +434,30 @@ class Delivered extends StatelessWidget {
 
                   /// ❌ REJECT BUTTON
                   ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseFirestore.instance
-                          .collection('orders')
-                          .doc(order.id)
-                          .update({'status': 'rejected'});
+            onPressed: () async {
+  final docRef = FirebaseFirestore.instance
+      .collection('orders')
+      .doc(order.id);
 
-                      Get.back();
-                      Get.snackbar("Success", "Order Rejected");
-                    },
+  final freshDoc = await docRef.get();
+  final freshData = freshDoc.data() as Map<String, dynamic>;
+
+  final items = freshData['items'];
+  final currentStatus = freshData['status'];
+
+  try {
+    if (currentStatus == 'delivered') {
+      await updateStock(items, false); // 🔺 ADD BACK
+    }
+
+    await docRef.update({'status': 'rejected'});
+
+    Get.back();
+    Get.snackbar("Updated", "Order Rejected");
+  } catch (e) {
+    print(e);
+  }
+},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
@@ -413,15 +501,30 @@ class Delivered extends StatelessWidget {
 
                   /// ⏳ OPTIONAL: PENDING BUTTON
                   ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseFirestore.instance
-                          .collection('orders')
-                          .doc(order.id)
-                          .update({'status': 'pending'});
+               onPressed: () async {
+  final docRef = FirebaseFirestore.instance
+      .collection('orders')
+      .doc(order.id);
 
-                      Get.back();
-                      Get.snackbar("Success", "Marked as Pending");
-                    },
+  final freshDoc = await docRef.get();
+  final freshData = freshDoc.data() as Map<String, dynamic>;
+
+  final items = freshData['items'];
+  final currentStatus = freshData['status'];
+
+  try {
+    if (currentStatus == 'delivered') {
+      await updateStock(items, false); // 🔺 ADD BACK
+    }
+
+    await docRef.update({'status': 'pending'});
+
+    Get.back();
+    Get.snackbar("Updated", "Marked as Pending");
+  } catch (e) {
+    print(e);
+  }
+},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                       shape: RoundedRectangleBorder(
