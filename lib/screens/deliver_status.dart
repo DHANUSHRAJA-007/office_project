@@ -239,7 +239,7 @@ class DeliverStatus extends StatelessWidget {
                         Get.snackbar("Success", "Order returned");
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Colors.grey,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -266,7 +266,7 @@ class DeliverStatus extends StatelessWidget {
                       Get.snackbar("Success", "Order Accepted");
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

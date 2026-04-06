@@ -161,7 +161,7 @@ class VieworderCard extends StatelessWidget {
         return Colors.orange;
       case 'accepted':
         return Colors.green;
-      case 'delivered':
+      case 'shipped':
         return Colors.blue;
       case 'rejected':
         return Colors.red;

@@ -13,7 +13,7 @@ class DeliveredPage extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('orders')
-            .where('status', isEqualTo: 'delivered')
+            .where('status', isEqualTo: 'shipped')
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -23,7 +23,7 @@ class DeliveredPage extends StatelessWidget {
           final orders = snapshot.data!.docs;
 
           if (orders.isEmpty) {
-            return const Center(child: Text("No Pending Orders"));
+            return const Center(child: Text("No Shipped Orders"));
           }
 
           return ListView.builder(

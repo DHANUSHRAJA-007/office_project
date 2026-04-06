@@ -162,7 +162,7 @@ class _ViewOrdersState extends State<ViewOrders> {
       case 'accepted':
         selectdIndex = 1;
         break;
-      case 'delivered':
+      case 'shipped':
         selectdIndex = 2;
         break;
       case 'rejected':

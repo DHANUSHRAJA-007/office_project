@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ReturnPage extends StatelessWidget {
+class CancelStatuspage extends StatelessWidget {
   final DocumentSnapshot order;
-  const ReturnPage({super.key, required this.order});
+  const CancelStatuspage({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ReturnPage extends StatelessWidget {
         backgroundColor: Colors.green,
         centerTitle: true,
         title: const Text(
-          "Returned Order",
+          "Cancelled Order",
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -200,46 +200,47 @@ class ReturnPage extends StatelessWidget {
               /// 🔥 BUTTONS (SAFE)
               Row(
                 children: [
-                  // Expanded(
-                  //   child: ElevatedButton(
-                  //     onPressed: () async {
-                  //       await FirebaseFirestore.instance
-                  //           .collection('orders')
-                  //           .doc(order.id)
-                  //           .update({'status': 'rejected'});
-
-                  //       Get.back();
-                  //       Get.snackbar("Rejected", "Order Rejected");
-                  //     },
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Colors.red,
-                  //       padding: const EdgeInsets.symmetric(vertical: 14),
-                  //     ),
-                  //     child: const Text(
-                  //       "Reject",
-                  //       style: TextStyle(color: Colors.white),
-                  //     ),
-                  //   ),
-                  // ),
-
-                  // const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
                         await FirebaseFirestore.instance
                             .collection('orders')
                             .doc(order.id)
-                            .update({'status': 'shipped'});
+                            .update({'status': 'pending'});
 
                         Get.back();
-                        Get.snackbar("Success", "Order Shipped");
+                        Get.snackbar("Pending", "Order Moved to Pending");
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
+                        "Pending",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+                  
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await FirebaseFirestore.instance
+                            .collection('orders')
+                            .doc(order.id)
+                            .update({'status': 'accepted'});
+
+                        Get.back();
+                        Get.snackbar("Success", "Order Accepted");
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: const Text(
-                        "Shipped",
+                        "Accept",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

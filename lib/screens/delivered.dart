@@ -327,10 +327,10 @@ class Delivered extends StatelessWidget {
                     await FirebaseFirestore.instance
                         .collection('orders')
                         .doc(order.id)
-                        .update({'status': 'delivered'});
+                        .update({'status': 'shipped'});
 
                     Get.back();
-                    Get.snackbar("Success", "Order Delivered");
+                    Get.snackbar("Success", "Order Shipped");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -339,7 +339,7 @@ class Delivered extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    "Mark as Deliver",
+                    "Mark as Shipped",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

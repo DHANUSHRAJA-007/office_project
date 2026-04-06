@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/screens/cancel_statuspage.dart';
 import 'package:office_project/widgets/vieworder_card.dart';
 
 class CancelledOrder extends StatelessWidget {
@@ -31,7 +33,8 @@ class CancelledOrder extends StatelessWidget {
 
         return InkWell(
           onTap: () {
-            // Get.to(() => Acceptorderpage(order: order));
+             Get.to(() => 
+             CancelStatuspage(order: order));
           },
 
           child: VieworderCard(

@@ -17,7 +17,7 @@ class _ConfirmedOrdersPageState extends State<ConfirmedOrdersPage> {
       switch (status) {
         case 'accepted':
           return Colors.green;
-        case 'delivered':
+        case 'shipped':
           return Colors.blue;
         case 'pending':
           return Colors.orange;
@@ -32,8 +32,8 @@ class _ConfirmedOrdersPageState extends State<ConfirmedOrdersPage> {
           return 'Ready for Shipment';
         case 'accepted':
           return 'Product Shipped';
-        case 'delivered':
-          return 'Delivered';
+        case 'shipped':
+          return 'Shipped';
         default:
           return status;
       }
@@ -55,7 +55,7 @@ class _ConfirmedOrdersPageState extends State<ConfirmedOrdersPage> {
             .where('buyerId', isEqualTo: user!.uid)
             .where(
               'status',
-              whereIn: ['accepted', 'delivered', 'pending'],
+              whereIn: ['accepted', 'shipped', 'pending'],
             ) // 🔥 IMPORTANT
             //  .orderBy('timestamp', descending: true)
             .snapshots(),
