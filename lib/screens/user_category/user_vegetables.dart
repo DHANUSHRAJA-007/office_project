@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -12,17 +11,16 @@ class UserVegetables extends StatefulWidget {
   @override
   State<UserVegetables> createState() => _UserVegetablesState();
 }
+
 Map<String, bool> likedProducts = {};
+
 class _UserVegetablesState extends State<UserVegetables> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text(
-          "Vegetables",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text("Vegetables", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -50,31 +48,30 @@ class _UserVegetablesState extends State<UserVegetables> {
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              int crossAxisCount =2;
-              if(constraints.maxWidth>900){
-                crossAxisCount=4;
-              }else if(constraints.maxWidth>600){
-                crossAxisCount=3;
+              int crossAxisCount = 2;
+              if (constraints.maxWidth > 900) {
+                crossAxisCount = 4;
+              } else if (constraints.maxWidth > 600) {
+                crossAxisCount = 3;
               }
-            
-            return GridView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: snapshot.data!.docs.length,
-              gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.75,
-              ),
-              itemBuilder: (context, index) {
-                var product = snapshot.data!.docs[index];
-                var data =
-                    product.data() as Map<String, dynamic>;
-            
-                return  _productCard(product);
-              },
-            );}
+
+              return GridView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: snapshot.data!.docs.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.75,
+                ),
+                itemBuilder: (context, index) {
+                  var product = snapshot.data!.docs[index];
+                  var data = product.data() as Map<String, dynamic>;
+
+                  return _productCard(product);
+                },
+              );
+            },
           );
         },
       ),
@@ -83,9 +80,7 @@ class _UserVegetablesState extends State<UserVegetables> {
 
   Widget _productCard(var product) {
     return InkWell(
-      onTap: () {
-        
-      },
+      onTap: () {},
       child: Card(
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -107,12 +102,15 @@ class _UserVegetablesState extends State<UserVegetables> {
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child:  Text(
+                    child: Text(
                       "Offer ${product['offer']}%",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
-      
+
                   // IconButton(
                   //   padding: EdgeInsets.zero,
                   //   constraints: const BoxConstraints(),
@@ -132,18 +130,18 @@ class _UserVegetablesState extends State<UserVegetables> {
                   // ),
                 ],
               ),
-      
+
               const SizedBox(height: 5),
-      
+
               /// IMAGE
               Expanded(
                 child: Center(
                   child: Image.asset('assets/fruits.png', fit: BoxFit.contain),
                 ),
               ),
-      
+
               const Divider(thickness: 1),
-      
+
               /// NAME + RATING
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,19 +153,22 @@ class _UserVegetablesState extends State<UserVegetables> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-      
+
                   const Row(
                     children: [
                       Icon(Icons.star, size: 14, color: Colors.amber),
                       SizedBox(width: 2),
-                      Text("4.9", style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        "4.9",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ],
               ),
-      
+
               const SizedBox(height: 4),
-      
+
               /// PRICE + ADD BUTTON
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -181,7 +182,7 @@ class _UserVegetablesState extends State<UserVegetables> {
                       const Text(" kg", style: TextStyle(color: Colors.grey)),
                     ],
                   ),
-      
+
                   InkWell(
                     onTap: () {
                       Map<String, dynamic> cartItem = {
@@ -197,8 +198,7 @@ class _UserVegetablesState extends State<UserVegetables> {
                           duration: const Duration(seconds: 3),
                           backgroundColor: Colors.black,
                           content: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text("Product Added to the Cart"),
                               TextButton(
@@ -206,14 +206,16 @@ class _UserVegetablesState extends State<UserVegetables> {
                                   // HomePage.homeKey.currentState
                                   //     ?.changeTab(2);
 
-                                  Get.offAll(() => HomePage(role: "user"), arguments: 2);
+                                  Get.offAll(
+                                    () => HomePage(role: "user"),
+                                    arguments: 2,
+                                  );
                                 },
                                 child: const Text(
                                   "GO TO CART",
-                                  style:
-                                      TextStyle(color: Colors.yellow),
+                                  style: TextStyle(color: Colors.yellow),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),

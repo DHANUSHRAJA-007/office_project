@@ -115,7 +115,7 @@ class _OrdersState extends State<Orders> {
                     children: [
                       _statusBox(
                         Icons.local_shipping,
-                        "Delivered",
+                        "Shipped",
                         "45",
                         Colors.greenAccent,
                         const Color.fromARGB(255, 26, 56, 27),

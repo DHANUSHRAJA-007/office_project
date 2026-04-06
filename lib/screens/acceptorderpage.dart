@@ -785,7 +785,7 @@ class Acceptorderpage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: const Text(
-                        "Accept & Deliver",
+                        "Accept & Ship",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

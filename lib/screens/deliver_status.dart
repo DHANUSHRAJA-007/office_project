@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class DeliverStatus extends StatelessWidget {
   final DocumentSnapshot order;
 
-  const DeliverStatus({super.key, required this.order});
+   DeliverStatus({super.key, required this.order});
 Future<void> updateStock(List items) async {
   for (var item in items) {
     final productId = item['productId'];
@@ -44,7 +44,7 @@ Future<void> updateStock(List items) async {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         centerTitle: true,
-        title: const Text(
+        title:  Text(
           "Order Details",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -69,7 +69,7 @@ Future<void> updateStock(List items) async {
                   child: Row(
                     children: [
                       const Icon(Icons.receipt, color: Colors.green),
-                      const SizedBox(width: 10),
+                     // const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           "Order ID: ${order.id}",
@@ -84,7 +84,7 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-              const SizedBox(height: 12),
+               SizedBox(height: 12),
 
               /// 🟢 BUYER DETAILS CARD
               Card(
@@ -97,7 +97,7 @@ Future<void> updateStock(List items) async {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                       Text(
                         "Buyer Details",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -109,17 +109,17 @@ Future<void> updateStock(List items) async {
                       Row(
                         children: [
                           const Icon(Icons.person, size: 18),
-                          const SizedBox(width: 8),
+                          //const SizedBox(width: 8),
                           Text(data['buyerName'] ?? "Unknown"),
                         ],
                       ),
 
-                      const SizedBox(height: 6),
+                       SizedBox(height: 6),
 
                       Row(
                         children: [
                           const Icon(Icons.location_on, size: 18),
-                          const SizedBox(width: 8),
+                         // const SizedBox(width: 8),
                           Expanded(child: Text(data['buyerAddress'] ?? "")),
                         ],
                       ),
@@ -128,7 +128,7 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-              const SizedBox(height: 12),
+               SizedBox(height: 12),
 
               /// 🟢 PRODUCTS CARD
               Card(
@@ -141,7 +141,7 @@ Future<void> updateStock(List items) async {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                       Text(
                         "Products",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -168,7 +168,7 @@ Future<void> updateStock(List items) async {
                                 color: Colors.green,
                               ),
 
-                              const SizedBox(width: 10),
+                              //const SizedBox(width: 10),
 
                               Expanded(
                                 child: Column(
@@ -200,7 +200,7 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-              const SizedBox(height: 12),
+               SizedBox(height: 12),
 
               /// 🟢 TOTAL CARD
               Card(
@@ -214,7 +214,7 @@ Future<void> updateStock(List items) async {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         "Total Amount",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -234,10 +234,10 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-              const SizedBox(height: 20),
+               SizedBox(height: 20),
 
               /// 🔥 BUTTON
-              const SizedBox(height: 20),
+              //const SizedBox(height: 20),
 
 //               GridView.count(
 //                 crossAxisCount: 2, // 2 buttons per row
@@ -247,23 +247,24 @@ Future<void> updateStock(List items) async {
 //                 mainAxisSpacing: 10,
 //                 childAspectRatio: 4.5,
 
-//                 children: [
-//                   /// ✅ DELIVER BUTTON
-//                   SizedBox(
-//                     height: 50,
-//                     width: double.infinity,
-//                     child: ElevatedButton(
-//                       onPressed: () async {
-//                         await FirebaseFirestore.instance
-//                             .collection('orders')
-//                             .doc(order.id)
-//                             .update({'status': 'returned'});
-
+// <<<<<<< HEAD
+// //                 children: [
+// //                   /// ✅ DELIVER BUTTON
+// //                   SizedBox(
+// //                     height: 50,
+// //                     width: double.infinity,
+// //                     child: ElevatedButton(
+// //                       onPressed: () async {
+// //                         await FirebaseFirestore.instance
+// //                             .collection('orders')
+// //                             .doc(order.id)
+// //                             .update({'status': 'returned'});
+// =======
 //                         Get.back();
 //                         Get.snackbar("Success", "Order returned");
 //                       },
 //                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: Colors.green,
+//                         backgroundColor: Colors.grey,
 //                         shape: RoundedRectangleBorder(
 //                           borderRadius: BorderRadius.circular(12),
 //                         ),
@@ -277,14 +278,52 @@ Future<void> updateStock(List items) async {
 //                       ),
 //                     ),
 //                   ),
+// >>>>>>> origin/dhanush
 
-//                   /// 🔄 OPTIONAL: ACCEPT BUTTON
-//                   ElevatedButton(
-//                     onPressed: () async {
-//                       await FirebaseFirestore.instance
-//                           .collection('orders')
-//                           .doc(order.id)
-//                           .update({'status': 'accepted'});
+// //                         Get.back();
+// //                         Get.snackbar("Success", "Order returned");
+// //                       },
+// //                       style: ElevatedButton.styleFrom(
+// //                         backgroundColor: Colors.green,
+// //                         shape: RoundedRectangleBorder(
+// //                           borderRadius: BorderRadius.circular(12),
+// //                         ),
+// //                       ),
+// //                       child: const Text(
+// //                         "Return",
+// //                         style: TextStyle(
+// //                           color: Colors.white,
+// //                           fontWeight: FontWeight.bold,
+// //                         ),
+// //                       ),
+// //                     ),
+// //                   ),
+
+// <<<<<<< HEAD
+// //                   /// 🔄 OPTIONAL: ACCEPT BUTTON
+// //                   ElevatedButton(
+// //                     onPressed: () async {
+// //                       await FirebaseFirestore.instance
+// //                           .collection('orders')
+// //                           .doc(order.id)
+
+//                       Get.back();
+//                       Get.snackbar("Success", "Order Accepted");
+//                     },
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: Colors.green,
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(12),
+//                       ),
+//                     ),
+//                     child: const Text(
+//                       "Accept",
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                     ),
+//                   ),
 
 //                       Get.back();
 //                       Get.snackbar("Success", "Order Accepted");

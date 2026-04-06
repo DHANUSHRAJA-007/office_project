@@ -355,7 +355,7 @@ class _DashboardState extends State<Dashboard> {
 
                     int pending = 0;
                     int accepted = 0;
-                    int delivered = 0;
+                    int shipped = 0;
                     int rejected = 0;
 
                     for (var order in orders) {
@@ -363,7 +363,7 @@ class _DashboardState extends State<Dashboard> {
 
                       if (status == 'pending') pending++;
                       if (status == 'accepted') accepted++;
-                      if (status == 'delivered') delivered++;
+                      if (status == 'shipped') shipped++;
                       if (status == 'rejected') rejected++;
                     }
 
@@ -392,10 +392,10 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         _dashCards(
                           const Color(0xFFBCBFFB),
-                          "Delivered",
-                          "$delivered",
+                          "Shipped",
+                          "$shipped",
                           Icons.local_shipping_outlined,
-                          "delivered",
+                          "shipped",
                         ),
                         _dashCards(
                           const Color(0xFFFCD1D2),
@@ -616,7 +616,7 @@ class _DashboardState extends State<Dashboard> {
           return Colors.orange;
         case 'accepted':
           return Colors.green;
-        case 'delivered':
+        case 'shipped':
           return Colors.blue;
         case 'rejected':
           return Colors.red;
