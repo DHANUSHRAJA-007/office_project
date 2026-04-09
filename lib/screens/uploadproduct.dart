@@ -197,18 +197,6 @@ class _UploadProductPageState extends State<UploadProductPage> {
                   ),
                 ),
 
-                // onPressed: () {
-                //   if (images.isEmpty) {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(content: Text("Upload atleast one image")),
-                //     );
-                //     return;
-                //   } else {
-                //     Get.to(Adddetailspage());
-                //   }
-
-                //   print("Images Selected: ${images.length}");
-                // },
                 onPressed: () => Get.to(Adddetailspage()),
                 child: const Text(
                   "Next",

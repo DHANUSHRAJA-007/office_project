@@ -200,28 +200,6 @@ class ReturnPage extends StatelessWidget {
               /// 🔥 BUTTONS (SAFE)
               Row(
                 children: [
-                  // Expanded(
-                  //   child: ElevatedButton(
-                  //     onPressed: () async {
-                  //       await FirebaseFirestore.instance
-                  //           .collection('orders')
-                  //           .doc(order.id)
-                  //           .update({'status': 'rejected'});
-
-                  //       Get.back();
-                  //       Get.snackbar("Rejected", "Order Rejected");
-                  //     },
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Colors.red,
-                  //       padding: const EdgeInsets.symmetric(vertical: 14),
-                  //     ),
-                  //     child: const Text(
-                  //       "Reject",
-                  //       style: TextStyle(color: Colors.white),
-                  //     ),
-                  //   ),
-                  // ),
-
                   // const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(

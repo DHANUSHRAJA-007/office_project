@@ -6,7 +6,6 @@ import 'package:office_project/screens/privacypolicy.dart';
 import 'package:office_project/screens/profilepage.dart';
 import 'package:office_project/screens/reports.dart';
 import 'package:office_project/screens/termsandcond.dart';
-// import 'package:office_project/theme_controller.dart';
 
 class Settings2 extends StatelessWidget {
   Settings2({super.key});
@@ -19,12 +18,7 @@ class Settings2 extends StatelessWidget {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.green,
-          // leading: IconButton(
-          //   onPressed: () {
-          //     Get.back();
-          //   },
-          //   icon: const Icon(Icons.arrow_back, color: Colors.white),
-          // ),
+
           title: const Text(
             "Settings",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -56,14 +50,6 @@ class Settings2 extends StatelessWidget {
                           Icons.person,
                           Icons.arrow_forward_ios,
                         ),
-
-                        // Divider(),
-                        // _reportItems(
-                        //   "Change Password",
-                        //   '/password',
-                        //   Icons.lock,
-                        //   Icons.arrow_forward_ios,
-                        // ),
                       ],
                     ),
                   ),

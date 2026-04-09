@@ -23,7 +23,7 @@ class AcceptedOrders extends StatelessWidget {
           final orders = snapshot.data!.docs;
 
           if (orders.isEmpty) {
-            return const Center(child: Text("No Pending Orders"));
+            return const Center(child: Text("No Accepted Orders"));
           }
 
           return ListView.builder(

@@ -1,108 +1,3 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-
-// class Delivered extends StatelessWidget {
-//   final DocumentSnapshot order;
-
-//   const Delivered({super.key, required this.order});
-
-//   @override
-//   Widget build(BuildContext context) {
-
-//     /// ✅ GET DATA HERE
-//     final data = order.data() as Map<String, dynamic>;
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         automaticallyImplyLeading: false,
-//          leading: IconButton(
-//           onPressed: () => Get.back(),
-//           icon: const Icon(Icons.arrow_back, color: Colors.white),
-//         ),
-//         centerTitle: true,
-//         title: const Text("Order Details",style: TextStyle(
-//           color: Colors.white
-//         ),),
-//         backgroundColor: Colors.green,
-//       ),
-
-//       body: Padding(
-//         padding: const EdgeInsets.all(12),
-//         child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-
-//             /// 🟢 ORDER ID
-//             Text("Order ID: ${order.id}",
-//                 style: const TextStyle(fontWeight: FontWeight.bold)),
-
-//             const SizedBox(height: 10),
-
-//             /// 🟢 BUYER DETAILS
-//             Text("Buyer: ${data['buyerName'] ?? "Unknown"}"),
-//             Text("Address: ${data['buyerAddress'] ?? ""}"),
-
-//             const SizedBox(height: 10),
-
-//             /// 🟢 PRODUCTS
-//             const Text("Products:",
-//                 style: TextStyle(fontWeight: FontWeight.bold)),
-
-//             ...List.generate(
-//               (data['items'] as List).length,
-//               (index) {
-//                 final item = data['items'][index];
-
-//                 return ListTile(
-//                   title: Text(item['name']),
-//                   subtitle: Text("Qty: ${item['quantity']}"),
-//                   trailing: Text("₹ ${item['price']}"),
-//                 );
-//               },
-//             ),
-
-//             const SizedBox(height: 10),
-
-//             /// 🟢 TOTAL
-//             Text("Total: ₹${data['total']}",
-//                 style: const TextStyle(fontWeight: FontWeight.bold)),
-
-//             const Spacer(),
-
-//             /// 🔥 DELIVER BUTTON (ONLY HERE)
-//             SizedBox(
-//               width: double.infinity,
-//               child: ElevatedButton(
-//                 onPressed: () async {
-//                   await FirebaseFirestore.instance
-//                       .collection('orders')
-//                       .doc(order.id)
-//                       .update({
-//                     'status': 'delivered',
-//                   });
-
-//                   Get.back(); // go back to list
-
-//                   Get.snackbar("Success", "Order Delivered");
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: Colors.blue,
-//                   padding: const EdgeInsets.all(14),
-//                 ),
-//                 child: const Text(
-//                   "Mark as Delivered",
-//                   style: TextStyle(color: Colors.white),
-//                 ),
-//               ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -112,44 +7,39 @@ class Delivered extends StatelessWidget {
 
   const Delivered({super.key, required this.order});
 
-Future<void> updateStock(List items, bool decrease) async {
-  for (var item in items) {
-    final productId = item['productId'];
+  Future<void> updateStock(List items, bool decrease) async {
+    for (var item in items) {
+      final productId = item['productId'];
+      final qty = int.tryParse(item['quantity'].toString()) ?? 1;
 
-    // ✅ FIX HERE
-    final qty = int.tryParse(item['quantity'].toString()) ?? 1;
+      print("👉 ProductId: $productId | Qty: $qty");
 
-    print("👉 ProductId: $productId | Qty: $qty");
+      if (productId == null) continue;
 
-    if (productId == null) {
-      print("❌ productId missing");
-      continue;
+      final ref = FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final snap = await transaction.get(ref);
+
+        if (!snap.exists) {
+          print("❌ Product not found");
+          return;
+        }
+
+        // ✅ FIXED HERE
+        final currentStock = int.tryParse(snap['stock'].toString()) ?? 0;
+
+        final newStock = decrease ? currentStock - qty : currentStock + qty;
+
+        print("Old: $currentStock → New: $newStock");
+
+        transaction.update(ref, {'stock': newStock});
+      });
     }
-
-    final ref = FirebaseFirestore.instance
-        .collection('products')
-        .doc(productId);
-
-    await FirebaseFirestore.instance.runTransaction((transaction) async {
-      final snap = await transaction.get(ref);
-
-      if (!snap.exists) {
-        print("❌ Product not found for ID: $productId");
-        return;
-      }
-
-      final currentStock = snap['stock'] ?? 0;
-
-      final newStock = decrease
-          ? currentStock - qty
-          : currentStock + qty;
-
-      print("Old: $currentStock → New: $newStock");
-
-      transaction.update(ref, {'stock': newStock});
-    });
   }
-}
+
   @override
   Widget build(BuildContext context) {
     final data = order.data() as Map<String, dynamic>;
@@ -361,58 +251,36 @@ Future<void> updateStock(List items, bool decrease) async {
                 height: 50,
                 width: double.infinity,
                 child: ElevatedButton(
+                  onPressed: () async {
+                    final docRef = FirebaseFirestore.instance
+                        .collection('orders')
+                        .doc(order.id);
 
-                  // onPressed: () async {
-                  //   await FirebaseFirestore.instance
-                  //       .collection('orders')
-                  //       .doc(order.id)
-                  //       .update({'status': 'shipped'});
+                    final freshDoc = await docRef.get(); // ✅ GET LATEST DATA
+                    final freshData = freshDoc.data() as Map<String, dynamic>;
 
-                  //   Get.back();
-                  //   Get.snackbar("Success", "Order Shipped");
-                  // },
-                  // onPressed: () async {
-                  //   await FirebaseFirestore.instance
-                  //       .collection('orders')
-                  //       .doc(order.id)
-                  //       .update({'status': 'delivered'});
+                    final items = (freshData['items'] ?? []) as List;
+                    final currentStatus = freshData['status'];
 
-                  //   Get.back();
-                  //   Get.snackbar("Success", "Order Delivered");
-                  // },
-    
-onPressed: () async {
-  final docRef = FirebaseFirestore.instance
-      .collection('orders')
-      .doc(order.id);
+                    try {
+                      if (currentStatus != 'shipped') {
+                        await updateStock(items, true); // 🔻 decrease
+                      }
 
-  final freshDoc = await docRef.get(); // ✅ GET LATEST DATA
-  final freshData = freshDoc.data() as Map<String, dynamic>;
+                      await docRef.update({'status': 'shipped'});
 
-  final items = freshData['items'];
-  final currentStatus = freshData['status'];
-
-  try {
-    if (currentStatus != 'shipped') {
-      await updateStock(items, true); // 🔻 decrease
-    }
-
-    await docRef.update({'status': 'shipped'});
-
-    Get.back();
-    Get.snackbar("Success", "Order Shipped");
-  } catch (e) {
-    print(e);
-  }
-},
+                      Get.back();
+                      Get.snackbar("Success", "Order Shipped");
+                    } catch (e, stack) {
+                      print("🔥 ERROR: $e");
+                      print(stack);
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
                   ),
                   child: const Text(
-                    "Mark as Shipped",
+                    "Ship",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -420,7 +288,7 @@ onPressed: () async {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               GridView.count(
                 crossAxisCount: 2, // 2 buttons per row
                 shrinkWrap: true,
@@ -434,30 +302,30 @@ onPressed: () async {
 
                   /// ❌ REJECT BUTTON
                   ElevatedButton(
-            onPressed: () async {
-  final docRef = FirebaseFirestore.instance
-      .collection('orders')
-      .doc(order.id);
+                    onPressed: () async {
+                      final docRef = FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id);
 
-  final freshDoc = await docRef.get();
-  final freshData = freshDoc.data() as Map<String, dynamic>;
+                      final freshDoc = await docRef.get();
+                      final freshData = freshDoc.data() as Map<String, dynamic>;
 
-  final items = freshData['items'];
-  final currentStatus = freshData['status'];
+                      final items = freshData['items'];
+                      final currentStatus = freshData['status'];
 
-  try {
-    if (currentStatus == 'delivered') {
-      await updateStock(items, false); // 🔺 ADD BACK
-    }
+                      try {
+                        if (currentStatus == 'delivered') {
+                          await updateStock(items, false); // 🔺 ADD BACK
+                        }
 
-    await docRef.update({'status': 'rejected'});
+                        await docRef.update({'status': 'rejected'});
 
-    Get.back();
-    Get.snackbar("Updated", "Order Rejected");
-  } catch (e) {
-    print(e);
-  }
-},
+                        Get.back();
+                        Get.snackbar("Updated", "Order Rejected");
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
@@ -473,58 +341,31 @@ onPressed: () async {
                     ),
                   ),
 
-                  /// 🔄 OPTIONAL: ACCEPT BUTTON
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     await FirebaseFirestore.instance
-                  //         .collection('orders')
-                  //         .doc(order.id)
-                  //         .update({'status': 'accepted'});
-
-                  //     Get.back();
-                  //     Get.snackbar("Success", "Order Accepted");
-                  //   },
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: Colors.orange,
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //   ),
-                  //   child: const Text(
-                  //     "Accept",
-                  //     style: TextStyle(
-                  //       color: Colors.white,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
-
-                  /// ⏳ OPTIONAL: PENDING BUTTON
                   ElevatedButton(
-               onPressed: () async {
-  final docRef = FirebaseFirestore.instance
-      .collection('orders')
-      .doc(order.id);
+                    onPressed: () async {
+                      final docRef = FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id);
 
-  final freshDoc = await docRef.get();
-  final freshData = freshDoc.data() as Map<String, dynamic>;
+                      final freshDoc = await docRef.get();
+                      final freshData = freshDoc.data() as Map<String, dynamic>;
 
-  final items = freshData['items'];
-  final currentStatus = freshData['status'];
+                      final items = freshData['items'];
+                      final currentStatus = freshData['status'];
 
-  try {
-    if (currentStatus == 'delivered') {
-      await updateStock(items, false); // 🔺 ADD BACK
-    }
+                      try {
+                        if (currentStatus == 'delivered') {
+                          await updateStock(items, false); // 🔺 ADD BACK
+                        }
 
-    await docRef.update({'status': 'pending'});
+                        await docRef.update({'status': 'pending'});
 
-    Get.back();
-    Get.snackbar("Updated", "Marked as Pending");
-  } catch (e) {
-    print(e);
-  }
-},
+                        Get.back();
+                        Get.snackbar("Updated", "Marked as Pending");
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                       shape: RoundedRectangleBorder(

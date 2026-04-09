@@ -39,12 +39,9 @@ class Drawerbox extends StatelessWidget {
             // _tile(context, "Orders", Icons.shopping_bag, '/orders'),
             // _tile(context, "Coupon", Icons.add_box_outlined, '/coupon'),
             // _tile(context, "Reports", Icons.bar_chart, '/reports'),
-
             _tile(context, "About Us", Icons.info, '/about'),
-
             // _tile(context, "chat", Icons.chat, '/chat'),
             // _tile(context, "Promo", Icons.rocket, '/promo'),
-
             // _tile(context, "Settings", Icons.settings, '/settings'),
             // _tile(context, "FAQ", Icons.textsms_outlined, '/faq'),
           ],

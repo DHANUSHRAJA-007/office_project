@@ -17,12 +17,6 @@ class _OrdersState extends State<Orders> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Get.back();
-        //   },
-        //   icon: const Icon(Icons.arrow_back, color: Colors.white),
-        // ),
         title: const Text(
           "Orders",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

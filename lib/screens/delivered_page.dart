@@ -23,7 +23,7 @@ class DeliveredPage extends StatelessWidget {
           final orders = snapshot.data!.docs;
 
           if (orders.isEmpty) {
-            return const Center(child: Text("No Shipped Orders"));
+            return const Center(child: Text("No Orders For Shipping"));
           }
 
           return ListView.builder(

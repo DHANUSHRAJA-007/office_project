@@ -4,31 +4,33 @@ import 'package:get/get.dart';
 
 class DeliverStatus extends StatelessWidget {
   final DocumentSnapshot order;
-   DeliverStatus({super.key, required this.order});
-Future<void> updateStock(List items) async {
-  for (var item in items) {
-    final productId = item['productId'];
-    final qty = int.tryParse(item['quantity'].toString()) ?? 1;
 
-    if (productId == null) continue;
+  const DeliverStatus({super.key, required this.order});
+  Future<void> updateStock(List items) async {
+    for (var item in items) {
+      final productId = item['productId'];
+      final qty = int.tryParse(item['quantity'].toString()) ?? 1;
 
-    final ref = FirebaseFirestore.instance
-        .collection('products')
-        .doc(productId);
+      if (productId == null) continue;
 
-    await FirebaseFirestore.instance.runTransaction((transaction) async {
-      final snap = await transaction.get(ref);
+      final ref = FirebaseFirestore.instance
+          .collection('products')
+          .doc(productId);
 
-      if (!snap.exists) return;
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final snap = await transaction.get(ref);
 
-      final currentStock = snap['stock'] ?? 0;
+        if (!snap.exists) return;
 
-      transaction.update(ref, {
-        'stock': currentStock + qty, // 🔺 INCREASE
+        final currentStock = snap['stock'] ?? 0;
+
+        transaction.update(ref, {
+          'stock': currentStock + qty, // 🔺 INCREASE
+        });
       });
-    });
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     final data = order.data() as Map<String, dynamic>;
@@ -43,7 +45,7 @@ Future<void> updateStock(List items) async {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         centerTitle: true,
-        title:  Text(
+        title: Text(
           "Order Details",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -67,8 +69,9 @@ Future<void> updateStock(List items) async {
                   padding: const EdgeInsets.all(12),
                   child: Row(
                     children: [
-                       Icon(Icons.receipt, color: Colors.green),
-                       //SizedBox(height: 10,),
+                      const Icon(Icons.receipt, color: Colors.green),
+
+                      // const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           "Order ID: ${order.id}",
@@ -83,7 +86,7 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-               SizedBox(height: 12),
+              SizedBox(height: 12),
 
               /// 🟢 BUYER DETAILS CARD
               Card(
@@ -96,7 +99,7 @@ Future<void> updateStock(List items) async {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text(
+                      Text(
                         "Buyer Details",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -108,17 +111,19 @@ Future<void> updateStock(List items) async {
                       Row(
                         children: [
                           const Icon(Icons.person, size: 18),
-                          // SizedBox(width: 8),
+
+                          const SizedBox(width: 8),
+
                           Text(data['buyerName'] ?? "Unknown"),
                         ],
                       ),
 
-                       SizedBox(height: 6),
+                      SizedBox(height: 6),
 
                       Row(
                         children: [
                           const Icon(Icons.location_on, size: 18),
-                          // const SizedBox(width: 8),
+
                           Expanded(child: Text(data['buyerAddress'] ?? "")),
                         ],
                       ),
@@ -127,7 +132,7 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-               SizedBox(height: 12),
+              SizedBox(height: 12),
 
               /// 🟢 PRODUCTS CARD
               Card(
@@ -140,7 +145,7 @@ Future<void> updateStock(List items) async {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text(
+                      Text(
                         "Products",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -168,7 +173,6 @@ Future<void> updateStock(List items) async {
                               ),
 
                               //const SizedBox(width: 10),
-
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +203,7 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-               SizedBox(height: 12),
+              SizedBox(height: 12),
 
               /// 🟢 TOTAL CARD
               Card(
@@ -213,7 +217,7 @@ Future<void> updateStock(List items) async {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       Text(
+                      Text(
                         "Total Amount",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -233,278 +237,144 @@ Future<void> updateStock(List items) async {
                 ),
               ),
 
-               SizedBox(height: 20),
+              SizedBox(height: 20),
+              GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 4.5,
+                children: [
+                  /// 🟢 RETURN
+                  ElevatedButton(
+                    onPressed: () async {
+                      final docRef = FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id);
 
-              /// 🔥 BUTTON
-               SizedBox(height: 20),
+                      final freshDoc = await docRef.get();
+                      final data = freshDoc.data() as Map<String, dynamic>;
 
-// //               GridView.count(
-// //                 crossAxisCount: 2, // 2 buttons per row
-// //                 shrinkWrap: true,
-// //                 physics: const NeverScrollableScrollPhysics(),
-// //                 crossAxisSpacing: 10,
-// //                 mainAxisSpacing: 10,
-// //                 childAspectRatio: 4.5,
+                      await updateStock(data['items']); // 🔺 increase
 
-// <<<<<<< HEAD
-//                         Get.back();
-//                         Get.snackbar("Success", "Order returned");
-//                       },
-//                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: Colors.grey,
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(12),
-//                         ),
-//                       ),
-//                       child: const Text(
-//                         "Return",
-//                         style: TextStyle(
-//                           color: Colors.white,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-// =======
-// //                 children: [
-// //                   /// ✅ DELIVER BUTTON
-// //                   SizedBox(
-// //                     height: 50,
-// //                     width: double.infinity,
-// //                     child: ElevatedButton(
-// //                       onPressed: () async {
-// //                         await FirebaseFirestore.instance
-// //                             .collection('orders')
-// //                             .doc(order.id)
-// //                             .update({'status': 'returned'});
-// >>>>>>> origin/girish
+                      await docRef.update({'status': 'returned'});
 
-// /
-// <<<<<<< HEAD
-//                       Get.back();
-//                       Get.snackbar("Success", "Order Accepted");
-//                     },
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: Colors.green,
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                       ),
-//                     ),
-//                     child: const Text(
-//                       "Accept",
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   ),
-// =======
-// //                   /// 🔄 OPTIONAL: ACCEPT BUTTON
-// //                   ElevatedButton(
-// //                     onPressed: () async {
-// //                       await FirebaseFirestore.instance
-// //                           .collection('orders')
-// //                           .doc(order.id)
-// //                           .update({'status': 'accepted'});
-// >>>>>>> origin/girish
+                      Get.back();
+                      Get.snackbar("Success", "Order Returned");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      "Return",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
 
-// //                       Get.back();
-// //                       Get.snackbar("Success", "Order Accepted");
-// //                     },
-// //                     style: ElevatedButton.styleFrom(
-// //                       backgroundColor: Colors.orange,
-// //                       shape: RoundedRectangleBorder(
-// //                         borderRadius: BorderRadius.circular(12),
-// //                       ),
-// //                     ),
-// //                     child: const Text(
-// //                       "Accept",
-// //                       style: TextStyle(
-// //                         color: Colors.white,
-// //                         fontWeight: FontWeight.bold,
-// //                       ),
-// //                     ),
-// //                   ),
+                  /// 🟡 ACCEPT
+                  ElevatedButton(
+                    onPressed: () async {
+                      final docRef = FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id);
 
-// //                   /// ❌ REJECT BUTTON
-// //                   ElevatedButton(
-// //                    onPressed: () async {
-// //   final docRef = FirebaseFirestore.instance
-// //       .collection('orders')
-// //       .doc(order.id);
+                      final freshDoc = await docRef.get();
+                      final data = freshDoc.data() as Map<String, dynamic>;
 
-// //   final freshDoc = await docRef.get();
-// //   final data = freshDoc.data() as Map<String, dynamic>;
+                      await updateStock(data['items']); // 🔺 increase
 
-// //   final items = data['items'];
+                      await docRef.update({'status': 'accepted'});
 
-// //   await updateStock(items); // 🔺 INCREASE STOCK
+                      Get.back();
+                      Get.snackbar("Success", "Order Accepted");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      "Accept",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
 
-// //   await docRef.update({'status': 'rejected'});
+                  /// 🔴 REJECT
+                  ElevatedButton(
+                    onPressed: () async {
+                      final docRef = FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id);
 
-// //   Get.back();
-// //   Get.snackbar("Success", "Order Rejected");
-// // },
-// //                     style: ElevatedButton.styleFrom(
-// //                       backgroundColor: Colors.red,
-// //                       shape: RoundedRectangleBorder(
-// //                         borderRadius: BorderRadius.circular(12),
-// //                       ),
-// //                     ),
-// //                     child: const Text(
-// //                       "Reject",
-// //                       style: TextStyle(
-// //                         color: Colors.white,
-// //                         fontWeight: FontWeight.bold,
-// //                       ),
-// //                     ),
-// //                   ),
+                      final freshDoc = await docRef.get();
+                      final data = freshDoc.data() as Map<String, dynamic>;
 
-// //                   /// ⏳ OPTIONAL: PENDING BUTTON
-// //                   ElevatedButton(
-// //                     onPressed: () async {
-// //                       await FirebaseFirestore.instance
-// //                           .collection('orders')
-// //                           .doc(order.id)
-// //                           .update({'status': 'pending'});
+                      await updateStock(data['items']); // 🔺 increase
 
-// //                       Get.back();
-// //                       Get.snackbar("Success", "Marked as Pending");
-// //                     },
-// //                     style: ElevatedButton.styleFrom(
-// //                       backgroundColor: Colors.orange,
-// //                       shape: RoundedRectangleBorder(
-// //                         borderRadius: BorderRadius.circular(12),
-// //                       ),
-// //                     ),
-// //                     child: const Text(
-// //                       "Pending",
-// //                       style: TextStyle(
-// //                         color: Colors.white,
-// //                         fontWeight: FontWeight.bold,
-// //                       ),
-// //                     ),
-// //                   ),
-// //                 ],
-// //               ),
-GridView.count(
-  crossAxisCount: 2,
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  crossAxisSpacing: 10,
-  mainAxisSpacing: 10,
-  childAspectRatio: 4.5,
-  children: [
+                      await docRef.update({'status': 'rejected'});
 
-    /// 🟢 RETURN
-    ElevatedButton(
-      onPressed: () async {
-        final docRef = FirebaseFirestore.instance
-            .collection('orders')
-            .doc(order.id);
+                      Get.back();
+                      Get.snackbar("Success", "Order Rejected");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      "Reject",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
 
-        final freshDoc = await docRef.get();
-        final data = freshDoc.data() as Map<String, dynamic>;
+                  /// 🟠 PENDING
+                  ElevatedButton(
+                    onPressed: () async {
+                      final docRef = FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(order.id);
 
-        await updateStock(data['items']); // 🔺 increase
+                      final freshDoc = await docRef.get();
+                      final data = freshDoc.data() as Map<String, dynamic>;
 
-        await docRef.update({'status': 'returned'});
+                      await updateStock(data['items']); // 🔺 increase
 
-        Get.back();
-        Get.snackbar("Success", "Order Returned");
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: const Text("Return",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-    ),
+                      await docRef.update({'status': 'pending'});
 
-    /// 🟡 ACCEPT
-    ElevatedButton(
-      onPressed: () async {
-        final docRef = FirebaseFirestore.instance
-            .collection('orders')
-            .doc(order.id);
-
-        final freshDoc = await docRef.get();
-        final data = freshDoc.data() as Map<String, dynamic>;
-
-        await updateStock(data['items']); // 🔺 increase
-
-        await docRef.update({'status': 'accepted'});
-
-        Get.back();
-        Get.snackbar("Success", "Order Accepted");
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.orange,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: const Text("Accept",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-    ),
-
-    /// 🔴 REJECT
-    ElevatedButton(
-      onPressed: () async {
-        final docRef = FirebaseFirestore.instance
-            .collection('orders')
-            .doc(order.id);
-
-        final freshDoc = await docRef.get();
-        final data = freshDoc.data() as Map<String, dynamic>;
-
-        await updateStock(data['items']); // 🔺 increase
-
-        await docRef.update({'status': 'rejected'});
-
-        Get.back();
-        Get.snackbar("Success", "Order Rejected");
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: const Text("Reject",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-    ),
-
-    /// 🟠 PENDING
-    ElevatedButton(
-      onPressed: () async {
-        final docRef = FirebaseFirestore.instance
-            .collection('orders')
-            .doc(order.id);
-
-        final freshDoc = await docRef.get();
-        final data = freshDoc.data() as Map<String, dynamic>;
-
-        await updateStock(data['items']); // 🔺 increase
-
-        await docRef.update({'status': 'pending'});
-
-        Get.back();
-        Get.snackbar("Success", "Marked as Pending");
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.orange,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: const Text("Pending",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-    ),
-  ],
-),
+                      Get.back();
+                      Get.snackbar("Success", "Marked as Pending");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      "Pending",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 10),
             ],
           ),

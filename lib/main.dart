@@ -1,11 +1,8 @@
-
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:office_project/firebase_options.dart';
 import 'package:office_project/screens/cart_provider.dart';
-import 'package:office_project/screens/loginpage.dart';
 import 'package:office_project/screens/splash_screen.dart';
 import 'package:office_project/theme_controller.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +29,7 @@ class MyApp extends StatelessWidget {
       builder: (context, themeMode, _) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'E-Commerce Starter',
+          title: 'AASHAI',
           themeMode: themeMode,
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),

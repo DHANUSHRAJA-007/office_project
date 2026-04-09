@@ -85,11 +85,14 @@ class _AddAddressPageState extends State<AddAddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-
       appBar: AppBar(
-        title: const Text("Add Address"),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.green,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
+        title: const Text("Add Address", style: TextStyle(color: Colors.white)),
       ),
 
       body: Padding(
@@ -105,7 +108,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 hintText: "Enter your address",
                 hintStyle: const TextStyle(color: Colors.grey),
                 filled: true,
-                fillColor: const Color(0xff2A2A2A),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -131,7 +133,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text(
                         "Save Address",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
               ),
             ),
