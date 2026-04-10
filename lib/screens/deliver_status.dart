@@ -168,7 +168,7 @@ Future<void> updateStock(List items) async {
                                 color: Colors.green,
                               ),
 
-                              //const SizedBox(width: 10),
+                              const SizedBox(width: 10),
 
                               Expanded(
                                 child: Column(

@@ -374,8 +374,335 @@
 //       ),
 //     );
 //   }
+// // }
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:office_project/screens/userhomepage.dart';
+// import 'package:provider/provider.dart';
+
+// import 'cart_provider.dart';
+
+// class Productdetailspage extends StatefulWidget {
+//   final DocumentSnapshot product;
+
+//   const Productdetailspage({super.key, required this.product});
+
+//   @override
+//   State<Productdetailspage> createState() => _ProductdetailspageState();
 // }
 
+// class _ProductdetailspageState extends State<Productdetailspage> {
+//   bool isliked = false;
+
+//   late Map<String, dynamic> data;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     data = widget.product.data() as Map<String, dynamic>;
+//   }
+
+//   /// ✅ COMMON ADD TO CART FUNCTION (BEST PRACTICE)
+//   void addToCart(Map<String, dynamic> productData) {
+//     Map<String, dynamic> cartItem = {
+//       'name': productData["productName"] ?? "",
+//       'price': productData["price"] ?? 0,
+//       'offer': productData["offer"]?.toString() ?? "No Offer",
+//       'quantity': 1,
+//     };
+//     print("CART ITEM: $cartItem"); // 👈 ADD THIS ALSO
+
+//     context.read<CartProvider>().addToCart(cartItem);
+
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(
+//         duration: const Duration(seconds: 3),
+//         backgroundColor: Colors.black,
+//         content: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             const Text("Product Added to the Cart"),
+//             TextButton(
+//               onPressed: () {
+//                 Get.offAll(() => HomePage(role: "user"), arguments: 2);
+//               },
+//               child: const Text(
+//                 "GO TO CART",
+//                 style: TextStyle(color: Colors.yellow),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     var size = MediaQuery.of(context).size;
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.green,
+//         automaticallyImplyLeading: false,
+//         centerTitle: true,
+//         leading: IconButton(
+//           color: Colors.white,
+//           onPressed: () => Get.back(),
+//           icon: const Icon(Icons.arrow_back),
+//         ),
+//         title: Text(
+//           "Product Details",
+//           style: TextStyle(
+//             color: Colors.white,
+//             fontWeight: FontWeight.bold,
+//             fontSize: 20,
+//           ),
+//         ),
+//       ),
+//       body: SingleChildScrollView(
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               /// 🔙 TOP BAR
+//               // Row(
+//               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               //   children: [
+//               //     IconButton(
+//               //       onPressed: () => Get.back(),
+//               //       icon: const Icon(Icons.arrow_back),
+//               //     ),
+//               //     const Text(
+//               //       "Product Details",
+//               //       style:
+//               //           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+//               //     ),
+//               //   ],
+//               // ),
+
+//               /// IMAGE
+//               SizedBox(
+//                 height: size.height * 0.35,
+//                 width: double.infinity,
+//                 child: Image.asset('assets/fruits.png', fit: BoxFit.contain),
+//               ),
+
+//               const SizedBox(height: 10),
+
+//               /// PRODUCT INFO
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         data['productName'] ?? '',
+//                         style: const TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                       Text(data['category'] ?? ''),
+//                       // const Text("4.9 ⭐"),
+//                     ],
+//                   ),
+//                   Text(
+//                     "Rs.${data['price'] ?? 0}",
+//                     style: const TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 18,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+
+//               const SizedBox(height: 10),
+
+//               /// DESCRIPTION
+//               Text(data['description'] ?? "No description available"),
+
+//               const Divider(),
+
+//               /// MORE PRODUCTS
+//               const Text("More", style: TextStyle(fontWeight: FontWeight.bold)),
+
+//               const SizedBox(height: 10),
+
+//               SizedBox(
+//                 height: 300,
+//                 child: StreamBuilder<QuerySnapshot>(
+//                   stream: FirebaseFirestore.instance
+//                       .collection('products')
+//                       .snapshots(),
+//                   builder: (context, snapshot) {
+//                     if (!snapshot.hasData) {
+//                       return const Center(child: CircularProgressIndicator());
+//                     }
+
+//                     return ListView.builder(
+//                       scrollDirection: Axis.horizontal,
+//                       itemCount: snapshot.data!.docs.length,
+//                       itemBuilder: (context, index) {
+//                         var doc = snapshot.data!.docs[index];
+//                         var data = doc.data() as Map<String, dynamic>;
+
+//                         return Container(
+//                           width: 170,
+//                           margin: const EdgeInsets.only(right: 12),
+//                           child: Card(
+//                             elevation: 7,
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(12),
+//                             ),
+//                             child: Padding(
+//                               padding: const EdgeInsets.all(8),
+//                               child: Column(
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   /// OFFER
+//                                   Row(
+//                                     mainAxisAlignment:
+//                                         MainAxisAlignment.spaceBetween,
+//                                     children: [
+//                                       Container(
+//                                         padding: const EdgeInsets.symmetric(
+//                                           horizontal: 8,
+//                                           vertical: 3,
+//                                         ),
+//                                         decoration: BoxDecoration(
+//                                           color: Colors.orange,
+//                                           borderRadius: BorderRadius.circular(
+//                                             5,
+//                                           ),
+//                                         ),
+//                                         child: Text(
+//                                           data['offer'] != null
+//                                               ? "Offer ${data['offer']}"
+//                                               : "No Offer",
+//                                           style: const TextStyle(fontSize: 12),
+//                                         ),
+//                                       ),
+
+//                                       // IconButton(
+//                                       //   icon: Icon(
+//                                       //     Icons.favorite,
+//                                       //     color: isliked
+//                                       //         ? Colors.red
+//                                       //         : Colors.grey,
+//                                       //   ),
+//                                       //   onPressed: () {
+//                                       //     setState(() {
+//                                       //       isliked = !isliked;
+//                                       //     });
+//                                       //   },
+//                                       // ),
+//                                     ],
+//                                   ),
+
+//                                   Expanded(
+//                                     child: Center(
+//                                       child: Image.asset('assets/fruits.png'),
+//                                     ),
+//                                   ),
+
+//                                   Text(
+//                                     data['productName'] ?? '',
+//                                     style: const TextStyle(
+//                                       fontWeight: FontWeight.bold,
+//                                     ),
+//                                   ),
+
+//                                   Row(
+//                                     mainAxisAlignment:
+//                                         MainAxisAlignment.spaceBetween,
+//                                     children: [
+//                                       Text(
+//                                         "₹ ${data['price']}/-",
+//                                         style: TextStyle(
+//                                           fontWeight: FontWeight.bold,
+//                                         ),
+//                                       ),
+
+//                                       /// ADD BUTTON
+//                                       InkWell(
+//                                         onTap: () => addToCart(data),
+//                                         child: Container(
+//                                           padding: const EdgeInsets.symmetric(
+//                                             horizontal: 10,
+//                                             vertical: 4,
+//                                           ),
+//                                           decoration: BoxDecoration(
+//                                             color: Colors.green,
+//                                             borderRadius: BorderRadius.circular(
+//                                               6,
+//                                             ),
+//                                           ),
+//                                           child: const Text(
+//                                             "Add",
+//                                             style: TextStyle(
+//                                               color: Colors.white,
+//                                             ),
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                     );
+//                   },
+//                 ),
+//               ),
+
+//               const Divider(),
+
+//               /// BOTTOM ADD BUTTON
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+//                 children: [
+//                   Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text("Total Price"),
+
+//                       Text(
+//                         "₹ ${data['price'] ?? 0}/-",
+//                         style: const TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   ElevatedButton(
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: Colors.green,
+//                     ),
+//                     onPressed: () => addToCart(data),
+//                     child: const Text(
+//                       "Add To Cart",
+//                       style: TextStyle(color: Colors.white),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -390,13 +717,38 @@ class Productdetailspage extends StatefulWidget {
   const Productdetailspage({super.key, required this.product});
 
   @override
-  State<Productdetailspage> createState() => _ProductdetailspageState();
+  State<Productdetailspage> createState() =>
+      _ProductdetailspageState();
 }
 
-class _ProductdetailspageState extends State<Productdetailspage> {
+class _ProductdetailspageState
+    extends State<Productdetailspage> {
   bool isliked = false;
 
   late Map<String, dynamic> data;
+
+  /// ✅ IMAGE FUNCTION ADDED
+  String getProductImage(String name) {
+    name = name.toLowerCase();
+
+    if (name.contains("pappali")) {
+      return "assets/pappali.jpg";
+    } else if (name.contains("banana")) {
+      return "assets/banana.png";
+    } else if (name.contains("carrot")) {
+      return "assets/carrot.png";
+    } else if (name.contains("tomato")) {
+      return "assets/tomato.png";
+    } else if (name.contains("potato")) {
+      return "assets/potato.png";
+    } else if (name.contains("onion")) {
+      return "assets/onion.png";
+    } else if (name.contains("mango")) {
+      return "assets/mango.png";
+    } else {
+      return "assets/default.png";
+    }
+  }
 
   @override
   void initState() {
@@ -404,7 +756,7 @@ class _ProductdetailspageState extends State<Productdetailspage> {
     data = widget.product.data() as Map<String, dynamic>;
   }
 
-  /// ✅ COMMON ADD TO CART FUNCTION (BEST PRACTICE)
+  /// ✅ ADD TO CART (UNCHANGED)
   void addToCart(Map<String, dynamic> productData) {
     Map<String, dynamic> cartItem = {
       'name': productData["productName"] ?? "",
@@ -412,7 +764,6 @@ class _ProductdetailspageState extends State<Productdetailspage> {
       'offer': productData["offer"]?.toString() ?? "No Offer",
       'quantity': 1,
     };
-    print("CART ITEM: $cartItem"); // 👈 ADD THIS ALSO
 
     context.read<CartProvider>().addToCart(cartItem);
 
@@ -421,12 +772,15 @@ class _ProductdetailspageState extends State<Productdetailspage> {
         duration: const Duration(seconds: 3),
         backgroundColor: Colors.black,
         content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment:
+              MainAxisAlignment.spaceBetween,
           children: [
             const Text("Product Added to the Cart"),
             TextButton(
               onPressed: () {
-                Get.offAll(() => HomePage(role: "user"), arguments: 2);
+                Get.offAll(
+                    () => HomePage(role: "user"),
+                    arguments: 2);
               },
               child: const Text(
                 "GO TO CART",
@@ -453,7 +807,7 @@ class _ProductdetailspageState extends State<Productdetailspage> {
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back),
         ),
-        title: Text(
+        title: const Text(
           "Product Details",
           style: TextStyle(
             color: Colors.white,
@@ -462,43 +816,35 @@ class _ProductdetailspageState extends State<Productdetailspage> {
           ),
         ),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          padding: const EdgeInsets.symmetric(
+              horizontal: 15, vertical: 20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
             children: [
-              /// 🔙 TOP BAR
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     IconButton(
-              //       onPressed: () => Get.back(),
-              //       icon: const Icon(Icons.arrow_back),
-              //     ),
-              //     const Text(
-              //       "Product Details",
-              //       style:
-              //           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              //     ),
-              //   ],
-              // ),
-
-              /// IMAGE
+              /// ✅ IMAGE (UPDATED)
               SizedBox(
                 height: size.height * 0.35,
                 width: double.infinity,
-                child: Image.asset('assets/fruits.png', fit: BoxFit.contain),
+                child: Image.asset(
+                  getProductImage(data['productName']),
+                  fit: BoxFit.contain,
+                ),
               ),
 
               const SizedBox(height: 10),
 
               /// PRODUCT INFO
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
                     children: [
                       Text(
                         data['productName'] ?? '',
@@ -508,7 +854,6 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                         ),
                       ),
                       Text(data['category'] ?? ''),
-                      // const Text("4.9 ⭐"),
                     ],
                   ),
                   Text(
@@ -524,12 +869,17 @@ class _ProductdetailspageState extends State<Productdetailspage> {
               const SizedBox(height: 10),
 
               /// DESCRIPTION
-              Text(data['description'] ?? "No description available"),
+              Text(data['description'] ??
+                  "No description available"),
 
               const Divider(),
 
               /// MORE PRODUCTS
-              const Text("More", style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                "More",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold),
+              ),
 
               const SizedBox(height: 10),
 
@@ -541,112 +891,139 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                          child:
+                              CircularProgressIndicator());
                     }
 
                     return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data!.docs.length,
+                      scrollDirection:
+                          Axis.horizontal,
+                      itemCount:
+                          snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-                        var doc = snapshot.data!.docs[index];
-                        var data = doc.data() as Map<String, dynamic>;
+                        var doc =
+                            snapshot.data!.docs[index];
+                        var data = doc.data()
+                            as Map<String, dynamic>;
 
                         return Container(
                           width: 170,
-                          margin: const EdgeInsets.only(right: 12),
+                          margin: const EdgeInsets.only(
+                              right: 12),
                           child: Card(
                             elevation: 7,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                            shape:
+                                RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(
+                                      12),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(8),
+                              padding:
+                                  const EdgeInsets.all(8),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment
+                                        .start,
                                 children: [
                                   /// OFFER
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment
+                                            .spaceBetween,
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
+                                        padding:
+                                            const EdgeInsets
+                                                .symmetric(
                                           horizontal: 8,
                                           vertical: 3,
                                         ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.orange,
-                                          borderRadius: BorderRadius.circular(
-                                            5,
-                                          ),
+                                        decoration:
+                                            BoxDecoration(
+                                          color:
+                                              Colors.orange,
+                                          borderRadius:
+                                              BorderRadius
+                                                  .circular(
+                                                      5),
                                         ),
                                         child: Text(
-                                          data['offer'] != null
+                                          data['offer'] !=
+                                                  null
                                               ? "Offer ${data['offer']}"
                                               : "No Offer",
-                                          style: const TextStyle(fontSize: 12),
+                                          style:
+                                              const TextStyle(
+                                                  fontSize:
+                                                      12),
                                         ),
                                       ),
-
-                                      // IconButton(
-                                      //   icon: Icon(
-                                      //     Icons.favorite,
-                                      //     color: isliked
-                                      //         ? Colors.red
-                                      //         : Colors.grey,
-                                      //   ),
-                                      //   onPressed: () {
-                                      //     setState(() {
-                                      //       isliked = !isliked;
-                                      //     });
-                                      //   },
-                                      // ),
                                     ],
                                   ),
 
+                                  /// ✅ IMAGE UPDATED HERE ALSO
                                   Expanded(
                                     child: Center(
-                                      child: Image.asset('assets/fruits.png'),
+                                      child: Image.asset(
+                                        getProductImage(
+                                            data['productName']),
+                                      ),
                                     ),
                                   ),
 
                                   Text(
-                                    data['productName'] ?? '',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                    data['productName'] ??
+                                        '',
+                                    style:
+                                        const TextStyle(
+                                      fontWeight:
+                                          FontWeight.bold,
                                     ),
                                   ),
 
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment
+                                            .spaceBetween,
                                     children: [
                                       Text(
                                         "₹ ${data['price']}/-",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                        style:
+                                            const TextStyle(
+                                          fontWeight:
+                                              FontWeight
+                                                  .bold,
                                         ),
                                       ),
 
                                       /// ADD BUTTON
                                       InkWell(
-                                        onTap: () => addToCart(data),
+                                        onTap: () =>
+                                            addToCart(data),
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(
+                                          padding:
+                                              const EdgeInsets
+                                                  .symmetric(
                                             horizontal: 10,
                                             vertical: 4,
                                           ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius: BorderRadius.circular(
-                                              6,
-                                            ),
+                                          decoration:
+                                              BoxDecoration(
+                                            color:
+                                                Colors.green,
+                                            borderRadius:
+                                                BorderRadius
+                                                    .circular(
+                                                        6),
                                           ),
-                                          child: const Text(
+                                          child:
+                                              const Text(
                                             "Add",
                                             style: TextStyle(
-                                              color: Colors.white,
-                                            ),
+                                                color: Colors
+                                                    .white),
                                           ),
                                         ),
                                       ),
@@ -667,18 +1044,19 @@ class _ProductdetailspageState extends State<Productdetailspage> {
 
               /// BOTTOM ADD BUTTON
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
                     children: [
-                      Text("Total Price"),
-
+                      const Text("Total Price"),
                       Text(
                         "₹ ${data['price'] ?? 0}/-",
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight:
+                              FontWeight.bold,
                           fontSize: 18,
                         ),
                       ),
@@ -691,7 +1069,8 @@ class _ProductdetailspageState extends State<Productdetailspage> {
                     onPressed: () => addToCart(data),
                     child: const Text(
                       "Add To Cart",
-                      style: TextStyle(color: Colors.white),
+                      style:
+                          TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

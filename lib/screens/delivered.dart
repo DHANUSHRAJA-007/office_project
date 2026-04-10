@@ -112,43 +112,42 @@ class Delivered extends StatelessWidget {
 
   const Delivered({super.key, required this.order});
 
-  Future<void> updateStock(List items, bool decrease) async {
-    for (var item in items) {
-      final productId = item['productId'];
+ Future<void> updateStock(List items, bool decrease) async {
+  for (var item in items) {
+    final productId = item['productId'];
+    final qty = int.tryParse(item['quantity'].toString()) ?? 1;
 
-      // ✅ FIX HERE
-      final qty = int.tryParse(item['quantity'].toString()) ?? 1;
+    print("👉 ProductId: $productId | Qty: $qty");
 
-      print("👉 ProductId: $productId | Qty: $qty");
+    if (productId == null) continue;
 
-      if (productId == null) {
-        print("❌ productId missing");
-        continue;
+    final ref = FirebaseFirestore.instance
+        .collection('products')
+        .doc(productId);
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final snap = await transaction.get(ref);
+
+      if (!snap.exists) {
+        print("❌ Product not found");
+        return;
       }
 
-      final ref = FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId);
+      // ✅ FIXED HERE
+      final currentStock = int.tryParse(
+        snap['stock'].toString(),
+      ) ?? 0;
 
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final snap = await transaction.get(ref);
+      final newStock = decrease
+          ? currentStock - qty
+          : currentStock + qty;
 
-        if (!snap.exists) {
-          print("❌ Product not found for ID: $productId");
-          return;
-        }
+      print("Old: $currentStock → New: $newStock");
 
-        final currentStock = snap['stock'] ?? 0;
-
-        final newStock = decrease ? currentStock - qty : currentStock + qty;
-
-        print("Old: $currentStock → New: $newStock");
-
-        transaction.update(ref, {'stock': newStock});
-      });
-    }
+      transaction.update(ref, {'stock': newStock});
+    });
   }
-
+}
   @override
   Widget build(BuildContext context) {
     final data = order.data() as Map<String, dynamic>;
@@ -372,7 +371,7 @@ class Delivered extends StatelessWidget {
                     final currentStatus = freshData['status'];
 
                     try {
-                      if (currentStatus != 'delivered') {
+                      if (currentStatus != 'shipped') {
                         await updateStock(items, true); // 🔻 decrease
                       }
 
@@ -387,7 +386,7 @@ class Delivered extends StatelessWidget {
                   child: const Text(
                     "Ship",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.green,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -443,10 +442,10 @@ class Delivered extends StatelessWidget {
                       final currentStatus = freshData['status'];
 
                       try {
-                        if (currentStatus == 'delivered') {
-                          await updateStock(items, false); // 🔺 ADD BACK
-                        }
-
+                        // if (currentStatus == 'shipped') {
+                        //   await updateStock(items, false); // 🔺 ADD BACK
+                        // }
+                            
                         await docRef.update({'status': 'rejected'});
 
                         Get.back();
