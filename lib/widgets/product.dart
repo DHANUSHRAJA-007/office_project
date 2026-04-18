@@ -79,14 +79,14 @@ class Product extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "₹${data['price']}/",
+                    "₹${data['price']}",
                     style: const TextStyle(
                         fontWeight: FontWeight.bold),
                   ),
-                  const Text(
-                    " kg",
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                  // const Text(
+                  //   " kg",
+                  //   style: TextStyle(color: Colors.grey),
+                 // ),
                 ],
               ),
             ],

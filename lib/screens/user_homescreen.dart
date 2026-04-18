@@ -308,10 +308,10 @@ class _UserHomescreenState extends State<UserHomescreen> {
                   Row(
                     children: [
                       Text(
-                        "₹${product['price']}/",
+                        "₹${product['price']}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const Text(" kg", style: TextStyle(color: Colors.grey)),
+                      //const Text(" kg", style: TextStyle(color: Colors.grey)),
                     ],
                   ),
 

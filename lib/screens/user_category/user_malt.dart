@@ -152,13 +152,13 @@ class _UserMaltState extends State<UserMalt> {
                     ),
                   ),
       
-                  const Row(
-                    children: [
-                      Icon(Icons.star, size: 14, color: Colors.amber),
-                      SizedBox(width: 2),
-                      Text("4.9", style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+                  // const Row(
+                  //   children: [
+                  //     Icon(Icons.star, size: 14, color: Colors.amber),
+                  //     SizedBox(width: 2),
+                  //     Text("4.9", style: TextStyle(fontWeight: FontWeight.bold)),
+                  //   ],
+                  // ),
                 ],
               ),
       
@@ -171,10 +171,10 @@ class _UserMaltState extends State<UserMalt> {
                   Row(
                     children: [
                       Text(
-                        "₹${product['price']}/",
+                        "₹${product['price']}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const Text(" kg", style: TextStyle(color: Colors.grey)),
+                      // const Text(" kg", style: TextStyle(color: Colors.grey)),
                     ],
                   ),
       
