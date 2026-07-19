@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,20 +46,29 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDXS-QeBzR9WO8D8RxQIztmtnGILdGjGO4',
+    appId: '1:953330828039:web:07cf6555a8c99157273ba2',
+    messagingSenderId: '953330828039',
+    projectId: 'ecommerce-app-1ea1d',
+    authDomain: 'ecommerce-app-1ea1d.firebaseapp.com',
+    storageBucket: 'ecommerce-app-1ea1d.firebasestorage.app',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDa7pWySINWipKQrbqjnI5OLJYZBeco8Js',
-    appId: '1:920440547587:android:0e10cceb5598eee254a136',
-    messagingSenderId: '920440547587',
-    projectId: 'office-project-9b120',
-    storageBucket: 'office-project-9b120.firebasestorage.app',
+    apiKey: 'AIzaSyANlA90n_FWeyeF20LN624ZfMnDjxWjHkU',
+    appId: '1:953330828039:android:f6ae1b055ecd024d273ba2',
+    messagingSenderId: '953330828039',
+    projectId: 'ecommerce-app-1ea1d',
+    storageBucket: 'ecommerce-app-1ea1d.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA0qK1iMeauIJvJvs3Qpyg1jzMVBauAK4c',
-    appId: '1:920440547587:ios:b8e6ba675b33be9b54a136',
-    messagingSenderId: '920440547587',
-    projectId: 'office-project-9b120',
-    storageBucket: 'office-project-9b120.firebasestorage.app',
+    apiKey: 'AIzaSyDjbq9V2ImqnziFagRUxeigc8HsFMeCh-k',
+    appId: '1:953330828039:ios:dd49b57c12dd7abf273ba2',
+    messagingSenderId: '953330828039',
+    projectId: 'ecommerce-app-1ea1d',
+    storageBucket: 'ecommerce-app-1ea1d.firebasestorage.app',
     iosBundleId: 'com.example.officeProject',
   );
 }

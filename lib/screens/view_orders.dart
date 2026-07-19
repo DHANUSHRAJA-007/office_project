@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'package:office_project/screens/accepted_orders.dart';
+import 'package:office_project/screens/cancelled_order.dart';
+import 'package:office_project/screens/delivered_page.dart';
+import 'package:office_project/screens/pending_orders.dart';
+import 'package:office_project/screens/returned_orderpage.dart';
+
+class ViewOrders extends StatefulWidget {
+  final String selectedStatus;
+  const ViewOrders({super.key, this.selectedStatus = 'pending'});
+
+  @override
+  State<ViewOrders> createState() => _ViewOrdersState();
+}
+
+class _ViewOrdersState extends State<ViewOrders> {
+  int selectdIndex = 0;
+
+  final List<String> filters = [
+    "Pending",
+    "Accepted",
+    "Shipped",
+    "Cancelled",
+    "Returned",
+  ];
+  @override
+  void didUpdateWidget(covariant ViewOrders oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.selectedStatus != widget.selectedStatus) {
+      updateSelectedIndex(widget.selectedStatus);
+    }
+  }
+
+  void updateSelectedIndex(String status) {
+    switch (status) {
+      case 'pending':
+        selectdIndex = 0;
+        break;
+      case 'accepted':
+        selectdIndex = 1;
+        break;
+      case 'shipped':
+        selectdIndex = 2;
+        break;
+      case 'rejected':
+        selectdIndex = 3;
+        break;
+      case 'returned':
+        selectdIndex = 4;
+      default:
+        selectdIndex = 0;
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updateSelectedIndex(widget.selectedStatus);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+
+        title: const Text(
+          "View Orders",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        elevation: 0,
+
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(screenWidth * 0.25),
+
+          child: Container(
+            width: double.infinity,
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.04,
+              vertical: 12,
+            ),
+
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// 🔹 FILTER CHIPS (SCROLLABLE)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(filters.length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          showCheckmark: false,
+                          label: Text(filters[index]),
+                          selected: selectdIndex == index,
+                          selectedColor: Colors.green,
+                          backgroundColor: Colors.grey.shade200,
+                          labelStyle: TextStyle(
+                            color: selectdIndex == index
+                                ? Colors.white
+                                : Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          onSelected: (value) {
+                            setState(() {
+                              selectdIndex = index;
+                            });
+                          },
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                /// 🔹 DATE (RESPONSIVE TEXT)
+              ],
+            ),
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: getSelectedPage(),
+        ),
+      ),
+    );
+  }
+
+  Widget getSelectedPage() {
+    switch (selectdIndex) {
+      case 0:
+        return const PendingOrders();
+      case 1:
+        return const AcceptedOrders();
+      case 2:
+        return const DeliveredPage();
+      case 3:
+        return const CancelledOrder();
+      default:
+        return const ReturnedOrderpage();
+    }
+  }
+}

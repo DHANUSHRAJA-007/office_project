@@ -1,26 +1,51 @@
 {
   "project_info": {
-    "project_number": "920440547587",
-    "project_id": "office-project-9b120",
-    "storage_bucket": "office-project-9b120.firebasestorage.app"
+    "project_number": "953330828039",
+    "project_id": "ecommerce-app-1ea1d",
+    "storage_bucket": "ecommerce-app-1ea1d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:920440547587:android:0e10cceb5598eee254a136",
+        "mobilesdk_app_id": "1:953330828039:android:f6ae1b055ecd024d273ba2",
         "android_client_info": {
           "package_name": "com.example.office_project"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "953330828039-3fu8s55ujk0usg0dkhs7s7cien22kchq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.office_project",
+            "certificate_hash": "b19152c916c8800f0637f79b5c527a179942f127"
+          }
+        },
+        {
+          "client_id": "953330828039-taf0cai4gdtcdsdbcfuchn5qh58msedc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDa7pWySINWipKQrbqjnI5OLJYZBeco8Js"
+          "current_key": "AIzaSyANlA90n_FWeyeF20LN624ZfMnDjxWjHkU"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953330828039-taf0cai4gdtcdsdbcfuchn5qh58msedc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "953330828039-1kd775515m2mrota4eo3f3jfhaen70m4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.officeProject"
+              }
+            }
+          ]
         }
       }
     }

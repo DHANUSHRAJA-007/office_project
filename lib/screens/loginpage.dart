@@ -1,177 +1,201 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:office_project/auth.dart';
+import 'package:office_project/screens/adminmain.dart';
+import 'userhomepage.dart';
+import 'signuppage.dart';
 
-class Loginpage extends StatefulWidget {
-  const Loginpage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
-  State<Loginpage> createState() => _LoginpageState();
-
-  static Widget _inputField(String hint, {bool obscure = true}) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
-        ),
-      ),
-    );
-  }
-
-  // Social Button Widget
-  static Widget _socialButton(IconData icon) {
-    return InkWell(
-      borderRadius: BorderRadius.all(Radius.circular(20)),
-      onTap: () {},
-      child: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Icon(icon, size: 28),
-      ),
-    );
-  }
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginpageState extends State<Loginpage> {
+int currentIndex = 0;
+
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final AuthService authService = AuthService();
+
+  bool loading = false;
   bool textVisible = true;
+
+  Future<void> login() async {
+    setState(() => loading = true);
+
+    try {
+      final role = await authService.signIn(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      print('ROLE = $role');
+
+      if (role == 'admin') {
+        Get.offAll(() => const Adminmain());
+      } else {
+        Get.offAll(() => HomePage(role: role), arguments: 0);
+      }
+    } catch (e) {
+      Get.snackbar('Login Failed', e.toString());
+    } finally {
+      setState(() => loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFA7C9AD),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          // 🔥 IMPORTANT (no overflow)
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+              Image(
+                height: height * 0.4,
+                // width: width * 0.5,
+                image: AssetImage("assets/aashai.png"),
+              ),
 
-              // Title
               const Text(
-                "Log into\nyour account",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
+                "Welcome",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+
+              SizedBox(height: height * 0.01),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+                child: const Text(
+                  "Manage your products, orders,\nand store – all in one place.",
+                  textAlign: TextAlign.center,
                 ),
               ),
 
-              const SizedBox(height: 40),
-
-              const SizedBox(height: 20),
-
-              // Email
-              Loginpage._inputField("Email address"),
-
-              const SizedBox(height: 20),
-
-              // Password
-              TextField(
-                obscureText: textVisible,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        textVisible = !textVisible;
-                      });
-                    },
-                    icon: textVisible
-                        ? Icon(Icons.visibility_off)
-                        : Icon(Icons.visibility),
-                  ),
-
-                  hintText: 'Password',
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(onPressed: () {}, child: Text("Forgot Password?")),
-                ],
-              ),
-              const SizedBox(height: 40),
-
-              // Sign Up Button
-              Center(
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2C1B18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      " Login",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Divider text
-              const Center(
-                child: Text(
-                  "or login with",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Social buttons
-              Center(child: Loginpage._socialButton(Icons.g_mobiledata)),
-
-              const SizedBox(height: 30),
-
-              // Login redirect
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              /// ---------- LOGIN SECTION ----------
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.06),
+                child: Column(
                   children: [
-                    const Text("Don't have an account? "),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        "Sign up",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+                    SizedBox(height: height * 0.03),
+
+                    const Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    SizedBox(height: height * 0.03),
+
+                    /// EMAIL
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: "Enter your Email",
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05,
+                          vertical: height * 0.02,
                         ),
                       ),
                     ),
+
+                    SizedBox(height: height * 0.02),
+
+                    /// PASSWORD
+                    TextField(
+                      controller: passwordController,
+                      obscureText: textVisible,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              textVisible = !textVisible;
+                            });
+                          },
+                          icon: Icon(
+                            textVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                        hintText: "Enter Password",
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05,
+                          vertical: height * 0.02,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: height * 0.03),
+
+                    /// LOGIN BUTTON
+                    SizedBox(
+                      width: double.infinity,
+                      height: height * 0.07,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff4CAF50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        onPressed: login,
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: height * 0.02),
+
+                    /// SIGNUP
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Don’t have an account ? ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.to(const SignupPage());
+                          },
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Color(0xff4CAF50),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: height * 0.03),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 20),
             ],
           ),
         ),

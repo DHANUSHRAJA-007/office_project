@@ -1,150 +1,309 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:office_project/auth.dart';
+import 'package:office_project/screens/termsandcond.dart';
+import 'package:office_project/screens/userhomepage.dart';
+import 'loginpage.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
+  State<SignupPage> createState() => _SignupPageState();
+}
 
-              // Title
-              const Text(
-                "Create\nyour account",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  height: 1.2,
-                ),
-              ),
+class _SignupPageState extends State<SignupPage> {
+  final emailController = TextEditingController();
+  final nameController = TextEditingController();
+  final phonenumberController = TextEditingController();
+  final passwordController = TextEditingController();
 
-              const SizedBox(height: 40),
+  final AuthService authService = AuthService();
 
-              // Name
-              _inputField("Enter your name"),
+  bool loading = false;
+  bool isAccepted = false;
 
-              const SizedBox(height: 20),
+  bool textVisible = true;
 
-              // Email
-              _inputField("Email address"),
+  // ================= GOOGLE EMAIL PICKER =================
+  Future<void> pickGoogleEmail() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
 
-              const SizedBox(height: 20),
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-              // Password
-              _inputField("Password", obscure: true),
+      if (googleUser == null) return;
 
-              const SizedBox(height: 20),
+      // Fill selected email
+      emailController.text = googleUser.email;
 
-              // Confirm Password
-              _inputField("Confirm password", obscure: true),
+      // Sign out immediately (we only need email)
+      await googleSignIn.signOut();
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 
-              const SizedBox(height: 40),
+  // ================= EMAIL SIGN UP =================
+  Future<void> signUp() async {
+    if (!isAccepted) {
+      Get.snackbar("Error", "Please accept Terms & Conditions");
+      return;
+    }
 
-              // Sign Up Button
-              Center(
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2C1B18),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      "SIGN UP",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+    setState(() => loading = true);
 
-              const SizedBox(height: 20),
+    try {
+      await authService.signUp(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+        role: 'user',
+        name: nameController.text.trim(),
+        phonenumber: phonenumberController.text.trim(),
+      );
 
-              // Divider text
-              const Center(
-                child: Text(
-                  "or sign up with",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
+      Get.snackbar('Success', 'Account created');
+      Get.offAll(() => const HomePage(role: 'user'));
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      setState(() => loading = false);
+    }
+  }
 
-              const SizedBox(height: 20),
-              // Social buttons
-                  Center(child: _socialButton(Icons.g_mobiledata)),
-              const SizedBox(height: 30),
-
-              // Login redirect
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Already have account? "),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        "Log In",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-            ],
+  // ================= TEXT FIELD =================
+  Widget buildTextField(
+    String hint,
+    TextEditingController controller, {
+    bool obscure = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: TextField(
+        controller: controller,
+        obscureText: obscure,
+        decoration: InputDecoration(
+          hintText: hint,
+          filled: true,
+          fillColor: Colors.grey.shade200,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 18,
+            horizontal: 20,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
           ),
         ),
       ),
     );
   }
 
-  // Input Field Widget
-  static Widget _inputField(String hint, {bool obscure = true}) {
-    return TextField(
-      obscureText: obscure,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: Colors.grey),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
+  // ================= EMAIL FIELD WITH GOOGLE PICKER =================
+  Widget buildEmailField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: TextField(
+        controller: emailController,
+        readOnly: true, // Prevent manual typing
+        onTap: pickGoogleEmail,
+        decoration: InputDecoration(
+          hintText: "Choose Email (Google)",
+          filled: true,
+          fillColor: Colors.grey.shade200,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 18,
+            horizontal: 20,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide.none,
+          ),
+          suffixIcon: const Icon(Icons.email),
         ),
       ),
     );
   }
 
-  // Social Button Widget
-  static Widget _socialButton(IconData icon) {
-    return Container(
-      height: 48,
-      width: 48,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey.shade300),
+  // ================= UI =================
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      backgroundColor: Color(0xFFA7C9AD),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: height * 0.001),
+              child: Image(
+                // height: height * 0.4,
+                // width: width * 0.5,
+                image: AssetImage("assets/aashai.png"),
+              ),
+            ),
+
+            const Text(
+              "Welcome",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+
+            SizedBox(height: height * 0.01),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.1),
+              child: const Text(
+                "Manage your products, orders,\nand store – all in one place.",
+                textAlign: TextAlign.center,
+              ),
+            ),
+      
+            const SizedBox(height: 30),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  const Text(
+                    "Sign Up",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 20),
+
+                  buildTextField("Enter your full name", nameController),
+                  buildTextField(
+                    "Enter your phone number",
+                    phonenumberController,
+                  ),
+
+                  // Updated Email Field
+                  buildEmailField(),
+
+                  TextField(
+                    controller: passwordController,
+                    obscureText: textVisible,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            textVisible = !textVisible;
+                          });
+                        },
+                        icon: Icon(
+                          textVisible ? Icons.visibility_off : Icons.visibility,
+                        ),
+                      ),
+                      hintText: "Enter Password",
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: width * 0.05,
+                        vertical: height * 0.02,
+                      ),
+                    ),
+                  ),
+
+                  // TERMS
+                  CheckboxListTile(
+                    value: isAccepted,
+                    onChanged: (value) {
+                      setState(() => isAccepted = value!);
+                    },
+                    title: RichText(
+                      text: TextSpan(
+                        text: "I agree to ",
+                        style: const TextStyle(color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: "Terms & Conditions",
+                            style: const TextStyle(
+                              color: Colors.green,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const TermsAndConditionsPage(),
+                                  ),
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // REGISTER BUTTON
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: loading
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff4CAF50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed: signUp,
+                            child: const Text(
+                              "Register",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // SIGN IN LINK
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Already have an account ? ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const LoginPage());
+                        },
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(
+                            color: Color(0xff4CAF50),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 30),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      child: Icon(icon, size: 28),
     );
   }
 }
